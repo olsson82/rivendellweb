@@ -13,7 +13,7 @@ But i needed something with more user friendly layout with more function. So i s
 ## How to use
 To use this you need a machine that have Rivendell installed. This system can not work without it. It uses the user created in RDAdmin. Run it behind a reverse proxy with https support. This is develop for **Version 4** of Rivendell and has not tested with older versions.
 
-In the config file, setup url to your reverse proxy and an smtp server (for mail function)
+The system has a installer, and no files need to be modified. Read the installation section in the wiki.
 
 **See the WIKI for more detail documentation**
 
