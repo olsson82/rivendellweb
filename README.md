@@ -20,9 +20,13 @@ The system has a installer, and no files need to be modified. Read the installat
 ## Translation
 [![Crowdin](https://badges.crowdin.net/rivendell-web-broadcast/localized.svg)](https://crowdin.com)
 
-Contribute to the system and translate to your language.
+My language is Swedish, so the english can be non correct, please report it.
+
+Contribute to the system and translate to your language. 
+
+Go to [Crowdin](https://crowdin.com/project/rivendell-web-broadcast) and start translate.
 
 Base language is **English**
 
 Translated to:
-* Swedish
+* Swedish by Andreas Olsson
