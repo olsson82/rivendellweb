@@ -3,7 +3,7 @@ Web system for manage Rivendell Radio Automation created by Andreas Olsson to he
 
 The goal with this is to be able to do the most things from this system.
 
-**This is still in development so there can be things that not works, contain bugs and things can be changed.**
+**This is still in development so there can be things that not works, contain bugs and things can be changed. You use it at your own risk. Do not use it on a live rivendell machine unless you know what you are doing, and that you know it will not brake your system.**
 
 ## The project
 This project started after i fixed some bugs in an old script by Brian McGlynn for to use with Rivendell Radio Automation. The original script can be found here: https://github.com/bpm1992/rivendell/tree/rdweb/web/rdphp
