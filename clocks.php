@@ -55,6 +55,7 @@ $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js
 <script src="assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
 <script src="assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
+<script src="https://unpkg.com/huebee@2/dist/huebee.pkgd.min.js"></script>
 
 <script src="assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
 <script src="assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
