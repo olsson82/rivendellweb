@@ -145,7 +145,7 @@ function delLog(id) {
     }
 }
 
-$('#addlog_form').validate({
+var addLogForm = $('#addlog_form').validate({
     rules: {
         logname: {
             required: true,
@@ -183,7 +183,7 @@ $('#addlog_form').validate({
                 var thelogname = mydata.logname;
                 if (fel == "false") {
                     dt.ajax.reload();
-                    $('#addlog_form').reset();
+                    addLogForm.resetForm();
                     $('#add_log').modal('hide');
                 } else {
                     Swal.fire({
