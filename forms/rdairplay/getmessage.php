@@ -27,38 +27,17 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-$username = $_POST['username'];
-$error = 0;
-if ($_POST['adminrights'] == 1) {
-    $json_sett["admin"][$username]['username'] = $username;
-    $json_sett["admin"][$username]['settings'] = $_POST['systemdata'];
-    $json_sett["admin"][$username]['users'] = $_POST['manageuser'];
-    $json_sett["admin"][$username]['message'] = $_POST['messages'];
-    $json_sett["admin"][$username]['hosts'] = $_POST['hosts'];
-
-    $jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
-
-    if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $jsonsettings)) {
-        $error = 1;
-    }
-} else if (isset($json_sett["admin"][$username])) {
-    unset($json_sett["admin"][$username]);
-    $jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
-    if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $jsonsettings)) {
-        $error = 1;
-    }
-}
-
-if ($error == 1) {
-    $echodata = ['error' => 'true', 'errorcode' => '2'];
+if (isset($json_sett['rdairplay'][$_POST['station']]['message'])) {
+    $echodata = ['error' => 'false', 'errorcode' => '0', 'message' => $json_sett['rdairplay'][$_POST['station']]['message']];
     echo json_encode($echodata);
 } else {
-
-    if (!$user->updateUserData($username, $_POST['fullname'], $_POST['email'], $_POST['phone'])) {
-        $echodata = ['error' => 'true', 'errorcode' => '1'];
+    $json_sett['rdairplay'][$_POST['station']]['message'] = '';
+    $jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
+    if (file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $jsonsettings)) {
+        $echodata = ['error' => 'false', 'errorcode' => '0', 'message' => ''];
         echo json_encode($echodata);
     } else {
-        $echodata = ['error' => 'false', 'errorcode' => '0'];
+        $echodata = ['error' => 'true', 'errorcode' => '1', 'message' => ''];
         echo json_encode($echodata);
     }
 }

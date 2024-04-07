@@ -226,6 +226,38 @@ $page_js = '<script src="assets/static/js/user.js"></script>';
                                         </p>
                                     </div>
                                     <div class="col-md-4">
+                                        <label for="messages">
+                                            <?= $ml->tr('MANAGEHOSTS'); ?>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select id="hosts" name="hosts" class="choices form-select">
+                                            <?php if ($isadmin == 1) { ?>
+                                                <option value="1" <?php if ($json_sett["admin"][$id]["hosts"] == '1') {
+                                                    echo 'SELECTED';
+                                                } ?>>
+                                                    <?= $ml->tr('YES'); ?>
+                                                </option>
+                                                <option value="0" <?php if ($json_sett["admin"][$id]["hosts"] == '0') {
+                                                    echo 'SELECTED';
+                                                } ?>>
+                                                    <?= $ml->tr('NO'); ?>
+                                                </option>
+                                            <?php } else { ?>
+                                                <option value="1">
+                                                    <?= $ml->tr('YES'); ?>
+                                                </option>
+                                                <option value="0" SELECTED>
+                                                    <?= $ml->tr('NO'); ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                        <p><small class="text-muted">
+                                                <?= $ml->tr('ALLOWUSRMANAGEHOST'); ?>
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
                                         <label for="systemdata">
                                             <?= $ml->tr('SYSTEMDATA'); ?>
                                         </label>

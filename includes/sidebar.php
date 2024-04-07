@@ -228,7 +228,7 @@ if (isset($_COOKIE['serviceName'])) {
                     </a>
                 </li>
                 <?php if (isset($json_sett["admin"][$_COOKIE['username']]["username"])) { ?>
-                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users') { ?>active<?php } ?> has-sub">
+                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay') { ?>active<?php } ?> has-sub">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-gear"></i>
                             <span>
@@ -256,6 +256,13 @@ if (isset($_COOKIE['serviceName'])) {
                                 <li class="submenu-item <?php if ($pagecode == 'users') { ?>active<?php } ?>">
                                     <a href="users.php" class="submenu-link">
                                         <?= $ml->tr('USERS'); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($json_sett["admin"][$_COOKIE['username']]["hosts"] == 1) { ?>
+                                <li class="submenu-item <?php if ($pagecode == 'rdairplay') { ?>active<?php } ?>">
+                                    <a href="rdairplay.php" class="submenu-link">
+                                        <?= $ml->tr('RDAIRPLAY'); ?>
                                     </a>
                                 </li>
                             <?php } ?>

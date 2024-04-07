@@ -1044,4 +1044,17 @@ class DBFunc
         return $users;
   
     }
+
+    public function getRdAirplays()
+    {
+        $rdairplay = array();
+        $sql = 'SELECT * FROM `RDAIRPLAY` ORDER BY `ID` ASC';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            $rdairplay[] = $row;
+        }
+        return $rdairplay; 
+    }
 }
