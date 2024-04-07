@@ -583,7 +583,7 @@ $page_js = '<script src="assets/static/js/log.js"></script>';
                                         <option value="0">
                                             <?= $ml->tr('PLAY') ?>
                                         </option>
-                                        <option value="1" selected>
+                                        <option value="1">
                                             <?= $ml->tr('SEGUE') ?>
                                         </option>
                                         <option value="2" selected>
@@ -722,7 +722,7 @@ $page_js = '<script src="assets/static/js/log.js"></script>';
                                         <option value="0">
                                             <?= $ml->tr('PLAY') ?>
                                         </option>
-                                        <option value="1" selected>
+                                        <option value="1">
                                             <?= $ml->tr('SEGUE') ?>
                                         </option>
                                         <option value="2" selected>
@@ -868,7 +868,7 @@ $page_js = '<script src="assets/static/js/log.js"></script>';
                                         <option value="0">
                                             <?= $ml->tr('PLAY') ?>
                                         </option>
-                                        <option value="1" selected>
+                                        <option value="1">
                                             <?= $ml->tr('SEGUE') ?>
                                         </option>
                                         <option value="2" selected>
@@ -1114,7 +1114,7 @@ $page_js = '<script src="assets/static/js/log.js"></script>';
                                         <option value="0">
                                             <?= $ml->tr('PLAY') ?>
                                         </option>
-                                        <option value="1" selected>
+                                        <option value="1">
                                             <?= $ml->tr('SEGUE') ?>
                                         </option>
                                         <option value="2" selected>
