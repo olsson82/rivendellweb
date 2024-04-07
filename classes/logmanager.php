@@ -201,6 +201,15 @@ class Log
 
     }
 
+    public function isValidClock($clocks, $name)
+    {
+        $valid = FALSE;
+
+        if (isset($clocks[$name]))
+            $valid = TRUE;
+        return $valid;
+    }
+
     public function getClock($clocks, $clockName)
     {
 
