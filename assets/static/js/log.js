@@ -1159,6 +1159,8 @@ var KTDatatablesServerSide = function () {
             title="`+ TRAN_ADDMARKER + `"><i class="bi bi-card-text"></i></button>
             <button type="button" onclick="addtolog('`+ LOG_ID + `', '4','` + row.COUNT + `','0')" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
             title="`+ TRAN_ADDLOGCHAIN + `"><i class="bi bi-link-45deg"></i></button>
+            <button type="button" onclick="addtolog('`+ LOG_ID + `', '`+ edittypes + `','` + row.COUNT + `','` + row.ID + `')" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
+            title="`+ TRAN_EDIT + `"><i class="bi bi-pencil"></i></button>
             <button type="button" onclick="removeLogLine('`+ row.ID + `','` + row.COUNT + `',)" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
             title="`+ TRAN_DELLOGLINE + `"><i class="bi bi-x-square"></i></button>
                     </div>

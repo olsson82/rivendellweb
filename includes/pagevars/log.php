@@ -5,6 +5,7 @@
         var LOCK_CODE = "<?php echo $lockguid; ?>";
         var TRAN_MOVEUP = "<?= $ml->tr('MOVEUP') ?>";
         var TRAN_MOVEDOWN = "<?= $ml->tr('MOVEDOWN') ?>";
+        var TRAN_EDIT = "<?= $ml->tr('EDIT') ?>";
         var TRAN_STOP = "<?= $ml->tr('STOP') ?>";
         var TRAN_PLAY = "<?= $ml->tr('PLAY') ?>";
         var TRAN_SEGUE = "<?= $ml->tr('SEGUE') ?>";
