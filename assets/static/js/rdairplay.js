@@ -48,6 +48,162 @@ function addmess(station) {
     });
 }
 
+function edithost(station) {
+    $.ajax({
+        url: HOST_URL + '/forms/rdairplay/getstation.php',
+        data: "id=" + station,
+        dataType: 'json',
+        success: function (data) {
+            $('#rdairhost').val(station);
+            $('#mansegue').val(data['SEGUE_LENGTH']);
+            $('#forcsegue').val(data['TRANS_LENGTH']);
+            $('#piecountlast').val(data['PIE_COUNT_LENGTH'] / 1000);
+            $('#systempanels').val(data['STATION_PANELS']);
+            $('#userpanels').val(data['USER_PANELS']);
+            $('#piecountsto').val(data['PIE_COUNT_ENDPOINT']);
+            $('#deftranstype').val(data['DEFAULT_TRANS_TYPE']);
+            $('#defaultservice').val(data['DEFAULT_SERVICE']);
+            $('#spacebar').val(data['BAR_ACTION']);
+            if (data['FLASH_PANEL'] == 'Y') {
+                $("#flashpanel").prop('checked', true);
+            } else {
+                $("#flashpanel").prop('checked', false);
+            }
+            if (data['PANEL_PAUSE_ENABLED'] == 'Y') {
+                $("#buttonpause").prop('checked', true);
+            } else {
+                $("#buttonpause").prop('checked', false);
+            }
+            $('#labletemp').val(data['BUTTON_LABEL_TEMPLATE']);
+            if (data['CHECK_TIMESYNC'] == 'Y') {
+                $("#timesunc").prop('checked', true);
+            } else {
+                $("#timesunc").prop('checked', false);
+            }
+            if (data['SHOW_AUX_1'] == 'Y') {
+                $("#aux1").prop('checked', true);
+            } else {
+                $("#aux1").prop('checked', false);
+            }
+            if (data['SHOW_AUX_2'] == 'Y') {
+                $("#aux2").prop('checked', true);
+            } else {
+                $("#aux2").prop('checked', false);
+            }
+            if (data['CLEAR_FILTER'] == 'Y') {
+                $("#clearcart").prop('checked', true);
+            } else {
+                $("#clearcart").prop('checked', false);
+            }
+            if (data['PAUSE_ENABLED'] == 'Y') {
+                $("#enabpaused").prop('checked', true);
+            } else {
+                $("#enabpaused").prop('checked', false);
+            }
+            if (data['SHOW_COUNTERS'] == 'Y') {
+                $("#extrabuttons").prop('checked', true);
+            } else {
+                $("#extrabuttons").prop('checked', false);
+            }
+            if (data['HOUR_SELECTOR_ENABLED'] == 'Y') {
+                $("#showhour").prop('checked', true);
+            } else {
+                $("#showhour").prop('checked', false);
+            }
+            $('#preroll').val(data['AUDITION_PREROLL'] / 1000);
+            $('#settings_window').modal('show');
+
+        }
+    });
+}
+
+$('#conf_form').validate({
+    rules: {
+        mansegue: {
+            required: true,
+        },
+        forcsegue: {
+            required: true,
+        },
+        piecountlast: {
+            required: true,
+        },
+        systempanels: {
+            required: true,
+        },
+        userpanels: {
+            required: true,
+        },
+        labletemp: {
+            required: true,
+        },
+        preroll: {
+            required: true,
+        },
+    },
+    messages: {
+        mansegue: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        forcsegue: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        piecountlast: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        systempanels: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        userpanels: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        labletemp: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        preroll: {
+            required: TRAN_NOTBEEMPTY,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#conf_form').serialize();
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/rdairplay/rdairsettings.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                if (fel == "false") {
+                    $('#settings_window').modal('hide');
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+
+
+                }
+            }
+        });
+    }
+});
+
 $('#addmessage_form').validate({
     rules: {
         message: {
@@ -161,6 +317,8 @@ var KTDatatablesServerSide = function () {
                         <div class="btn-group mb-3" role="group">
                                     <a href="javascript:;" onclick="addmess('`+ row.STATION + `')" class="btn icon btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_ADDMESSAGE + `"><i class="bi bi-chat-right-text"></i></a>
+                                    <a href="javascript:;" onclick="edithost('`+ row.STATION + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_CONFRDAIRPLAY + `"><i class="bi bi-pencil"></i></a>
                                 </div>
                         `;
                     }
@@ -219,10 +377,60 @@ var KTDatatablesServerSide = function () {
         });
     }
 
+    const element2 = document.getElementById('settings_window');
+    const modal2 = new bootstrap.Modal(element2);
+
+    var initAirSettingsModalButtons = function () {
+        const cancelButton2 = element2.querySelector('[data-kt-rdairhost-modal-action="cancel"]');
+        cancelButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal2.hide();
+                }
+            });
+        });
+        const closeButton2 = element2.querySelector('[data-kt-rdairhost-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal2.hide();
+
+                }
+            });
+        });
+    }
+
     return {
         init: function () {
             initDatatable();
             initMessageModalButtons();
+            initAirSettingsModalButtons();
         }
     }
 }();

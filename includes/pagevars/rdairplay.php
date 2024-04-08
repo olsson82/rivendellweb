@@ -1,6 +1,7 @@
 <script>
     var HOST_URL = "<?php echo DIR; ?>";
-    var TRAN_ADDMESSAGE = "<?= $ml->tr('ADDMESSAGE') ?>";    
+    var TRAN_ADDMESSAGE = "<?= $ml->tr('ADDMESSAGE') ?>";
+    var TRAN_CONFRDAIRPLAY = "<?= $ml->tr('CONFRDAIRPLAY') ?>";       
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";
     var TRAN_NO = "<?= $ml->tr('NO') ?>";

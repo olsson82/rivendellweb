@@ -35,6 +35,7 @@ if (!$json_sett["admin"][$_COOKIE['username']]["hosts"] == 1) {
     header('Location: index.php');
     exit();
 }
+$services = $dbfunc->getServices();
 $username = $_COOKIE['username'];
 $fullname = $_COOKIE['fullname'];
 $pagecode = "rdairplay";
@@ -68,7 +69,7 @@ $page_js = '<script src="assets/static/js/rdairplay.js"></script>';
                     <?= $ml->tr('RDAIRPLAY'); ?>
                 </h3>
                 <p class="text-subtitle text-muted">
-                <?= $ml->tr('MANAGERDAIRPLAY'); ?>
+                    <?= $ml->tr('MANAGERDAIRPLAY'); ?>
                 </p>
             </div>
             <div class="col-12 col-md-6 order-md-2 order-first">
@@ -120,8 +121,278 @@ $page_js = '<script src="assets/static/js/rdairplay.js"></script>';
         </div>
 
     </section>
-    <div class="modal fade text-left" id="add_message" data-bs-backdrop="static" role="dialog" aria-labelledby="addMessageLabel"
-        aria-hidden="true">
+    <div class="modal fade text-left" id="settings_window" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="SettingsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="SettingsLabel">
+                        <?= $ml->tr('CONFRDAIRPLAY') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-rdairhost-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="conf_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('LOGSETTINGS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="mansegue">
+                                        <?= $ml->tr('MANSEGUE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="mansegue" class="form-control" name="mansegue" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="forcsegue">
+                                        <?= $ml->tr('FORCSEGUE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="forcsegue" class="form-control" name="forcsegue" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="piecountlast">
+                                        <?= $ml->tr('PIECOUNTLAST') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="piecountlast" class="form-control" name="piecountlast"
+                                        value="" min="0" max="60">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="piecountsto">
+                                        <?= $ml->tr('PIECOUNTSTO') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="piecountsto" name="piecountsto" class="form-select">
+                                        <option value="0" selected>
+                                            <?= $ml->tr('CARTEND') ?>
+                                        </option>
+                                        <option value="1">
+                                            <?= $ml->tr('TRANSITION') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="deftranstype">
+                                        <?= $ml->tr('DEFAULTTRANSTYPE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="deftranstype" name="deftranstype" class="form-select">
+                                        <option value="0" selected>
+                                            <?= $ml->tr('PLAY') ?>
+                                        </option>
+                                        <option value="1">
+                                            <?= $ml->tr('SEGUE') ?>
+                                        </option>
+                                        <option value="2">
+                                            <?= $ml->tr('STOP') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="defaultservice">
+                                        <?= $ml->tr('DEFSERVICE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="defaultservice" name="defaultservice" class="form-select">
+                                        <?php foreach ($services as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('SOUNDPANELSETT') ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="systempanels">
+                                        <?= $ml->tr('SYSTEMPANELS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="systempanels" class="form-control" name="systempanels"
+                                        value="" min="0" max="50">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="userpanels">
+                                        <?= $ml->tr('USERPANELS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="userpanels" class="form-control" name="userpanels" value=""
+                                        min="0" max="50">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="flashpanel" name="flashpanel"
+                                                class='form-check-input'>
+                                            <label for="flashpanel">
+                                                <?= $ml->tr('FLASHPANELBUTT') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="buttonpause" name="buttonpause"
+                                                class='form-check-input'>
+                                            <label for="buttonpause">
+                                                <?= $ml->tr('ENABLEBUTTONPAUSE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="labletemp">
+                                        <?= $ml->tr('LABELTEMPLATE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="labletemp" class="form-control" name="labletemp" value="">
+                                </div>
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('MISCSETTINGS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="timesunc" name="timesunc"
+                                                class='form-check-input'>
+                                            <label for="timesunc">
+                                                <?= $ml->tr('CHECKTIMESYNC') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="aux1" name="aux1"
+                                                class='form-check-input'>
+                                            <label for="aux1">
+                                                <?= $ml->tr('SHOWAUX1') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="aux2" name="aux2"
+                                                class='form-check-input'>
+                                            <label for="aux2">
+                                                <?= $ml->tr('SHOWAUX2') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="clearcart" name="clearcart"
+                                                class='form-check-input'>
+                                            <label for="clearcart">
+                                                <?= $ml->tr('CLEARCARTSEARCH') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="enabpaused" name="enabpaused"
+                                                class='form-check-input'>
+                                            <label for="enabpaused">
+                                                <?= $ml->tr('ENABLEPAUSEEVENT') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="extrabuttons" name="extrabuttons"
+                                                class='form-check-input'>
+                                            <label for="extrabuttons">
+                                                <?= $ml->tr('SHOWEXTRABUTTONS') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="showhour" name="showhour"
+                                                class='form-check-input'>
+                                            <label for="showhour">
+                                                <?= $ml->tr('SHOWHOURSELECTOR') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="preroll">
+                                        <?= $ml->tr('AUDITIONPREROLL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="preroll" class="form-control" name="preroll" value=""
+                                        min="0" max="60">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="spacebar">
+                                        <?= $ml->tr('SPACEBARACTION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="spacebar" name="spacebar" class="form-select">
+                                        <option value="0" selected>
+                                            <?= $ml->tr('NONE') ?>
+                                        </option>
+                                        <option value="1">
+                                            <?= $ml->tr('STARTNEXT') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="rdairhost" name="rdairhost" value="">
+                        <button type="button" class="btn btn-light-secondary" data-kt-rdairhost-modal-action="close">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">
+                                <?= $ml->tr('CLOSE') ?>
+                            </span>
+                        </button>
+                        <input type="submit" id="subbut_chain" class="btn btn-primary ms-1"
+                            value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="add_message" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="addMessageLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
             <div class="modal-content">
                 <div class="modal-header  bg-success">

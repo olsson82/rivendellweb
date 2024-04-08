@@ -1057,4 +1057,77 @@ class DBFunc
         }
         return $rdairplay; 
     }
+
+    public function getServices()
+    {
+
+        $service = array();
+
+        $sql = 'SELECT `NAME` FROM `SERVICES`
+                ORDER BY `NAME` ASC';
+
+        $results = $this->_db->prepare($sql);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+        $results->execute();
+        while ($row = $results->fetch()) {
+
+            foreach ($row as $field)
+                $service[] = $field;
+
+        }
+
+        $results = NULL;
+
+        return $service;
+
+    }
+
+    public function getRDAirPlayData($station)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM RDAIRPLAY WHERE STATION = :id');
+        $stmt->execute([':id' => $station]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+
+    }
+
+    public function updateRDAirPlay($station, $mansegue, $forcsegue, $piecount, $pieto, $deftrans, $service, $syspan, $usrpan, $flash, $butpaus, $label, $timesync, $aux1, $aux2, $clear, $pauseevent, $hour, $extrabutton, $audition, $spacebar)
+    {
+
+        $sql = 'UPDATE `RDAIRPLAY` SET `SEGUE_LENGTH` = :mansegue, `TRANS_LENGTH` = :forcsegue, `PIE_COUNT_LENGTH` = :piecount, `PIE_COUNT_ENDPOINT` = :pieto,
+        `DEFAULT_TRANS_TYPE` = :deftrans, `DEFAULT_SERVICE` = :services, `STATION_PANELS` = :syspan, `USER_PANELS` = :usrpan, `FLASH_PANEL` = :flash, `PANEL_PAUSE_ENABLED` = :butpaus,
+        `BUTTON_LABEL_TEMPLATE` = :labels, `CHECK_TIMESYNC` = :timesync, `SHOW_AUX_1` = :aux1, `SHOW_AUX_2` = :aux2, `CLEAR_FILTER` = :clears, `PAUSE_ENABLED` = :pauseevent, `HOUR_SELECTOR_ENABLED` = :ahour,
+        `SHOW_COUNTERS` = :extrabutton, `AUDITION_PREROLL` = :audition, `BAR_ACTION` = :spacebar WHERE `STATION` = :station';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':mansegue', $mansegue);
+        $stmt->bindParam(':forcsegue', $forcsegue);
+        $stmt->bindParam(':piecount', $piecount);
+        $stmt->bindParam(':pieto', $pieto);
+        $stmt->bindParam(':deftrans', $deftrans);
+        $stmt->bindParam(':services', $service);
+        $stmt->bindParam(':syspan', $syspan);
+        $stmt->bindParam(':usrpan', $usrpan);
+        $stmt->bindParam(':flash', $flash);
+        $stmt->bindParam(':butpaus', $butpaus);
+        $stmt->bindParam(':labels', $label);
+        $stmt->bindParam(':timesync', $timesync);
+        $stmt->bindParam(':aux1', $aux1);
+        $stmt->bindParam(':aux2', $aux2);
+        $stmt->bindParam(':clears', $clear);
+        $stmt->bindParam(':pauseevent', $pauseevent);
+        $stmt->bindParam(':ahour', $hour);
+        $stmt->bindParam(':extrabutton', $extrabutton);
+        $stmt->bindParam(':audition', $audition);
+        $stmt->bindParam(':spacebar', $spacebar);
+        $stmt->bindParam(':station', $station);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
 }
