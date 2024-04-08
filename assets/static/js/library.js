@@ -99,6 +99,13 @@ selgrouplibrary = new Choices(groupselbox, {
 });
 
 
+if (Cookies.get('groupsel') === undefined || Cookies.get('groupsel') === null) {
+    allgroups = 1;
+    Cookies.set('groupsel', '1', { expires: 7 });    
+    selgrouplibrary.setChoiceByValue("allgroups");
+}
+
+
 if (Cookies.get('groupsel') == 1) {
     allgroups = 1;
     selgrouplibrary.setChoiceByValue("allgroups");
@@ -106,9 +113,6 @@ if (Cookies.get('groupsel') == 1) {
     allgroups = 0;
     groupnow = Cookies.get('groupsel');
     selgrouplibrary.setChoiceByValue(groupnow);
-} else {
-    allgroups = 1;    
-    selgrouplibrary.setChoiceByValue("allgroups");
 }
 
 
