@@ -1130,4 +1130,36 @@ class DBFunc
         }
 
     }
+
+    public function setConductor($cart, $conductor)
+    {
+
+        $sql = 'UPDATE `CART` SET `CONDUCTOR` = :conductor WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':conductor', $conductor);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setSongID($cart, $songid)
+    {
+
+        $sql = 'UPDATE `CART` SET `SONG_ID` = :songid WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':songid', $songid);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
 }

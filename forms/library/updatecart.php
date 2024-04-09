@@ -85,6 +85,22 @@ if ($wehavesched == 1) {
     }
 }
 
+if (isset($songid) && $songid != '') {
+    if (!$dbfunc->setSongID($number, $songid)) {
+        $echodata = ['error' => 'true', 'errorcode' => '1'];
+        echo json_encode($echodata);
+        exit();
+    }
+}
+
+if (isset($conductor) && $conductor != '') {
+    if (!$dbfunc->setConductor($number, $conductor)) {
+        $echodata = ['error' => 'true', 'errorcode' => '1'];
+        echo json_encode($echodata);
+        exit();
+    }
+}
+
 if (!$functions->rd_edit_cart($number, $group, $album, $year, $record, $client, $agency, $publisher, $composer, $userdef, $usagecode, $enflength, $frlength, $asynchronous, $artist, $title, $notes)) {
     $echodata = ['error' => 'true', 'errorcode' => '1'];
     echo json_encode($echodata);
