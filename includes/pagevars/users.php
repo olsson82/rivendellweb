@@ -1,6 +1,13 @@
 <script>
     var HOST_URL = "<?php echo DIR; ?>";
     var TRAN_EDITUSER = "<?= $ml->tr('EDITUSER') ?>";
+    var TRAN_EDITRIVRIGHTS = "<?= $ml->tr('EDITRIVRIGHTS') ?>";
+    var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
+    var TRAN_YES = "<?= $ml->tr('YES') ?>";
+    var TRAN_NO = "<?= $ml->tr('NO') ?>";
+    var TRAN_BUG = "<?= $ml->tr('BUG') ?>";
+    var TRAN_OK = "<?= $ml->tr('OK') ?>";
+    var TRAN_NOTBEEMPTY = "<?= $ml->tr('NOTBEEMPTY') ?>";
     var TRAN_TABLEFIRST = "<?= $ml->tr('TAFIRST') ?>";
     var TRAN_TABLELAST = "<?= $ml->tr('TALAST') ?>";
     var TRAN_TABLENEXT = "<?= $ml->tr('TANEXT') ?>";

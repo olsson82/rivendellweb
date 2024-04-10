@@ -27,6 +27,89 @@
  *********************************************************************************************************/
 var dt;
 
+function editRights(user) {
+    $.ajax({
+        url: HOST_URL + '/forms/loaduser.php',
+        data: "id=" + user,
+        dataType: 'json',
+        success: function (data) {
+            $('#theuser').val(user);
+            $('#createcarts').val(data['CREATE_CARTS_PRIV']);
+            $('#modifycarts').val(data['MODIFY_CARTS_PRIV']);
+            $('#deletecarts').val(data['DELETE_CARTS_PRIV']);  
+            $('#editaudio').val(data['EDIT_AUDIO_PRIV']);  
+            $('#deditnetcatch').val(data['EDIT_CATCHES_PRIV']);  
+            $('#voicetracklogs').val(data['VOICETRACK_LOG_PRIV']);  
+            $('#allowweb').val(data['WEBGET_LOGIN_PRIV']);  
+            $('#createlog').val(data['CREATE_LOG_PRIV']); 
+            $('#deletelog').val(data['DELETE_LOG_PRIV']); 
+            $('#modifytemp').val(data['MODIFY_TEMPLATE_PRIV']); 
+            $('#delreportdata').val(data['DELETE_REC_PRIV']); 
+            $('#playoutlogs').val(data['PLAYOUT_LOG_PRIV']); 
+            $('#addlogitems').val(data['ADDTO_LOG_PRIV']); 
+            $('#rearrlogitems').val(data['ARRANGE_LOG_PRIV']); 
+            $('#dellogitems').val(data['REMOVEFROM_LOG_PRIV']);  
+            $('#confsyspanel').val(data['CONFIG_PANELS_PRIV']);  
+            $('#createpodcast').val(data['ADD_PODCAST_PRIV']);  
+            $('#editpodcast').val(data['EDIT_PODCAST_PRIV']);  
+            $('#delpodcast').val(data['DELETE_PODCAST_PRIV']);   
+            $('#allweblog').val(data['ENABLE_WEB']);
+            $("#user_window").modal("show");                
+        }
+    });
+}
+
+$('#user_form').validate({
+    rules: {
+        createcarts: {
+            required: true,
+        },
+    },
+    messages: {
+        createcarts: {
+            required: TRAN_NOTBEEMPTY
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#user_form').serialize();
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/editrivrights.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                if (fel == "false") {
+                    $('#user_window').modal('hide');
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+
+
+                }
+            }
+        });
+    }
+});
+
 var KTDatatablesServerSide = function () {
     var initDatatable = function () {
         dt = $("#users_table").DataTable({
@@ -95,6 +178,8 @@ var KTDatatablesServerSide = function () {
                         <div class="btn-group mb-3" role="group">
                                     <a href="user.php?id=` + row.LOGIN_NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDITUSER + `"><i class="bi bi-pencil"></i></a>
+                                    <a href="javascript:;" onclick="editRights('` + row.LOGIN_NAME + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_EDITRIVRIGHTS + `"><i class="bi bi-universal-access"></i></a>
                                 </div>
                         `;
                     }
@@ -104,9 +189,59 @@ var KTDatatablesServerSide = function () {
 
     }
 
+const element1 = document.getElementById('user_window');
+const modal1 = new bootstrap.Modal(element1);
+
+var initUserRightsModalButtons = function () {
+    const cancelButton2 = element1.querySelector('[data-kt-user-modal-action="cancel"]');
+    cancelButton2.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal1.hide();
+            }
+        });
+    });
+    const closeButton2 = element1.querySelector('[data-kt-user-modal-action="close"]');
+    closeButton2.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal1.hide();
+
+            }
+        });
+    });
+}
+
     return {
         init: function () {
             initDatatable();
+            initUserRightsModalButtons();
         }
     }
 }();

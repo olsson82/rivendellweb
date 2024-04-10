@@ -126,6 +126,360 @@ $page_js = '<script src="assets/static/js/users.js"></script>';
         </div>
 
     </section>
+    <div class="modal fade text-left" id="user_window" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="UserLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="UserLabel">
+                        <?= $ml->tr('USRRDRIGHTS') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-user-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="user_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('PRODUCTIONRIGHTS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="createcarts">
+                                        <?= $ml->tr('CREATECARTS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="createcarts" name="createcarts" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="modifycarts">
+                                        <?= $ml->tr('MODIFYCARTS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="modifycarts" name="modifycarts" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="deletecarts">
+                                        <?= $ml->tr('DELETECARTS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="deletecarts" name="deletecarts" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editaudio">
+                                        <?= $ml->tr('EDITAUDIO') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="editaudio" name="editaudio" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="deditnetcatch">
+                                        <?= $ml->tr('EDITNETCATCH') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="deditnetcatch" name="deditnetcatch" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="voicetracklogs">
+                                        <?= $ml->tr('VOICETRACKLOGS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="voicetracklogs" name="voicetracklogs" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="allowweb">
+                                        <?= $ml->tr('ALLOWWEBGET') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="allowweb" name="allowweb" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('TRAFFICRIGHTS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="createlog">
+                                        <?= $ml->tr('CREATELOG') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="createlog" name="createlog" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="deletelog">
+                                        <?= $ml->tr('DELETELOG') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="deletelog" name="deletelog" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="modifytemp">
+                                        <?= $ml->tr('MODIFYTEMPLATE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="modifytemp" name="modifytemp" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="delreportdata">
+                                        <?= $ml->tr('DELREPORTDATA') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="delreportdata" name="delreportdata" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('ONAIRRIGHTS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="playoutlogs">
+                                        <?= $ml->tr('PLAYOUTLOGS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="playoutlogs" name="playoutlogs" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="addlogitems">
+                                        <?= $ml->tr('ADDLOGITEMS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="addlogitems" name="addlogitems" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="rearrlogitems">
+                                        <?= $ml->tr('REARRLOGITEMS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="rearrlogitems" name="rearrlogitems" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dellogitems">
+                                        <?= $ml->tr('DELLOGITEMS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="dellogitems" name="dellogitems" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="confsyspanel">
+                                        <?= $ml->tr('CONFSYSTEMPANELS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="confsyspanel" name="confsyspanel" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('PODCASTINGRIGHTS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="createpodcast">
+                                        <?= $ml->tr('CREATEPODCAST') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="createpodcast" name="createpodcast" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="editpodcast">
+                                        <?= $ml->tr('EDITPODCAST') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="editpodcast" name="editpodcast" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="delpodcast">
+                                        <?= $ml->tr('DELPODCAST') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="delpodcast" name="delpodcast" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="allweblog">
+                                        <?= $ml->tr('ALLWEBLOGIN') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="allweblog" name="allweblog" class="form-select">
+                                        <option value="Y" selected>
+                                            <?= $ml->tr('YES') ?>
+                                        </option>
+                                        <option value="N">
+                                            <?= $ml->tr('NO') ?>
+                                        </option>
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="theuser" name="theuser" value="">
+                        <button type="button" class="btn btn-light-secondary" data-kt-user-modal-action="close">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">
+                                <?= $ml->tr('CLOSE') ?>
+                            </span>
+                        </button>
+                        <input type="submit" class="btn btn-primary ms-1"
+                            value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 </div>
 

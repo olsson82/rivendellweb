@@ -245,5 +245,42 @@ class User
         }
     }
 
+    public function updateRivRights($username, $ccarts, $delcarts, $modcarts, $editnet, $editaudio, $voicetrack, $allowweb, $clog, $dellog, $modtemp, $delrepo, $playout, $addlog, $rearr, $dellogitem, $configsys, $cpod, $epod, $dpod, $weblogin)
+    {
+        $sql = 'UPDATE `USERS` SET `CREATE_CARTS_PRIV` = :ccarts, `MODIFY_CARTS_PRIV` = :modcarts, `DELETE_CARTS_PRIV` = :delcarts,
+        `EDIT_CATCHES_PRIV` = :editnet, `EDIT_AUDIO_PRIV` = :editaudio, `VOICETRACK_LOG_PRIV` = :voicetrack, `WEBGET_LOGIN_PRIV` = :allowweb,
+        `CREATE_LOG_PRIV` = :clog, `DELETE_LOG_PRIV` = :dellog, `MODIFY_TEMPLATE_PRIV` = :modtemp, `DELETE_REC_PRIV` = :delrepo, `PLAYOUT_LOG_PRIV` = :playout,
+        `ADDTO_LOG_PRIV` = :addlog, `ARRANGE_LOG_PRIV` = :rearr, `REMOVEFROM_LOG_PRIV` = :dellogitem, `CONFIG_PANELS_PRIV` = :configsys,
+        `ADD_PODCAST_PRIV` = :cpod, `EDIT_PODCAST_PRIV` = :epod, `DELETE_PODCAST_PRIV` = :dpod, `ENABLE_WEB` = :weblogin WHERE `LOGIN_NAME` = :loginname';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':ccarts', $ccarts);
+        $stmt->bindParam(':modcarts', $modcarts);
+        $stmt->bindParam(':delcarts', $delcarts);
+        $stmt->bindParam(':editnet', $editnet);
+        $stmt->bindParam(':editaudio', $editaudio);
+        $stmt->bindParam(':voicetrack', $voicetrack);
+        $stmt->bindParam(':allowweb', $allowweb);
+        $stmt->bindParam(':clog', $clog);
+        $stmt->bindParam(':dellog', $dellog);
+        $stmt->bindParam(':modtemp', $modtemp);
+        $stmt->bindParam(':delrepo', $delrepo);
+        $stmt->bindParam(':playout', $playout);
+        $stmt->bindParam(':addlog', $addlog);
+        $stmt->bindParam(':rearr', $rearr);
+        $stmt->bindParam(':dellogitem', $dellogitem);
+        $stmt->bindParam(':configsys', $configsys);
+        $stmt->bindParam(':cpod', $cpod);
+        $stmt->bindParam(':epod', $epod);
+        $stmt->bindParam(':dpod', $dpod);
+        $stmt->bindParam(':weblogin', $weblogin);
+        $stmt->bindParam(':loginname', $username);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 
 }
