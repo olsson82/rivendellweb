@@ -691,3 +691,6 @@ $en_US['EDITPODCAST'] = 'Edit Podcast';
 $en_US['DELPODCAST'] = 'Delete Podcast';
 $en_US['ALLWEBLOGIN'] = 'Allow Web Login';
 $en_US['EDITRIVRIGHTS'] = 'Edit Rivendell Rights';
+$en_US['MULTIEDITCARTS'] = 'Multi Edit Carts';
+$en_US['UNCHANGEBRACK'] = '[unchanged]';
+$en_US['SELECTTOMULTIEDIT'] = 'You need to select carts to multiedit.';

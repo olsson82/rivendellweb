@@ -28,6 +28,7 @@
 var dt;
 var groupnow;
 var allgroups = 1;
+var editids_arr = [];
 
 function tr(translate) {
     var result = false;
@@ -41,7 +42,7 @@ function tr(translate) {
         datatype: 'html',
         success: function (data) {
             var mydata = $.parseJSON(data);
-            result  = mydata.translated;
+            result = mydata.translated;
         }
     });
     return result;
@@ -98,10 +99,9 @@ selgrouplibrary = new Choices(groupselbox, {
     itemSelectText: TRAN_SELECTPRESSSELECT,
 });
 
-
 if (Cookies.get('groupsel') === undefined || Cookies.get('groupsel') === null) {
     allgroups = 1;
-    Cookies.set('groupsel', '1', { expires: 7 });    
+    Cookies.set('groupsel', '1', { expires: 7 });
     selgrouplibrary.setChoiceByValue("allgroups");
 }
 
@@ -274,7 +274,7 @@ var KTDatatablesServerSide = function () {
                 "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
                 "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
                 "infoThousands": " ",
-                "lengthMenu": TRAN_TABLESHOW+ " _MENU_ " +TRAN_TABLEROWS,
+                "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
                 "loadingRecords": TRAN_TABLELOADING,
                 "processing": TRAN_TABLEWORKING,
                 "search": TRAN_TABLESEARCH,
@@ -440,6 +440,7 @@ var KTDatatablesServerSide = function () {
         const container = document.querySelector('#library_table');
         const checkboxes = container.querySelectorAll('[type="checkbox"]');
         const deleteSelected = document.querySelector('[data-kt-library-table-select="delete_selected"]');
+        const editSelected = document.querySelector('[data-kt-library-table-select="edit_selected"]');
 
         checkboxes.forEach(c => {
             c.addEventListener('click', function () {
@@ -449,7 +450,40 @@ var KTDatatablesServerSide = function () {
             });
         });
 
-        deleteSelected.addEventListener('click', function () { 
+        editSelected.addEventListener('click', function () {
+
+            if (ALLOW_MOD == 0) {
+                Swal.fire({
+                    text: TRAN_NORIGHTS,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: TRAN_OK,
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-primary"
+                    }
+                });
+            } else {
+                editids_arr = [];
+                $("input:checkbox[name=deletethis]:checked").each(function () {
+                    editids_arr.push($(this).val());
+                });
+                if (editids_arr.length > 0) {
+                    $('#multi_edit').modal('show');
+                } else {
+                    Swal.fire({
+                        text: TRAN_SELECTTOMULTIEDIT,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn fw-bold btn-primary"
+                        }
+                    });
+                }
+            }
+        });
+
+        deleteSelected.addEventListener('click', function () {
 
             if (ALLOW_DEL == 0) {
                 Swal.fire({
@@ -594,6 +628,8 @@ var KTDatatablesServerSide = function () {
     const modal2 = new bootstrap.Modal(element2);
     const element3 = document.getElementById('add_cart');
     const modal3 = new bootstrap.Modal(element3);
+    const element4 = document.getElementById('multi_edit');
+    const modal4 = new bootstrap.Modal(element4);
 
     var initImportModalButtons = function () {
         const cancelButton2 = element2.querySelector('[data-kt-import-modal-action="cancel"]');
@@ -641,7 +677,7 @@ var KTDatatablesServerSide = function () {
         });
     }
 
-    var initAddModalButtons = function () { 
+    var initAddModalButtons = function () {
         const cancelButton2 = element3.querySelector('[data-kt-add-modal-action="cancel"]');
         cancelButton2.addEventListener('click', e => {
             e.preventDefault();
@@ -686,6 +722,52 @@ var KTDatatablesServerSide = function () {
             });
         });
     }
+
+    var initMultiModalButtons = function () {
+        const cancelButton2 = element4.querySelector('[data-kt-multiedit-modal-action="cancel"]');
+        cancelButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal4.hide();
+                }
+            });
+        });
+        const closeButton2 = element4.querySelector('[data-kt-multiedit-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal4.hide();
+
+                }
+            });
+        });
+    }
     return {
         init: function () {
             initDatatable();
@@ -693,8 +775,7 @@ var KTDatatablesServerSide = function () {
             toggleToolbars();
             initImportModalButtons();
             initAddModalButtons();
-
-
+            initMultiModalButtons();
         }
     }
 }();
@@ -745,6 +826,54 @@ function msConversion(millis) {
         return min + ":" + sec;
     }
 }
+
+$("#multieditSave").click(function () {
+    $.ajax({
+        url: HOST_URL + '/forms/library/multieditcart.php',
+        type: 'post',
+        data: {
+            request: 2,
+            edit_arr: editids_arr,
+            title: $("#title").val(),
+            artist: $("#artist").val(),
+            year: $("#year").val(),
+            songid: $("#songid").val(),
+            album: $("#album").val(),
+            record: $("#record").val(),
+            client: $("#client").val(),
+            agency: $("#agency").val(),
+            publisher: $("#publisher").val(),
+            composer: $("#composer").val(),
+            conductor: $("#conductor").val(),
+            usrdef: $("#usrdef").val(),
+            usagecode: $("#usagecode").val(),
+            group: $("#group").val(),
+            schedcodes: $("#schedcodes").val(),
+        },
+        success: function (data) {
+            var mydata = $.parseJSON(data);
+            var fel = mydata.error;
+            var kod = mydata.errorcode;
+            if (fel == "false") {
+                $('#multi_edit').modal('hide');
+            } else {
+                Swal.fire({
+                    text: TRAN_BUG,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: TRAN_OK,
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+
+
+            }
+
+        }
+    });
+});
+
 
 $('#add_cart_form').validate({
     rules: {

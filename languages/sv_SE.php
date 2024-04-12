@@ -691,3 +691,6 @@ $sv_SE['EDITPODCAST'] = 'Redigera podcast';
 $sv_SE['DELPODCAST'] = 'Radera podcast';
 $sv_SE['ALLWEBLOGIN'] = 'Tillåt webbinloggning';
 $sv_SE['EDITRIVRIGHTS'] = 'Redigera rättigheter för Rivendell';
+$sv_SE['MULTIEDITCARTS'] = 'Multi redigera carts';
+$sv_SE['UNCHANGEBRACK'] = '[oförändrad]';
+$sv_SE['SELECTTOMULTIEDIT'] = 'Du behöver välja carts att multi redigera.';

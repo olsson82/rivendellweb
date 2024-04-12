@@ -83,7 +83,7 @@ class DBFunc
             $sql = 'SELECT * FROM `CUTS`
             WHERE `CART_NUMBER` = :number ORDER BY PLAY_ORDER ASC';
         }
-        
+
         $stmt = $this->_db->prepare($sql);
         $stmt->bindParam(':number', $cutid);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -312,14 +312,14 @@ class DBFunc
                 if ($day == 0 && $row['SUN'] == 'N' || $day == 1 && $row['MON'] == 'N' || $day == 2 && $row['TUE'] == 'N' || $day == 3 && $row['WED'] == 'N' || $day == 4 && $row['THU'] == 'N' || $day == 5 && $row['FRI'] == 'N' || $day == 6 && $row['SAT'] == 'N') {
                     $color = '#6f0000';
                 } else
-                    if (isset ($row['START_DATETIME']) && new DateTime() < new DateTime($row['START_DATETIME'])) {
+                    if (isset($row['START_DATETIME']) && new DateTime() < new DateTime($row['START_DATETIME'])) {
                         $color = '#01f8f4';
 
                     } else
-                        if (isset ($row['END_DATETIME']) && new DateTime() > new DateTime($row['END_DATETIME'])) {
+                        if (isset($row['END_DATETIME']) && new DateTime() > new DateTime($row['END_DATETIME'])) {
                             $color = '#6f0000';
                         } else
-                            if (isset ($row['START_DAYPART'])) {
+                            if (isset($row['START_DAYPART'])) {
                                 if (new DateTime() < new DateTime($row['START_DAYPART']) || new DateTime() > new DateTime($row['END_DAYPART'])) {
                                     $color = '#6f0000';
                                 }
@@ -1020,13 +1020,13 @@ class DBFunc
         }
 
         return $users;
-  
+
     }
 
     public function getRivUser($username)
     {
 
-        $users = array();        
+        $users = array();
         $notadmin = 'N';
         $sql = 'SELECT * FROM `USERS` WHERE `ADMIN_CONFIG_PRIV` = :notadmin AND `LOGIN_NAME` = :username';
 
@@ -1042,7 +1042,7 @@ class DBFunc
         }
 
         return $users;
-  
+
     }
 
     public function getRdAirplays()
@@ -1055,7 +1055,7 @@ class DBFunc
         while ($row = $stmt->fetch()) {
             $rdairplay[] = $row;
         }
-        return $rdairplay; 
+        return $rdairplay;
     }
 
     public function getServices()
@@ -1162,4 +1162,197 @@ class DBFunc
         }
 
     }
+
+    public function setGroupName($cart, $group)
+    {
+
+        $sql = 'UPDATE `CART` SET `GROUP_NAME` = :groupname WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':groupname', $group);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartTitle($cart, $title)
+    {
+
+        $sql = 'UPDATE `CART` SET `TITLE` = :title WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':title', $title);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartArtist($cart, $artist)
+    {
+
+        $sql = 'UPDATE `CART` SET `ARTIST` = :artist WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':artist', $artist);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartAlbum($cart, $album)
+    {
+
+        $sql = 'UPDATE `CART` SET `ALBUM` = :album WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':album', $album);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartYear($cart, $year)
+    {
+        $dateform = $year . "-01-01";
+        $sql = 'UPDATE `CART` SET `YEAR` = :years WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':years', $dateform);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartClient($cart, $client)
+    {
+
+        $sql = 'UPDATE `CART` SET `CLIENT` = :clients WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':clients', $client);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartAgency($cart, $agency)
+    {
+
+        $sql = 'UPDATE `CART` SET `AGENCY` = :agency WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':agency', $agency);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartPublisher($cart, $publisher)
+    {
+
+        $sql = 'UPDATE `CART` SET `PUBLISHER` = :publisher WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':publisher', $publisher);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartComposer($cart, $composer)
+    {
+
+        $sql = 'UPDATE `CART` SET `COMPOSER` = :composer WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':composer', $composer);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartUserDefined($cart, $user)
+    {
+
+        $sql = 'UPDATE `CART` SET `USER_DEFINED` = :userdef WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':userdef', $user);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartRecordLabel($cart, $label)
+    {
+
+        $sql = 'UPDATE `CART` SET `LABEL` = :labels WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':labels', $label);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function setCartUsageCode($cart, $usage)
+    {
+
+        $sql = 'UPDATE `CART` SET `USAGE_CODE` = :uscode WHERE `NUMBER` = :numberCart';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':uscode', $usage);
+        $stmt->bindParam(':numberCart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

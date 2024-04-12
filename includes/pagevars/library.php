@@ -1,6 +1,9 @@
 <script>
         var HOST_URL = "<?php echo DIR; ?>";
         var USERNAME = "<?php echo $username; ?>";
+        var TRAN_SELECTTOMULTIEDIT = "<?= $ml->tr('SELECTTOMULTIEDIT') ?>";
+        var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
+        var TRAN_ONLYDIGITS = "<?= $ml->tr('ONLYDIGITS') ?>";
         var TRAN_NORIGHTS = "<?= $ml->tr('NORIGHTS') ?>";
         var TRAN_YES = "<?= $ml->tr('YES') ?>";
         var TRAN_NO = "<?= $ml->tr('NO') ?>";

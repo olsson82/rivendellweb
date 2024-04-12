@@ -83,8 +83,6 @@ $page_js = '<script src="assets/static/js/library.js"></script>';
             </div>
         </div>
     </div>
-
-    <!-- Basic Tables start -->
     <section class="section">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
@@ -99,6 +97,9 @@ $page_js = '<script src="assets/static/js/library.js"></script>';
                     </div>
                     <button type="button" class="btn btn-danger" data-kt-library-table-select="delete_selected">
                         <?= $ml->tr('DELSELECTED'); ?>
+                    </button>
+                    <button type="button" class="btn btn-primary" data-kt-library-table-select="edit_selected">
+                        <?= $ml->tr('MULTIEDITCARTS'); ?>
                     </button>
                 </div>
                 <div data-kt-library-table-toolbar="base">
@@ -165,7 +166,199 @@ $page_js = '<script src="assets/static/js/library.js"></script>';
         </div>
 
     </section>
-    <!-- Basic Tables end -->
+    <div class="modal fade text-left" id="multi_edit" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="multiEditLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-primary">
+                    <h4 class="modal-title white" id="multiEditLabel">
+                        <?= $ml->tr('MULTIEDITCARTS') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-multiedit-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="multi_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="title">
+                                        <?= $ml->tr('TITLE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="title" class="form-control" name="title" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="artist">
+                                        <?= $ml->tr('ARTIST') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="artist" class="form-control" name="artist" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="year">
+                                        <?= $ml->tr('YEARRELEASED') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="year" class="form-control" name="year" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="songid">
+                                        <?= $ml->tr('SONGID') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="songid" class="form-control" name="songid" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="album">
+                                        <?= $ml->tr('ALBUM') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="album" class="form-control" name="album" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="record">
+                                        <?= $ml->tr('RECORDLABEL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="record" class="form-control" name="record" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="client">
+                                        <?= $ml->tr('CLIENT') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="client" class="form-control" name="client" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="agency">
+                                        <?= $ml->tr('AGENCY') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="agency" class="form-control" name="agency" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="publisher">
+                                        <?= $ml->tr('PUBLISHER') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="publisher" class="form-control" name="publisher" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="composer">
+                                        <?= $ml->tr('COMPOSER') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="composer" class="form-control" name="composer" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="conductor">
+                                        <?= $ml->tr('CONDUCTOR') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="conductor" class="form-control" name="conductor" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="usrdef">
+                                        <?= $ml->tr('USERDEFINED') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="usrdef" class="form-control" name="usrdef" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="usagecode">
+                                        <?= $ml->tr('USAGE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="usagecode" name="usagecode" class="choices form-select">
+                                        <option value="non" SELECTED>
+                                            <?= $ml->tr('UNCHANGEBRACK') ?>
+                                        </option>
+                                        <option value="0">
+                                            <?= $ml->tr('FEATURE') ?>
+                                        </option>
+                                        <option value="1">
+                                            <?= $ml->tr('THEMEOPEN') ?>
+                                        </option>
+                                        <option value="2">
+                                            <?= $ml->tr('THEMECLOSE') ?>
+                                        </option>
+                                        <option value="3">
+                                            <?= $ml->tr('THEMEOPENCLOSE') ?>
+                                        </option>
+                                        <option value="4">
+                                            <?= $ml->tr('BACKGROUND') ?>
+                                        </option>
+                                        <option value="5">
+                                            <?= $ml->tr('COMJINGPROMO') ?>
+                                        </option>
+
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="schedcodes">
+                                        <?= $ml->tr('SCHEDULERCODES') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="schedcodes" name="schedcodes[]" class="choices form-select" multiple>
+                                        <?php foreach ($schedCodes as $scode) { ?>
+                                            <option value="<?php echo $scode['code']; ?>">
+                                                <?php echo $scode['code']; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="group">
+                                        <?= $ml->tr('GROUP') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="group" name="group" class="choices form-select">
+                                        <option value="non" SELECTED>
+                                            <?= $ml->tr('UNCHANGEBRACK') ?>
+                                        </option>
+                                        <?php foreach ($usrgroups as $groupdata) { ?>
+                                            <option value="<?php echo $groupdata; ?>">
+                                                <?php echo $groupdata; ?>
+                                            </option>
+                                        <?php } ?>
+
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-kt-multiedit-modal-action="close">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">
+                                <?= $ml->tr('CLOSE') ?>
+                            </span>
+                        </button>
+                        <button type="button" id="multieditSave" class="btn btn-primary ms-1">
+                            <?= $ml->tr('SAVE') ?>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="modal fade text-left" id="import_music" data-bs-backdrop="static" role="dialog"
         aria-labelledby="myModalLabel33" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
