@@ -26,48 +26,14 @@
  *             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE             *
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
-function fileCreateWrite()
-{
-    $array_data = array();
-    $extra = array(
-        'sysname' => $_POST['sys_name'],
-        'sysurl' => $_POST["urladd"],
-        'deflang' => $_POST["def_lang"],
-        'admin' => array(
-            $_POST["admin_usr"] => array(
-                'username' => $_POST["admin_usr"],
-                'settings' => '1',
-                'users' => '1',
-                'message' => '1',
-                'groups' => '1',
-            )
-        ),
-        'timezone' => $_POST["time_zone"],
-        'smtpserv' => $_POST["smtp_server"],
-        'port' => $_POST["smtp_port"],
-        'smtplogin' => $_POST["smtp_login"],
-        'smtpenc' => $_POST["smtp_enc"],
-        'smtpusr' => $_POST["smtp_usr"],
-        'smtppass' => $_POST["smtp_pass"],
-        'smtpfrom' => $_POST["smtp_from"],
-        'newsmess' => '',
-        'usereset' => $_POST["pass_reset"],
-        'autotrim' => $_POST["autotrim"],
-        'normalize' => $_POST["normalize"],
-        'jsonID' => 'xuZa983fAUkLv23163',
+require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 
-    );
-    $array_data[] = $extra;
-    $final_data = json_encode($extra, JSON_UNESCAPED_SLASHES);
-    return $final_data;
-}
-
-
-$final_data = fileCreateWrite();
-if (file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $final_data)) {
-    $echodata = ['error' => 'false', 'errorcode' => '0'];
-    echo json_encode($echodata);
+$newgroup = $_GET['groupname'];
+if ($dbfunc->getGroupNameExist($newgroup)) {
+    $response = "true";
 } else {
-    $echodata = ['error' => 'true', 'errorcode' => '1'];
-    echo json_encode($echodata);
+    $response = $ml->tr('GROUPNAMEEXIST');
 }
+header("HTTP/1.1 200 OK");
+header('Content-Type: application/json');
+echo json_encode($response);

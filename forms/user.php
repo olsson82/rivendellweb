@@ -35,6 +35,7 @@ if ($_POST['adminrights'] == 1) {
     $json_sett["admin"][$username]['users'] = $_POST['manageuser'];
     $json_sett["admin"][$username]['message'] = $_POST['messages'];
     $json_sett["admin"][$username]['hosts'] = $_POST['hosts'];
+    $json_sett["admin"][$username]['groups'] = $_POST['modifygroups'];
 
     $jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
 

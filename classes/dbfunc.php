@@ -1355,4 +1355,209 @@ class DBFunc
 
     }
 
+    public function getRivGroups()
+    {
+
+        $groups = array();
+        $sql = 'SELECT * FROM `GROUPS` ORDER BY `NAME` ASC';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $groups[] = $row;
+        }
+
+        return $groups;
+
+    }
+
+    public function getRivGroup($name)
+    {
+
+        $group = array();
+        $sql = 'SELECT * FROM `GROUPS` WHERE `NAME` = :thename';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':thename', $name);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $group = $row;
+        }
+
+        return $group;
+
+    }
+
+    public function getServicesGroup($name)
+    {
+
+        $service = array();
+
+        $sql = 'SELECT `SERVICE_NAME` FROM `AUDIO_PERMS` WHERE `GROUP_NAME` = :thename ORDER BY `SERVICE_NAME` ASC';
+
+        $results = $this->_db->prepare($sql);
+        $results->bindParam(':thename', $name);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+        $results->execute();
+        while ($row = $results->fetch()) {
+
+            foreach ($row as $field)
+                $service[] = $field;
+
+        }
+
+        $results = NULL;
+
+        return $service;
+
+    }
+
+    public function clearServiceGroup($name)
+    {
+        $stmt1 = $this->_db->prepare('DELETE FROM AUDIO_PERMS WHERE GROUP_NAME = :id');
+        $stmt1->execute([
+            ':id' => $name,
+        ]);
+
+        return true;
+    }
+
+    public function removeOldServiceGroup($name, $service)
+    {
+        $stmt1 = $this->_db->prepare('DELETE FROM AUDIO_PERMS WHERE GROUP_NAME = :group AND SERVICE_NAME = :id');
+        $stmt1->execute([
+            ':group' => $name,
+            ':id' => $service,
+        ]);
+
+        return true;
+    }
+
+    public function addNewServiceGroup($name, $service)
+    {
+
+        $sql = 'INSERT INTO `AUDIO_PERMS` (`GROUP_NAME`, `SERVICE_NAME`)
+                VALUES (:gname, :sname)';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':gname', $name);
+        $stmt->bindParam(':sname', $service);
+
+        if ($stmt->execute() === FALSE || $stmt->rowCount() != 1) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function updateGroupInfo($groupid, $groupdesc, $gimport, $emailaddresses, $carttype, $cartstart, $cartend, $color, $enfcart, $inctraffic, $incmusic, $cutcreation, $purgedays, $delempty)
+    {
+
+        $sql = 'UPDATE `GROUPS` SET `DESCRIPTION` = :descript, `DEFAULT_CART_TYPE` = :carttype, `DEFAULT_LOW_CART` = :cartstart, `DEFAULT_HIGH_CART` = :cartend,
+        `DEFAULT_CUT_LIFE` = :cutcreation, `CUT_SHELFLIFE` = :purgedays, `DELETE_EMPTY_CARTS` = :delempty, `DEFAULT_TITLE` = :gimport,
+        `ENFORCE_CART_RANGE` = :enfcart, `REPORT_TFC` = :inctraffic, `REPORT_MUS` = :incmusic, `COLOR` = :color, `NOTIFY_EMAIL_ADDRESS` = :emailaddresses WHERE `NAME` = :thename';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':descript', $groupdesc);
+        $stmt->bindParam(':carttype', $carttype);
+        $stmt->bindParam(':cartstart', $cartstart);
+        $stmt->bindParam(':cartend', $cartend);
+        $stmt->bindParam(':cutcreation', $cutcreation);
+        $stmt->bindParam(':purgedays', $purgedays);
+        $stmt->bindParam(':delempty', $delempty);
+        $stmt->bindParam(':gimport', $gimport);
+        $stmt->bindParam(':enfcart', $enfcart);
+        $stmt->bindParam(':inctraffic', $inctraffic);
+        $stmt->bindParam(':incmusic', $incmusic);
+        $stmt->bindParam(':color', $color);
+        $stmt->bindParam(':emailaddresses', $emailaddresses);
+        $stmt->bindParam(':thename', $groupid);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function addGroupToUsers($name)
+    {
+        $notadmin = 'N';
+        $sql = 'SELECT * FROM USERS WHERE `ADMIN_CONFIG_PRIV` = :notadmin';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':notadmin', $notadmin);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        $totalCount = $stmt->rowCount();
+        if ($totalCount > 0) {            
+            while ($row = $stmt->fetch()) {
+                $sql2 = 'INSERT INTO `USER_PERMS` (`USER_NAME`, `GROUP_NAME`)
+                VALUES (:usrname, :groupname)';
+                $stmt2 = $this->_db->prepare($sql2);
+                $stmt2->bindParam(':usrname', $row['LOGIN_NAME']);
+                $stmt2->bindParam(':groupname', $name);
+                $stmt2->execute();
+            }
+            return true;
+        } else {
+            return false;
+        }
+
+    }
+
+    public function addGroupInfo($groupid, $groupdesc, $gimport, $emailaddresses, $carttype, $cartstart, $cartend, $color, $enfcart, $inctraffic, $incmusic, $cutcreation, $purgedays, $delempty)
+    {
+        $sql = 'INSERT INTO `GROUPS` (`NAME`, `DESCRIPTION`, `DEFAULT_CART_TYPE`, `DEFAULT_LOW_CART`, `DEFAULT_HIGH_CART`, `DEFAULT_CUT_LIFE`, `CUT_SHELFLIFE`, `DELETE_EMPTY_CARTS`, `DEFAULT_TITLE`,
+        `ENFORCE_CART_RANGE`, `REPORT_TFC`, `REPORT_MUS`, `COLOR`, `NOTIFY_EMAIL_ADDRESS`) VALUES (:thename, :descript, :carttype, :cartstart, :cartend, :cutcreation, :purgedays, :delempty, :gimport, :enfcart, :inctraffic, :incmusic, :color, :emailaddresses)';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':thename', $groupid);
+        $stmt->bindParam(':descript', $groupdesc);
+        $stmt->bindParam(':carttype', $carttype);
+        $stmt->bindParam(':cartstart', $cartstart);
+        $stmt->bindParam(':cartend', $cartend);
+        $stmt->bindParam(':cutcreation', $cutcreation);
+        $stmt->bindParam(':purgedays', $purgedays);
+        $stmt->bindParam(':delempty', $delempty);
+        $stmt->bindParam(':gimport', $gimport);
+        $stmt->bindParam(':enfcart', $enfcart);
+        $stmt->bindParam(':inctraffic', $inctraffic);
+        $stmt->bindParam(':incmusic', $incmusic);
+        $stmt->bindParam(':color', $color);
+        $stmt->bindParam(':emailaddresses', $emailaddresses);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function getGroupNameExist($name)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM GROUPS WHERE NAME = :evname');
+        $stmt->execute([
+            ':evname' => $name
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+        $number_of_rows = $stmt->rowCount();
+
+        if ($number_of_rows > 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+
+    }
+
 }
