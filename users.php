@@ -37,6 +37,8 @@ if (!$json_sett["admin"][$_COOKIE['username']]["users"] == 1) {
 }
 $username = $_COOKIE['username'];
 $fullname = $_COOKIE['fullname'];
+$services = $dbfunc->getServices();
+$groups = $dbfunc->getGroupNames();
 $pagecode = "users";
 $page_vars = 'users';
 $page_title = $ml->tr('USERS');
@@ -126,6 +128,67 @@ $page_js = '<script src="assets/static/js/users.js"></script>';
         </div>
 
     </section>
+    <div class="modal fade text-left" id="permission_window" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="EditLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="EditLabel">
+                        <?= $ml->tr('GROUPSERVICEPERMS') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-perms-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="perms_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="activegroups">
+                                        <?= $ml->tr('GROUPPERMISSIONS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="activegroups" name="activegroups[]" class="form-select" multiple>
+                                        <?php foreach ($groups as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="activeservice">
+                                        <?= $ml->tr('SERVICEPERMISSIONS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="activeservice" name="activeservice[]" class="form-select" multiple>
+                                        <?php foreach ($services as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="userid" name="userid" value="">
+                        <button type="button" class="btn btn-light-secondary" data-kt-perms-modal-action="close">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">
+                                <?= $ml->tr('CLOSE') ?>
+                            </span>
+                        </button>
+                        <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="modal fade text-left" id="user_window" data-bs-backdrop="static" role="dialog"
         aria-labelledby="UserLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">

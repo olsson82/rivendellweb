@@ -729,3 +729,6 @@ $sv_SE['GROUPNAMELONG'] = 'Gruppnamn får inte vara längre än 10 tecken.';
 $sv_SE['REMOVEGROUP'] = 'Ta bort grupp';
 $sv_SE['CARTSWILLDELETE '] = '{{1}} carts som tillhör gruppen {{2}} kommer att tas bort! Vill du fortfarande ta bort den?';
 $sv_SE['REMOVETHEGROUP '] = 'Vill du ta bort gruppen {{1}}?';
+$sv_SE['GROUPPERMISSIONS'] = 'Grupp Behörigheter';
+$sv_SE['SERVICEPERMISSIONS'] = 'Service Behörigheter';
+$sv_SE['GROUPSERVICEPERMS'] = 'Grupp & Service Behörigheter';

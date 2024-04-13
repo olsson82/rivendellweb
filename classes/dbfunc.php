@@ -1664,4 +1664,84 @@ class DBFunc
 
     }
 
+    public function getGroupNames()
+    {
+
+        $groups = array();
+
+        $sql = 'SELECT `NAME` FROM `GROUPS`
+                ORDER BY `NAME` ASC';
+
+        $results = $this->_db->prepare($sql);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+        $results->execute();
+        while ($row = $results->fetch()) {
+
+            foreach ($row as $field)
+                $groups[] = $field;
+
+        }
+
+        $results = NULL;
+
+        return $groups;
+
+    }
+
+    public function clearServiceUser($name)
+    {
+        $stmt1 = $this->_db->prepare('DELETE FROM USER_SERVICE_PERMS WHERE USER_NAME = :id');
+        $stmt1->execute([
+            ':id' => $name,
+        ]);
+
+        return true;
+    }
+
+    public function clearGroupUser($name)
+    {
+        $stmt1 = $this->_db->prepare('DELETE FROM USER_PERMS WHERE USER_NAME = :id');
+        $stmt1->execute([
+            ':id' => $name,
+        ]);
+
+        return true;
+    }
+
+    public function addUserService($name, $service)
+    {
+
+        $sql = 'INSERT INTO `USER_SERVICE_PERMS` (`USER_NAME`, `SERVICE_NAME`)
+                VALUES (:gname, :sname)';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':gname', $name);
+        $stmt->bindParam(':sname', $service);
+
+        if ($stmt->execute() === FALSE || $stmt->rowCount() != 1) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function addUserGroups($name, $group)
+    {
+
+        $sql = 'INSERT INTO `USER_PERMS` (`USER_NAME`, `GROUP_NAME`)
+                VALUES (:gname, :sname)';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':gname', $name);
+        $stmt->bindParam(':sname', $group);
+
+        if ($stmt->execute() === FALSE || $stmt->rowCount() != 1) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

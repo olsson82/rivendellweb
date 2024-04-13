@@ -3,6 +3,7 @@
     var TRAN_EDITUSER = "<?= $ml->tr('EDITUSER') ?>";
     var TRAN_EDITRIVRIGHTS = "<?= $ml->tr('EDITRIVRIGHTS') ?>";
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
+    var TRAN_GROUPSERVICEPERMS = "<?= $ml->tr('GROUPSERVICEPERMS') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";
     var TRAN_NO = "<?= $ml->tr('NO') ?>";
     var TRAN_BUG = "<?= $ml->tr('BUG') ?>";

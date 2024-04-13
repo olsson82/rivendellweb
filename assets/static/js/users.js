@@ -27,6 +27,36 @@
  *********************************************************************************************************/
 var dt;
 
+function editperms(user) {
+    $("#activeservice option:selected").removeAttr("selected");
+    $("#activegroups option:selected").removeAttr("selected");
+    $.ajax({
+        url: HOST_URL + '/forms/loaduserservice.php',
+        data: "id=" + user,
+        dataType: 'json',
+        success: function (data) {
+            var i;
+            for (i = 0; i < data.length; i++) {
+                $('#activeservice option[value=' + data[i] + ']').attr('selected', true);
+            }
+        }
+    });
+
+    $.ajax({
+        url: HOST_URL + '/forms/loadusergroup.php',
+        data: "id=" + user,
+        dataType: 'json',
+        success: function (data) {
+            var i;
+            for (i = 0; i < data.length; i++) {
+                $('#activegroups option[value=' + data[i] + ']').attr('selected', true);
+            }
+        }
+    });
+    $('#userid').val(user);
+    $("#permission_window").modal("show");
+}
+
 function editRights(user) {
     $.ajax({
         url: HOST_URL + '/forms/loaduser.php',
@@ -58,6 +88,63 @@ function editRights(user) {
         }
     });
 }
+
+$('#perms_form').validate({
+    rules: {
+        activegroups: {
+            required: true,
+        },
+        activeservice: {
+            required: true,
+        },
+    },
+    messages: {
+        activegroups: {
+            required: TRAN_NOTBEEMPTY
+        },
+        activeservice: {
+            required: TRAN_NOTBEEMPTY
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#perms_form').serialize();
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/edituserperms.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                if (fel == "false") {
+                    $('#permission_window').modal('hide');
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+
+
+                }
+            }
+        });
+    }
+});
 
 $('#user_form').validate({
     rules: {
@@ -180,6 +267,8 @@ var KTDatatablesServerSide = function () {
                                     title="`+ TRAN_EDITUSER + `"><i class="bi bi-pencil"></i></a>
                                     <a href="javascript:;" onclick="editRights('` + row.LOGIN_NAME + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDITRIVRIGHTS + `"><i class="bi bi-universal-access"></i></a>
+                                    <a href="javascript:;" onclick="editperms('` + row.LOGIN_NAME + `')" class="btn icon btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_GROUPSERVICEPERMS + `"><i class="bi bi-database-lock"></i></a>
                                 </div>
                         `;
                     }
@@ -238,10 +327,60 @@ var initUserRightsModalButtons = function () {
     });
 }
 
+const element2 = document.getElementById('permission_window');
+const modal2 = new bootstrap.Modal(element2);
+
+var initPermsModalButtons = function () {
+    const cancelButton2 = element2.querySelector('[data-kt-perms-modal-action="cancel"]');
+    cancelButton2.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal2.hide();
+            }
+        });
+    });
+    const closeButton2 = element2.querySelector('[data-kt-perms-modal-action="close"]');
+    closeButton2.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal2.hide();
+
+            }
+        });
+    });
+}
+
     return {
         init: function () {
             initDatatable();
             initUserRightsModalButtons();
+            initPermsModalButtons();
         }
     }
 }();

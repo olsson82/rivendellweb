@@ -729,3 +729,6 @@ $en_US['GROUPNAMELONG'] = 'Group name can not be longer than 10 characters.';
 $en_US['REMOVEGROUP'] = 'Remove group';
 $en_US['CARTSWILLDELETE '] = '{{1}} carts that belongs to group {{2}} will be removed! Do you still want to remove it ?';
 $en_US['REMOVETHEGROUP '] = 'Do you want to remove the group {{1}} ?';
+$en_US['GROUPPERMISSIONS'] = 'Group Permissions';
+$en_US['SERVICEPERMISSIONS'] = 'Service Permissions';
+$en_US['GROUPSERVICEPERMS'] = 'Group & Service Permissions';
