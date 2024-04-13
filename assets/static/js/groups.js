@@ -27,6 +27,24 @@
  *********************************************************************************************************/
 var dt;
 
+function tr(translate) {
+    var result = false;
+    jQuery.ajax({
+        type: "POST",
+        url: HOST_URL + '/forms/jstrans.php',
+        async: false,
+        data: {
+            translate: translate
+        },
+        datatype: 'html',
+        success: function (data) {
+            var mydata = $.parseJSON(data);
+            result = mydata.translated;
+        }
+    });
+    return result;
+}
+
 function editgroup(name) {
     $.ajax({
         url: HOST_URL + '/forms/loadgroup.php',
@@ -89,11 +107,186 @@ function editgroup(name) {
     $("#edit_window").modal("show");
 }
 
+function renamegroup(name) {
+
+    $.ajax({
+        url: HOST_URL + '/forms/loadgroup.php',
+        data: "id=" + name,
+        dataType: 'json',
+        success: function (data) {
+            $('#re_groupid').val(name);
+            $("#rename_window").modal("show");
+        }
+    });
+}
+
+function delgroup(id) {
+    jQuery.ajax({
+        type: "POST",
+        url: HOST_URL + '/forms/checkgroupcarts.php',
+        async: false,
+        data: {
+            name: id
+        },
+        datatype: 'html',
+        success: function (data) {
+            var mydata = $.parseJSON(data);
+            var fel = mydata.error;
+            var kod = mydata.errorcode;
+            var carts = mydata.carts;
+            if (fel == "true") {
+                var trans = tr('CARTSWILLDELETE {{' + carts + '}} {{' + id + '}}');
+                Swal.fire({
+                    text: trans,
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: TRAN_YES,
+                    cancelButtonText: TRAN_NO,
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-danger",
+                        cancelButton: "btn fw-bold btn-active-light-primary"
+                    }
+                }).then(function (result) {
+                    if (result.value) {
+                        jQuery.ajax({
+                            type: "POST",
+                            url: HOST_URL + '/forms/removegroup.php',
+                            data: {
+                                idet: id,
+                                remcarts: 1
+                            },
+                            datatype: 'html',
+                            success: function (data) {
+                                var mydata = $.parseJSON(data);
+                                var fel = mydata.error;
+                                if (fel == "false") {
+                                    dt.ajax.reload();
+                                } else {
+                                    Swal.fire({
+                                        text: TRAN_BUG,
+                                        icon: "error",
+                                        buttonsStyling: false,
+                                        confirmButtonText: TRAN_OK,
+                                        customClass: {
+                                            confirmButton: "btn btn-primary"
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+            } else {
+                var trans2 = tr('REMOVETHEGROUP {{' + id + '}}');
+                Swal.fire({
+                    text: trans2,
+                    icon: "warning",
+                    showCancelButton: true,
+                    buttonsStyling: false,
+                    confirmButtonText: TRAN_YES,
+                    cancelButtonText: TRAN_NO,
+                    customClass: {
+                        confirmButton: "btn fw-bold btn-danger",
+                        cancelButton: "btn fw-bold btn-active-light-primary"
+                    }
+                }).then(function (result) {
+                    if (result.value) {
+                        jQuery.ajax({
+                            type: "POST",
+                            url: HOST_URL + '/forms/removegroup.php',
+                            data: {
+                                idet: id,
+                                remcarts: 0
+                            },
+                            datatype: 'html',
+                            success: function (data) {
+                                var mydata = $.parseJSON(data);
+                                var fel = mydata.error;
+                                if (fel == "false") {
+                                    dt.ajax.reload();
+                                } else {
+                                    Swal.fire({
+                                        text: TRAN_BUG,
+                                        icon: "error",
+                                        buttonsStyling: false,
+                                        confirmButtonText: TRAN_OK,
+                                        customClass: {
+                                            confirmButton: "btn btn-primary"
+                                        }
+                                    });
+                                }
+                            }
+                        });
+                    }
+                });
+
+            }
+        }
+    });
+}
+
+var RenameForm = $('#rename_form').validate({
+    rules: {
+        groupname: {
+            required: true,
+            remote: HOST_URL + "/validation/checknewgroupname.php",
+            maxlength: 10
+        },
+    },
+    messages: {
+        groupname: {
+            required: TRAN_NOTBEEMPTY,
+            maxlength: TRAN_GROUPNAMELONG
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#rename_form').serialize();
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/renamegroup.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                var kod = mydata.errorcode;
+                if (fel == "false") {
+                    RenameForm.resetForm();
+                    dt.ajax.reload();
+                    $('#rename_window').modal('hide');
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+            }
+        });
+    }
+});
+
 var AddForm = $('#add_form').validate({
     rules: {
         groupname: {
             required: true,
             remote: HOST_URL + "/validation/checknewgroupname.php",
+            maxlength: 10
         },
         groupdesc: {
             required: true,
@@ -109,6 +302,10 @@ var AddForm = $('#add_form').validate({
         },
     },
     messages: {
+        groupname: {
+            required: TRAN_NOTBEEMPTY,
+            maxlength: TRAN_GROUPNAMELONG
+        },
         groupdesc: {
             required: TRAN_NOTBEEMPTY
         },
@@ -363,6 +560,10 @@ var KTDatatablesServerSide = function () {
                         <div class="btn-group mb-3" role="group">
                                     <a href="javascript:;" onclick="editgroup('` + row.NAME + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDITGROUP + `"><i class="bi bi-pencil"></i></a>
+                                    <a href="javascript:;" onclick="renamegroup('` + row.NAME + `')" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_RENAMEGROUP + `"><i class="bi bi-fonts"></i></a>
+                                    <a href="javascript:;" onclick="delgroup('` + row.NAME + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_REMOVEGROUP + `"><i class="bi bi-x-square"></i></a>
                                 </div>
                         `;
                     }
@@ -470,11 +671,61 @@ var KTDatatablesServerSide = function () {
         });
     }
 
+    const element3 = document.getElementById('rename_window');
+    const modal3 = new bootstrap.Modal(element3);
+
+    var initRenameModalButtons = function () {
+        const cancelButton2 = element3.querySelector('[data-kt-rename-modal-action="cancel"]');
+        cancelButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal3.hide();
+                }
+            });
+        });
+        const closeButton2 = element3.querySelector('[data-kt-rename-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal3.hide();
+
+                }
+            });
+        });
+    }
+
     return {
         init: function () {
             initDatatable();
             initEditModalButtons();
             initAddModalButtons();
+            initRenameModalButtons();
         }
     }
 }();

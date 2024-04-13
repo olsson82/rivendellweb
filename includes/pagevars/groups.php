@@ -1,6 +1,9 @@
 <script>
     var HOST_URL = "<?php echo DIR; ?>";
     var TRAN_EDITGROUP = "<?= $ml->tr('EDIT') ?>";
+    var TRAN_RENAMEGROUP = "<?= $ml->tr('RENAMEGROUP') ?>";
+    var TRAN_GROUPNAMELONG = "<?= $ml->tr('GROUPNAMELONG') ?>";
+    var TRAN_REMOVEGROUP = "<?= $ml->tr('REMOVEGROUP') ?>";
     var TRAN_NONBRACKET = "<?= $ml->tr('NONBRACKET') ?>";
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";

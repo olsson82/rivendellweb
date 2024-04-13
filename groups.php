@@ -141,6 +141,48 @@ $page_js = '<script src="assets/static/js/groups.js"></script>';
 
     </section>
 
+    <div class="modal fade text-left" id="rename_window" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="RenameLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-primary">
+                    <h4 class="modal-title white" id="RenameLabel">
+                        <?= $ml->tr('RENAMEGROUP') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-rename-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="rename_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="re_groupname">
+                                        <?= $ml->tr('GROUPNAME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="re_groupname" class="form-control" name="groupname">
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="re_groupid" name="groupid" value="">
+                        <button type="button" class="btn btn-light-secondary" data-kt-rename-modal-action="close">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">
+                                <?= $ml->tr('CLOSE') ?>
+                            </span>
+                        </button>
+                        <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade text-left" id="edit_window" data-bs-backdrop="static" role="dialog"
         aria-labelledby="EditLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">

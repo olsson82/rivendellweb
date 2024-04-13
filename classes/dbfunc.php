@@ -1497,7 +1497,7 @@ class DBFunc
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
 
         $totalCount = $stmt->rowCount();
-        if ($totalCount > 0) {            
+        if ($totalCount > 0) {
             while ($row = $stmt->fetch()) {
                 $sql2 = 'INSERT INTO `USER_PERMS` (`USER_NAME`, `GROUP_NAME`)
                 VALUES (:usrname, :groupname)';
@@ -1557,6 +1557,110 @@ class DBFunc
             return true;
         }
 
+
+    }
+
+    public function renameGroup($name, $oldname)
+    {
+
+        $sql = 'UPDATE `GROUPS` SET `NAME` = :newnames WHERE `NAME` = :oldname';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':newnames', $name);
+        $stmt->bindParam(':oldname', $oldname);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            $sql = 'UPDATE `AUDIO_PERMS` SET `GROUP_NAME` = :newnames WHERE `GROUP_NAME` = :oldname';
+            $stmt = $this->_db->prepare($sql);
+            $stmt->bindParam(':newnames', $name);
+            $stmt->bindParam(':oldname', $oldname);
+
+            if ($stmt->execute() === FALSE) {
+                return false;
+            } else {
+                $sql = 'UPDATE `CART` SET `GROUP_NAME` = :newnames WHERE `GROUP_NAME` = :oldname';
+                $stmt = $this->_db->prepare($sql);
+                $stmt->bindParam(':newnames', $name);
+                $stmt->bindParam(':oldname', $oldname);
+
+                if ($stmt->execute() === FALSE) {
+                    return false;
+                } else {
+                    $sql = 'UPDATE `DROPBOXES` SET `GROUP_NAME` = :newnames WHERE `GROUP_NAME` = :oldname';
+                    $stmt = $this->_db->prepare($sql);
+                    $stmt->bindParam(':newnames', $name);
+                    $stmt->bindParam(':oldname', $oldname);
+
+                    if ($stmt->execute() === FALSE) {
+                        return false;
+                    } else {
+                        $sql = 'UPDATE `REPORT_GROUPS` SET `GROUP_NAME` = :newnames WHERE `GROUP_NAME` = :oldname';
+                        $stmt = $this->_db->prepare($sql);
+                        $stmt->bindParam(':newnames', $name);
+                        $stmt->bindParam(':oldname', $oldname);
+
+                        if ($stmt->execute() === FALSE) {
+                            return false;
+                        } else {
+                            $sql = 'UPDATE `USER_PERMS` SET `GROUP_NAME` = :newnames WHERE `GROUP_NAME` = :oldname';
+                            $stmt = $this->_db->prepare($sql);
+                            $stmt->bindParam(':newnames', $name);
+                            $stmt->bindParam(':oldname', $oldname);
+
+                            if ($stmt->execute() === FALSE) {
+                                return false;
+                            } else {
+                                return true;
+                            }
+                        }
+                    }
+
+                }
+            }
+        }
+
+    }
+
+    public function removeGroup($name)
+    {
+
+        $sql = "DELETE FROM AUDIO_PERMS WHERE GROUP_NAME = '$name'";
+        $sql2 = "DELETE FROM DROPBOXES WHERE GROUP_NAME = '$name'";
+        $sql3 = "DELETE FROM USER_PERMS WHERE GROUP_NAME = '$name'";
+        $sql4 = "DELETE FROM GROUPS WHERE NAME = '$name'";
+
+        if ($this->_db->query($sql) === FALSE) {
+            return false;
+        } else {
+            if ($this->_db->query($sql2) === FALSE) {
+                return false;
+            } else {
+                if ($this->_db->query($sql3) === FALSE) {
+                    return false;
+                } else {
+                    if ($this->_db->query($sql4) === FALSE) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+
+    }
+
+    public function checkRemoveGroupCarts($name)
+    {
+
+        $sql = 'SELECT * FROM `CART` WHERE `GROUP_NAME` = :thename';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':thename', $name);
+        $stmt->execute();
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+
+        return $stmt->rowCount();
 
     }
 
