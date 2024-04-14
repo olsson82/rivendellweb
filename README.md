@@ -7,6 +7,10 @@ The goal with this is to be able to do the most things from this system.
 
 **Please be advice that this system use BOTH Rivendells API and also do direct changes in the database**
 
+As this is in early development, the file structure is not so fancy, this will be fix in the future.
+
+The system has been updated to more fancy urls with rewrite engine. If you use an older version do update your system.
+
 ## The project
 This project started after i fixed some bugs in an old script by Brian McGlynn for to use with Rivendell Radio Automation. The original script can be found here: https://github.com/bpm1992/rivendell/tree/rdweb/web/rdphp
 
