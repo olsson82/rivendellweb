@@ -245,6 +245,23 @@ class User
         }
     }
 
+    public function updateUserDataAdmin($username, $fullname, $email, $phone, $description)
+    {
+        $sql = 'UPDATE `USERS` SET `FULL_NAME` = :fullname, `EMAIL_ADDRESS` = :emailadd, `PHONE_NUMBER` = :phone, `DESCRIPTION` = :descr  WHERE `LOGIN_NAME` = :loginname';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':fullname', $fullname);
+        $stmt->bindParam(':emailadd', $email);
+        $stmt->bindParam(':phone', $phone);
+        $stmt->bindParam(':descr', $description);
+        $stmt->bindParam(':loginname', $username);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     public function updateRivRights($username, $ccarts, $delcarts, $modcarts, $editnet, $editaudio, $voicetrack, $allowweb, $clog, $dellog, $modtemp, $delrepo, $playout, $addlog, $rearr, $dellogitem, $configsys, $cpod, $epod, $dpod, $weblogin)
     {
         $sql = 'UPDATE `USERS` SET `CREATE_CARTS_PRIV` = :ccarts, `MODIFY_CARTS_PRIV` = :modcarts, `DELETE_CARTS_PRIV` = :delcarts,

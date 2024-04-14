@@ -56,7 +56,7 @@ if ($error == 1) {
     echo json_encode($echodata);
 } else {
 
-    if (!$user->updateUserData($username, $_POST['fullname'], $_POST['email'], $_POST['phone'])) {
+    if (!$user->updateUserDataAdmin($username, $_POST['fullname'], $_POST['email'], $_POST['phone'], $_POST['description'])) {
         $echodata = ['error' => 'true', 'errorcode' => '1'];
         echo json_encode($echodata);
     } else {

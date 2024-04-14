@@ -130,6 +130,15 @@ $page_js = '<script src="'.DIR.'/assets/static/js/user.js"></script>';
                                         <input type="text" id="phone" class="form-control" name="phone"
                                             value="<?php echo $userData["PHONE_NUMBER"]; ?>">
                                     </div>
+                                    <div class="col-md-4">
+                                        <label for="description">
+                                            <?= $ml->tr('DESCRIPTION'); ?>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <input type="text" id="description" class="form-control" name="description"
+                                            value="<?php echo $userData["DESCRIPTION"]; ?>">
+                                    </div>
                                     <div class="divider">
                                         <div class="divider-text">
                                             <?= $ml->tr('ADMINRIGHTS'); ?>
