@@ -16,14 +16,14 @@
 	<meta property="og:url" content="<?php echo DIR; ?>" />
 	<meta property="og:site_name" content="<?php echo SYSTIT; ?>" />
 	<link rel="canonical" href="<?php echo DIR; ?>" />
-	<link rel="shortcut icon" href="AppImages/favicon.ico" />
+	<link rel="shortcut icon" href="<?php echo DIR; ?>/AppImages/favicon.ico" />
     <?php echo $page_css; ?>
-    <link rel="stylesheet" href="./assets/compiled/css/app.css">
-    <link rel="stylesheet" href="./assets/compiled/css/app-dark.css">
+    <link rel="stylesheet" href="<?php echo DIR; ?>/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="<?php echo DIR; ?>/assets/compiled/css/app-dark.css">
 </head>
 
 <body>
-    <script src="assets/static/js/initTheme.js"></script>
+    <script src="<?php echo DIR; ?>/assets/static/js/initTheme.js"></script>
     <div id="app">
         <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/sidebar.php'; ?>
         <div id="main">

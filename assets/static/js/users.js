@@ -263,7 +263,7 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         return `
                         <div class="btn-group mb-3" role="group">
-                                    <a href="user.php?id=` + row.LOGIN_NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    <a href="`+HOST_URL+`/admin/users/user/` + row.LOGIN_NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDITUSER + `"><i class="bi bi-pencil"></i></a>
                                     <a href="javascript:;" onclick="editRights('` + row.LOGIN_NAME + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDITRIVRIGHTS + `"><i class="bi bi-universal-access"></i></a>

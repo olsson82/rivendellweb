@@ -472,7 +472,7 @@ $('#saveas_form').validate({
                 var kod = mydata.errorcode;
                 var theclockname = mydata.clockname;
                 if (fel == "false") {
-                    location.href = HOST_URL + "/clock.php?id=" + theclockname;
+                    location.href = HOST_URL + "/manager/clock/" + theclockname;
                 } else {
                     if (kod == 1) {
                         Swal.fire({

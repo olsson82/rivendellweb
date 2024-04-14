@@ -349,10 +349,10 @@ var KTDatatablesServerSide = function () {
                             if (ALLOW_MOD == 1) {
 
                                 if (row.TYPE == 2) {
-                                    return '<a href="macro.php?id=' + row.NUMBER + '" class="text-gray-800 text-hover-primary mb-1">' + data + '</a>';
+                                    return '<a href="'+HOST_URL +'/cart/macro/' + row.NUMBER + '" class="text-gray-800 text-hover-primary mb-1">' + data + '</a>';
                                 } else {
 
-                                    return '<a href="cart.php?id=' + row.NUMBER + '" class="text-gray-800 text-hover-primary mb-1">' + data + '</a>';
+                                    return '<a href="'+HOST_URL +'/cart/audio/' + row.NUMBER + '" class="text-gray-800 text-hover-primary mb-1">' + data + '</a>';
                                 }
 
                             } else {
@@ -409,10 +409,10 @@ var KTDatatablesServerSide = function () {
                             if (ALLOW_MOD == 1) {
 
                                 if (row.TYPE == 2) {
-                                    URL = 'macro.php?id=' + row.NUMBER;
+                                    URL = HOST_URL +'/cart/macro/' + row.NUMBER;
                                 } else {
 
-                                    URL = 'cart.php?id=' + row.NUMBER;
+                                    URL = HOST_URL +'/cart/audio/' + row.NUMBER;
                                 }
 
                             } else {

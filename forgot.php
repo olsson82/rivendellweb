@@ -28,11 +28,11 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if ($user->is_logged_in()) {
-    header('Location: dash.php');
+    header('Location: '.DIR.'/dash');
     exit();
 }
 if (USERESET == 0) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 
@@ -57,25 +57,25 @@ if (USERESET == 0) {
     <meta property="og:url" content="<?php echo DIR; ?>" />
     <meta property="og:site_name" content="<?php echo SYSTIT; ?>" />
     <link rel="canonical" href="<?php echo DIR; ?>" />
-    <link rel="shortcut icon" href="AppImages/favicon.ico" />
+    <link rel="shortcut icon" href="<?php echo DIR; ?>/AppImages/favicon.ico" />
     <title>
         <?= $ml->tr('FORGOTPASSWORD'); ?>
     </title>
-    <link rel="stylesheet" href="assets/extensions/sweetalert2/sweetalert2.min.css">
-    <link rel="stylesheet" href="./assets/compiled/css/app.css">
-    <link rel="stylesheet" href="./assets/compiled/css/app-dark.css">
-    <link rel="stylesheet" href="./assets/compiled/css/auth.css">
+    <link rel="stylesheet" href="<?php echo DIR; ?>/assets/extensions/sweetalert2/sweetalert2.min.css">
+    <link rel="stylesheet" href="<?php echo DIR; ?>/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="<?php echo DIR; ?>/assets/compiled/css/app-dark.css">
+    <link rel="stylesheet" href="<?php echo DIR; ?>/assets/compiled/css/auth.css">
 </head>
 
 <body>
-    <script src="assets/static/js/initTheme.js"></script>
+    <script src="<?php echo DIR; ?>/assets/static/js/initTheme.js"></script>
     <div id="auth">
 
         <div class="row h-100">
             <div class="col-lg-5 col-12">
                 <div id="auth-left">
                     <div class="auth-logo">
-                        <a href="index.php"><img src="assets/static/images/rivlogo/rdairplay-128x128.png"
+                        <a href="<?php echo DIR; ?>/login"><img src="<?php echo DIR; ?>/assets/static/images/rivlogo/rdairplay-128x128.png"
                                 alt="Logo"></a>
                     </div>
                     <h1 class="auth-title">
@@ -99,7 +99,7 @@ if (USERESET == 0) {
                     </form>
                     <div class="text-center mt-5 text-lg fs-4">
                         <p class='text-gray-600'>
-                            <?= $ml->tr('REMEMBERACCOUNT'); ?> <a href="index.php" class="font-bold">
+                            <?= $ml->tr('REMEMBERACCOUNT'); ?> <a href="<?php echo DIR; ?>/login" class="font-bold">
                                 <?= $ml->tr('LOGIN'); ?>
                             </a>.
                         </p>
@@ -114,10 +114,10 @@ if (USERESET == 0) {
         </div>
 
     </div>
-    <script src="assets/extensions/jquery/jquery.min.js"></script>
-    <script src="assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-    <script src="assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-    <script src="assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+    <script src="<?php echo DIR; ?>/assets/extensions/jquery/jquery.min.js"></script>
+    <script src="<?php echo DIR; ?>/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+    <script src="<?php echo DIR; ?>/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+    <script src="<?php echo DIR; ?>/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
     <script>
         var HOST_URL = "<?= DIR ?>";
         var TRAN_NOTBEEMPTY = "<?= $ml->tr('NOTBEEMPTY'); ?>";
@@ -127,7 +127,7 @@ if (USERESET == 0) {
         var TRAN_ERRORSENDMAIL = "<?= $ml->tr('ERRORSENDMAIL'); ?>";
         var TRAN_BUG = "<?= $ml->tr('BUG'); ?>";
     </script>
-    <script src="assets/static/js/forgot.js"></script>
+    <script src="<?php echo DIR; ?>/assets/static/js/forgot.js"></script>
 </body>
 
 </html>

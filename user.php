@@ -28,12 +28,12 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 
 if (!$json_sett["admin"][$_COOKIE['username']]["users"] == 1) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 
@@ -45,20 +45,20 @@ $userData = $dbfunc->getRivUser($id);
 $pagecode = "users";
 $page_vars = 'user';
 $page_title = $ml->tr('EDITUSER');
-$page_css = '<link rel="stylesheet" href="assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="assets/extensions/flatpickr/flatpickr.min.css">
-<link rel="stylesheet" href="assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="./assets/compiled/css/table-datatable-jquery.css">';
-$plugin_js = '<script src="assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="assets/extensions/flatpickr/flatpickr.min.js"></script>
-<script src="assets/extensions/jquery-loading/jquery.loading.min.js"></script>
-<script src="assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
-$page_js = '<script src="assets/static/js/user.js"></script>';
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.css">
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
+$plugin_js = '<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.js"></script>
+<script src="'.DIR.'/assets/extensions/jquery-loading/jquery.loading.min.js"></script>
+<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
+$page_js = '<script src="'.DIR.'/assets/static/js/user.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -76,10 +76,10 @@ $page_js = '<script src="assets/static/js/user.js"></script>';
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="dash.php">
+                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/admin/dash">
                                 <?= $ml->tr('DASHBOARD'); ?>
                             </a></li>
-                        <li class="breadcrumb-item"><a href="users.php">
+                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/admin/users">
                                 <?= $ml->tr('USERS'); ?>
                             </a></li>
                         <li class="breadcrumb-item active" aria-current="page">
@@ -286,6 +286,38 @@ $page_js = '<script src="assets/static/js/user.js"></script>';
                                         </select>
                                         <p><small class="text-muted">
                                                 <?= $ml->tr('MODIFYGROUPSINFO'); ?>
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="modifysched">
+                                            <?= $ml->tr('MODIFYSCHEDCODES'); ?>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select id="modifysched" name="modifysched" class="choices form-select">
+                                            <?php if ($isadmin == 1) { ?>
+                                                <option value="1" <?php if ($json_sett["admin"][$id]["sched"] == '1') {
+                                                    echo 'SELECTED';
+                                                } ?>>
+                                                    <?= $ml->tr('YES'); ?>
+                                                </option>
+                                                <option value="0" <?php if ($json_sett["admin"][$id]["sched"] == '0') {
+                                                    echo 'SELECTED';
+                                                } ?>>
+                                                    <?= $ml->tr('NO'); ?>
+                                                </option>
+                                            <?php } else { ?>
+                                                <option value="1">
+                                                    <?= $ml->tr('YES'); ?>
+                                                </option>
+                                                <option value="0" SELECTED>
+                                                    <?= $ml->tr('NO'); ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                        <p><small class="text-muted">
+                                                <?= $ml->tr('MODIFYSCHEDCODESINFO'); ?>
                                             </small>
                                         </p>
                                     </div>

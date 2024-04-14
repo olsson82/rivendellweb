@@ -28,7 +28,7 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 
@@ -38,11 +38,11 @@ $fullname = $_COOKIE['fullname'];
 $pagecode = "usersett";
 $page_vars = 'usrsett';
 $page_title = $ml->tr('ACCINFO');
-$page_css = '<link rel="stylesheet" href="assets/extensions/sweetalert2/sweetalert2.min.css">';
-$plugin_js = '<script src="assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="assets/extensions/sweetalert2/sweetalert2.min.js"></script>';
-$page_js = '<script src="assets/static/js/usrsett.js"></script>';
+$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">';
+$plugin_js = '<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>';
+$page_js = '<script src="'.DIR.'/assets/static/js/usrsett.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -56,7 +56,7 @@ $page_js = '<script src="assets/static/js/usrsett.js"></script>';
                         <div class="col-12 col-md-6 order-md-2 order-first">
                             <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="dash.php"><?= $ml->tr('DASHBOARD'); ?></a></li>
+                                    <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/dash"><?= $ml->tr('DASHBOARD'); ?></a></li>
                                     <li class="breadcrumb-item active" aria-current="page"><?= $ml->tr('ACCINFO'); ?></li>
                                 </ol>
                             </nav>

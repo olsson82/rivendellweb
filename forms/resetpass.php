@@ -61,7 +61,7 @@ if ($user->getEmailConn($email)) {
         $message = str_replace('%forgotpass%', $ml->tr('LOOKSFORGOTPASSWORD'), $message);
         $message = str_replace('%resetimg%', DIR . '/assets/static/images/forgotpassmail.png', $message);
         $message = str_replace('%resetpassword%', $ml->tr('FORGOTPASSWORD'), $message);
-        $message = str_replace('%reseturl%', DIR . '/reset.php?token=' . $token, $message);
+        $message = str_replace('%reseturl%', DIR . '/reset/' . $token, $message);
         $message = str_replace('%ifnot%', $ml->tr('CLICKTHEBUTTONABOW'), $message);
         $message = str_replace('%onlysame%', $ml->tr('RESETWITHIN15'), $message);
         $message = str_replace('%footernote%', $ml->tr('SENTFROM {{' . APPNAME . '}}'), $message);

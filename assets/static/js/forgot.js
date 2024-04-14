@@ -71,7 +71,7 @@ $('#forgot_form').validate({
                         }
                     }).then(function (result) {
                         if (result.value) {
-                            location.href = HOST_URL + "/index.php";
+                            location.href = HOST_URL + "/login";
                         }
                     });
                 } else {

@@ -67,7 +67,7 @@ if (!isset($reset_data[$token]['token'])) {
                         $message = str_replace('%passreset%', $ml->tr('PASSRESETED'), $message);
                         $message = str_replace('%hello%', $ml->tr('HELLONAME {{' . $fullname . '}}'), $message);
                         $message = str_replace('%someone%', $ml->tr('SOMEONECHANGEDPASS {{' . APPNAME . '}}'), $message);
-                        $message = str_replace('%loginurl%', DIR . '/index.php', $message);
+                        $message = str_replace('%loginurl%', DIR . '/login', $message);
                         $message = str_replace('%loginaccount%', $ml->tr('LOGINTOYOURACCOUNT'), $message);
                         $message = str_replace('%footernote%', $ml->tr('SENTFROM {{' . APPNAME . '}}'), $message);
                         $mail = new PHPMailer(true);

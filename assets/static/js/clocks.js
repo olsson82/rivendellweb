@@ -216,7 +216,7 @@ $('#add_form').validate({
                 var kod = mydata.errorcode;
                 var theclockname = mydata.clockname;
                 if (fel == "false") {
-                    location.href = HOST_URL + "/clock.php?id="+theclockname;
+                    location.href = HOST_URL + "/manager/clock/"+theclockname;
                 } else {
                     if (kod == 1) {
                         Swal.fire({
@@ -415,7 +415,7 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
 
 
-                        return '<a href="clock.php?id=' + row.NAME + '" style="color:' + row.COLOR + ';" class="text-hover-primary mb-1">' + data + '</a>';
+                        return '<a href="'+ HOST_URL +'/manager/clock/' + row.NAME + '" style="color:' + row.COLOR + ';" class="text-hover-primary mb-1">' + data + '</a>';
 
 
 
@@ -432,7 +432,7 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         return `
                         <div class="btn-group mb-3" role="group">
-                                    <a href="clock.php?id=`+ row.NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    <a href="`+ HOST_URL +`/manager/clock/`+ row.NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDITCLOCK + `"><i class="bi bi-pencil"></i></a>
                                     <a href="javascript:;" onclick="rename('` + row.NAME + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_RENAMECLOCK + `"><i class="bi bi-fonts"></i></a>

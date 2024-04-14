@@ -211,7 +211,7 @@ var addEventForm = $('#addevent_form').validate({
                 var kod = mydata.errorcode;
                 var theeventname = mydata.eventname;
                 if (fel == "false") {
-                    location.href = HOST_URL + "/event.php?id=" + theeventname;
+                    location.href = HOST_URL + "/manager/event/" + theeventname;
                 } else {
                     Swal.fire({
                         text: TRAN_BUG,
@@ -360,7 +360,7 @@ var KTDatatablesServerSide = function () {
                 {
                     targets: 1,
                     render: function (data, type, row) {
-                        return '<a href="event.php?id=' + row.NAME + '" style="color:' + row.COLOR + ';" class="text-hover-primary mb-1">' + data + '</a>';
+                        return '<a href="'+HOST_URL+'/manager/event/' + row.NAME + '" style="color:' + row.COLOR + ';" class="text-hover-primary mb-1">' + data + '</a>';
                     }
                 },
 
@@ -423,7 +423,7 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         return `
                         <div class="btn-group mb-3" role="group">
-                                    <a href="event.php?id=`+ row.NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    <a href="`+HOST_URL+`/manager/event/`+ row.NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDITEVENT + `"><i class="bi bi-pencil"></i></a>
                                     <a href="javascript:;" onclick="renameEvent('` + row.NAME + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_RENAMEEVENT + `"><i class="bi bi-fonts"></i></a>

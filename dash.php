@@ -29,7 +29,7 @@
 
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 
@@ -39,8 +39,8 @@ $fullname = $_COOKIE['fullname'];
 $pagecode = "dash";
 $page_vars = 'dash';
 $page_title = $ml->tr('DASHBOARD');
-$page_css = '<link rel="stylesheet" href="./assets/compiled/css/iconly.css">
-<link rel="stylesheet" href="assets/extensions/@fortawesome/fontawesome-free/css/all.min.css">';
+$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/iconly.css">
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/@fortawesome/fontawesome-free/css/all.min.css">';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -159,7 +159,7 @@ $page_css = '<link rel="stylesheet" href="./assets/compiled/css/iconly.css">
                                                         } ?>">
                                                             <h4><?php echo $log['NAME']; ?></h4>
                                                             <P><?= $ml->trp('SINGVOICETRACK {{'.$needsrecord.'}}', 'PLURVOICETRACK {{'.$needsrecord.'}}'); ?></P>
-                                                            <P><a href="voicetrack.php?log=<?php echo $log['NAME']; ?>" class="btn btn-danger rounded-pill"><?= $ml->tr('FIXITNOW'); ?></a></P>
+                                                            <P><a href="<?php echo DIR; ?>/logs/voicetrack/<?php echo $log['NAME']; ?>" class="btn btn-danger rounded-pill"><?= $ml->tr('FIXITNOW'); ?></a></P>
                                                         </div>
                                                     <?php $i++; } ?>
                                                 </div>

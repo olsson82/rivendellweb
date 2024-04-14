@@ -65,7 +65,7 @@ $('#login_form').validate({
             var fel = mydata.error;
             var kod = mydata.errorcode;
             if (fel == "false") {
-                location.href = HOST_URL+"/dash.php";
+                location.href = HOST_URL+"/dash";
             } else {
                 if (kod == 1) {
                     Swal.fire({

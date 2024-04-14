@@ -28,5 +28,5 @@
  *********************************************************************************************************/
 require_once $_SERVER['DOCUMENT_ROOT'].'/includes/config.php';
 $user->logout();
-header('Location: index.php');
+header('Location: '.DIR.'/login');
 exit;

@@ -600,16 +600,16 @@ var KTDatatablesServerSide = function () {
                         if (row.EVENT_TYPE == 0) {
                             return `
                             <div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/sound.png" /></div> ` + data;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/sound.png" /></div> ` + data;
                         } else if (row.EVENT_TYPE == 6) {
                             return `<div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/microphone.png" /></div> `;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/microphone.png" /></div> `;
                         } else if (row.EVENT_TYPE == 2) {
                             return `<div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/settings.png" /></div> ` + data;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/settings.png" /></div> ` + data;
                         } else if (row.EVENT_TYPE == 1) {
                             return `<div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/notepad.png" /></div> `;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/notepad.png" /></div> `;
                         }
                     }
                 },
@@ -804,16 +804,16 @@ var KTDatatablesServerSide = function () {
                         if (row.EVENT_TYPE == 0) {
                             return `
                             <div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/sound.png" /></div> ` + data;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/sound.png" /></div> ` + data;
                         } else if (row.EVENT_TYPE == 6) {
                             return `<div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/microphone.png" /></div> `;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/microphone.png" /></div> `;
                         } else if (row.EVENT_TYPE == 2) {
                             return `<div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/settings.png" /></div> ` + data;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/settings.png" /></div> ` + data;
                         } else if (row.EVENT_TYPE == 1) {
                             return `<div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/notepad.png" /></div> `;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/notepad.png" /></div> `;
                         }
                     }
                 },

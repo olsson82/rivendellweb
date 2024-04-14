@@ -28,7 +28,7 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 
@@ -36,7 +36,7 @@ if (!$user->is_logged_in()) {
 $username = $_COOKIE['username'];
 $fullname = $_COOKIE['fullname'];
 if (!isset($json_sett["admin"][$_COOKIE['username']]["username"])) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 $pagecode = "admindash";
@@ -55,13 +55,13 @@ if ($read[0] > VERS) {
 
 $page_vars = 'admindash';
 $page_title = $ml->tr('ADMINDASH');
-$page_css = '<link rel="stylesheet" href="./assets/compiled/css/iconly.css">
-<link rel="stylesheet" href="assets/extensions/@fortawesome/fontawesome-free/css/all.min.css">
-<link rel="stylesheet" href="assets/extensions/sweetalert2/sweetalert2.min.css">';
-$plugin_js = '<script src="assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="assets/extensions/sweetalert2/sweetalert2.min.js"></script>';
-$page_js = '<script src="assets/static/js/admindash.js"></script>';
+$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/iconly.css">
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/@fortawesome/fontawesome-free/css/all.min.css">
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">';
+$plugin_js = '<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>';
+$page_js = '<script src="'.DIR.'/assets/static/js/admindash.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 

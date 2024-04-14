@@ -27,7 +27,7 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 if (file_exists($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json')) {
-    header('Location: installer.php');
+    header('Location: '.DIR.'/login');
     exit();
   }
 function timezone_list()

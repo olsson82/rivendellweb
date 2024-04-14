@@ -41,7 +41,7 @@ if (isset($_COOKIE['serviceName'])) {
         <div class="sidebar-header position-relative">
             <div class="d-flex justify-content-between align-items-center">
                 <div class="logo">
-                    <a href="index.php"><img src="assets/static/images/rivlogo/rdairplay-128x128.png" alt="Logo" srcset=""></a>
+                    <a href="index.php"><img src="<?php echo DIR; ?>/assets/static/images/rivlogo/rdairplay-128x128.png" alt="Logo" srcset=""></a>
                 </div>
                 <div class="theme-toggle d-flex gap-2  align-items-center mt-2">
                     <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
@@ -167,7 +167,7 @@ if (isset($_COOKIE['serviceName'])) {
                 </li>
 
                 <li class="sidebar-item <?php if ($pagecode == 'dash') { ?>active<?php } ?>">
-                    <a href="dash.php" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/dash" class='sidebar-link'>
                         <i class="bi bi-grid-fill"></i>
                         <span>
                             <?= $ml->tr('DASHBOARD'); ?>
@@ -177,7 +177,7 @@ if (isset($_COOKIE['serviceName'])) {
 
                 </li>
                 <li class="sidebar-item <?php if ($pagecode == 'library') { ?>active<?php } ?>">
-                    <a href="library.php" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/library" class='sidebar-link'>
                         <i class="bi bi-collection-play-fill"></i>
                         <span>
                             <?= $ml->tr('LIBRARY'); ?>
@@ -187,7 +187,7 @@ if (isset($_COOKIE['serviceName'])) {
 
                 </li>
                 <li class="sidebar-item <?php if ($pagecode == 'logs') { ?>active<?php } ?>">
-                    <a href="logs.php" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/logs" class='sidebar-link'>
                         <i class="bi bi-receipt"></i>
                         <span>
                             <?= $ml->tr('LOGS'); ?>
@@ -200,7 +200,7 @@ if (isset($_COOKIE['serviceName'])) {
                     <?= $ml->tr('LOGMANAGER'); ?>
                 </li>
                 <li class="sidebar-item <?php if ($pagecode == 'events') { ?>active<?php } ?>">
-                    <a href="events.php" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/manager/events" class='sidebar-link'>
                         <i class="bi bi-calendar-event"></i>
                         <span>
                             <?= $ml->tr('EVENTS'); ?>
@@ -210,7 +210,7 @@ if (isset($_COOKIE['serviceName'])) {
 
                 </li>
                 <li class="sidebar-item <?php if ($pagecode == 'clocks') { ?>active<?php } ?>">
-                    <a href="clocks.php" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/manager/clocks" class='sidebar-link'>
                         <i class="bi bi-clock"></i>
                         <span>
                             <?= $ml->tr('CLOCKS'); ?>
@@ -220,7 +220,7 @@ if (isset($_COOKIE['serviceName'])) {
 
                 </li>
                 <li class="sidebar-item <?php if ($pagecode == 'grids') { ?>active<?php } ?>">
-                    <a href="grids.php" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/manager/grids" class='sidebar-link'>
                         <i class="bi bi-ui-checks-grid"></i>
                         <span>
                             <?= $ml->tr('GRIDS'); ?>
@@ -241,46 +241,46 @@ if (isset($_COOKIE['serviceName'])) {
 
 
                             <li class="submenu-item <?php if ($pagecode == 'admindash') { ?>active<?php } ?>">
-                                <a href="admindash.php" class="submenu-link">
+                                <a href="<?php echo DIR; ?>/admin/dash" class="submenu-link">
                                     <?= $ml->tr('ADMINDASH'); ?>
                                 </a>
                             </li>
                             <?php if ($json_sett["admin"][$_COOKIE['username']]["settings"] == 1) { ?>
                                 <li class="submenu-item <?php if ($pagecode == 'settings') { ?>active<?php } ?>">
-                                    <a href="settings.php" class="submenu-link">
+                                    <a href="<?php echo DIR; ?>/admin/settings" class="submenu-link">
                                         <?= $ml->tr('SETTINGS'); ?>
                                     </a>
                                 </li>
                             <?php } ?>
                             <?php if ($json_sett["admin"][$_COOKIE['username']]["users"] == 1) { ?>
                                 <li class="submenu-item <?php if ($pagecode == 'users') { ?>active<?php } ?>">
-                                    <a href="users.php" class="submenu-link">
+                                    <a href="<?php echo DIR; ?>/admin/users" class="submenu-link">
                                         <?= $ml->tr('USERS'); ?>
                                     </a>
                                 </li>
                             <?php } ?>
                             <?php if ($json_sett["admin"][$_COOKIE['username']]["groups"] == 1) { ?>
                                 <li class="submenu-item <?php if ($pagecode == 'groups') { ?>active<?php } ?>">
-                                    <a href="groups.php" class="submenu-link">
+                                    <a href="<?php echo DIR; ?>/admin/groups" class="submenu-link">
                                         <?= $ml->tr('GROUPS'); ?>
                                     </a>
                                 </li>
                             <?php } ?>
                             <?php if ($json_sett["admin"][$_COOKIE['username']]["sched"] == 1) { ?>
                                 <li class="submenu-item <?php if ($pagecode == 'schedcodes') { ?>active<?php } ?>">
-                                    <a href="schedcodes.php" class="submenu-link">
+                                    <a href="<?php echo DIR; ?>/admin/schedcodes" class="submenu-link">
                                         <?= $ml->tr('SCHEDULERCODES'); ?>
                                     </a>
                                 </li>
                             <?php } ?>
                             <?php if ($json_sett["admin"][$_COOKIE['username']]["hosts"] == 1) { ?>
                                 <li class="submenu-item <?php if ($pagecode == 'hosts') { ?>active<?php } ?>">
-                                    <a href="hosts.php" class="submenu-link">
+                                    <a href="<?php echo DIR; ?>/admin/hosts" class="submenu-link">
                                         <?= $ml->tr('RIVHOSTS'); ?>
                                     </a>
                                 </li>
                                 <li class="submenu-item <?php if ($pagecode == 'rdairplay') { ?>active<?php } ?>">
-                                    <a href="rdairplay.php" class="submenu-link">
+                                    <a href="<?php echo DIR; ?>/admin/hosts/rdairplay" class="submenu-link">
                                         <?= $ml->tr('RDAIRPLAY'); ?>
                                     </a>
                                 </li>
@@ -293,7 +293,7 @@ if (isset($_COOKIE['serviceName'])) {
                     <?= $ml->tr('OTHER'); ?>
                 </li>
                 <li class="sidebar-item <?php if ($pagecode == 'usersett') { ?>active<?php } ?>">
-                    <a href="usrsett.php" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/usrsett" class='sidebar-link'>
                         <i class="bi bi-person-gear"></i>
                         <span>
                             <?= $ml->tr('ACCINFO'); ?>
@@ -309,7 +309,7 @@ if (isset($_COOKIE['serviceName'])) {
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="logout.php" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/logout" class='sidebar-link'>
                         <i class="bi bi-box-arrow-right"></i>
                         <span>
                             <?= $ml->tr('LOGOUT'); ?>

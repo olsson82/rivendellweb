@@ -28,11 +28,11 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 if (!$json_sett["admin"][$_COOKIE['username']]["sched"] == 1) {
-    header('Location: index.php');
+    header('Location: '.DIR.'/login');
     exit();
 }
 $username = $_COOKIE['username'];
@@ -40,23 +40,23 @@ $fullname = $_COOKIE['fullname'];
 $pagecode = "schedcodes";
 $page_vars = 'schedcodes';
 $page_title = $ml->tr('SCHEDULERCODES');
-$page_css = '<link rel="stylesheet" href="assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="./assets/compiled/css/table-datatable-jquery.css">';
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
-<script src="assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="'.DIR.'/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="'.DIR.'/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
-<script src="assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
-<script src="assets/static/js/pages/datatables.js"></script>';
-$page_js = '<script src="assets/static/js/schedcodes.js"></script>';
+<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script src="'.DIR.'/assets/static/js/pages/datatables.js"></script>';
+$page_js = '<script src="'.DIR.'/assets/static/js/schedcodes.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -74,7 +74,7 @@ $page_js = '<script src="assets/static/js/schedcodes.js"></script>';
             <div class="col-12 col-md-6 order-md-2 order-first">
                 <nav aria-label="breadcrumb" class="breadcrumb-header float-start float-lg-end">
                     <ol class="breadcrumb">
-                        <li class="breadcrumb-item"><a href="dash.php">
+                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/admin/dash">
                                 <?= $ml->tr('DASHBOARD'); ?>
                             </a></li>
                         <li class="breadcrumb-item active" aria-current="page">

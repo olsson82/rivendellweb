@@ -523,10 +523,10 @@ var KTDatatablesServerSide = function () {
                         if (row.DEFAULT_CART_TYPE == 1) {
                             return `
                             <div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/sound.png" /></div> <P style="color:` + row.COLOR + `">` + data + `</p>`;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/sound.png" /></div> <P style="color:` + row.COLOR + `">` + data + `</p>`;
                         } else if (row.DEFAULT_CART_TYPE == 2) {
                             return `<div class="avatar me-3">
-                            <img alt="Logo" src="assets/static/images/event/settings.png" /></div> <P style="color:` + row.COLOR + `">` + data + `</p>`;
+                            <img alt="Logo" src="`+HOST_URL+`/assets/static/images/event/settings.png" /></div> <P style="color:` + row.COLOR + `">` + data + `</p>`;
                         }
                     }
                 },
