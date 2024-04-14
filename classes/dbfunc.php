@@ -1866,4 +1866,89 @@ class DBFunc
 
     }
 
+    public function getRivHosts()
+    {
+
+        $hosts = array();
+        $sql = 'SELECT * FROM `STATIONS` ORDER BY `NAME` ASC';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $hosts[] = $row;
+        }
+
+        return $hosts;
+
+    }
+
+    public function getHost($name)
+    {
+
+        $host = array();
+        $sql = 'SELECT * FROM `STATIONS` WHERE `NAME` = :thename';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':thename', $name);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $host = $row;
+        }
+
+        return $host;
+
+    }
+
+    public function getUsers()
+    {
+
+        $users = array();
+        $notadmin = 'N';
+        $sql = 'SELECT `LOGIN_NAME` FROM `USERS` WHERE `ADMIN_CONFIG_PRIV` = :notadmin
+                ORDER BY `LOGIN_NAME` ASC';
+
+        $results = $this->_db->prepare($sql);
+        $results->bindParam(':notadmin', $notadmin);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+        $results->execute();
+        while ($row = $results->fetch()) {
+
+            foreach ($row as $field)
+                $users[] = $field;
+
+        }
+
+        $results = NULL;
+
+        return $users;
+
+    }
+
+    public function updateHost($hostname, $shortname, $description, $defuser, $ipaddress, $report, $web)
+    {
+
+        $sql = 'UPDATE `STATIONS` SET `SHORT_NAME` = :short, `DESCRIPTION` = :descri, `DEFAULT_NAME` = :defname, `IPV4_ADDRESS` = :ipv4, `REPORT_EDITOR_PATH` = :report, `BROWSER_PATH` = :browspath WHERE `NAME` = :thename';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':short', $shortname);
+        $stmt->bindParam(':descri', $description);
+        $stmt->bindParam(':defname', $defuser);
+        $stmt->bindParam(':ipv4', $ipaddress);
+        $stmt->bindParam(':report', $report);
+        $stmt->bindParam(':browspath', $web);
+        $stmt->bindParam(':thename', $hostname);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

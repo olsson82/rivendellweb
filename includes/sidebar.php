@@ -228,7 +228,7 @@ if (isset($_COOKIE['serviceName'])) {
                     </a>
                 </li>
                 <?php if (isset($json_sett["admin"][$_COOKIE['username']]["username"])) { ?>
-                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes') { ?>active<?php } ?> has-sub">
+                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts') { ?>active<?php } ?> has-sub">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-gear"></i>
                             <span>
@@ -237,7 +237,7 @@ if (isset($_COOKIE['serviceName'])) {
                         </a>
 
                         <ul
-                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes') { ?>active<?php } ?>">
+                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts') { ?>active<?php } ?>">
 
 
                             <li class="submenu-item <?php if ($pagecode == 'admindash') { ?>active<?php } ?>">
@@ -274,6 +274,11 @@ if (isset($_COOKIE['serviceName'])) {
                                 </li>
                             <?php } ?>
                             <?php if ($json_sett["admin"][$_COOKIE['username']]["hosts"] == 1) { ?>
+                                <li class="submenu-item <?php if ($pagecode == 'hosts') { ?>active<?php } ?>">
+                                    <a href="hosts.php" class="submenu-link">
+                                        <?= $ml->tr('RIVHOSTS'); ?>
+                                    </a>
+                                </li>
                                 <li class="submenu-item <?php if ($pagecode == 'rdairplay') { ?>active<?php } ?>">
                                     <a href="rdairplay.php" class="submenu-link">
                                         <?= $ml->tr('RDAIRPLAY'); ?>
