@@ -228,7 +228,7 @@ if (isset($_COOKIE['serviceName'])) {
                     </a>
                 </li>
                 <?php if (isset($json_sett["admin"][$_COOKIE['username']]["username"])) { ?>
-                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups') { ?>active<?php } ?> has-sub">
+                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes') { ?>active<?php } ?> has-sub">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-gear"></i>
                             <span>
@@ -237,7 +237,7 @@ if (isset($_COOKIE['serviceName'])) {
                         </a>
 
                         <ul
-                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users') { ?>active<?php } ?>">
+                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes') { ?>active<?php } ?>">
 
 
                             <li class="submenu-item <?php if ($pagecode == 'admindash') { ?>active<?php } ?>">
@@ -263,6 +263,13 @@ if (isset($_COOKIE['serviceName'])) {
                                 <li class="submenu-item <?php if ($pagecode == 'groups') { ?>active<?php } ?>">
                                     <a href="groups.php" class="submenu-link">
                                         <?= $ml->tr('GROUPS'); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($json_sett["admin"][$_COOKIE['username']]["sched"] == 1) { ?>
+                                <li class="submenu-item <?php if ($pagecode == 'schedcodes') { ?>active<?php } ?>">
+                                    <a href="schedcodes.php" class="submenu-link">
+                                        <?= $ml->tr('SCHEDULERCODES'); ?>
                                     </a>
                                 </li>
                             <?php } ?>

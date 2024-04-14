@@ -1744,4 +1744,126 @@ class DBFunc
 
     }
 
+    public function getSchedCodes()
+    {
+
+        $sched = array();
+        $sql = 'SELECT * FROM `SCHED_CODES` ORDER BY `CODE` ASC';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $sched[] = $row;
+        }
+
+        return $sched;
+
+    }
+
+    public function getSchedCode($name)
+    {
+
+        $sched = array();
+        $sql = 'SELECT * FROM `SCHED_CODES` WHERE `CODE` = :thename';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':thename', $name);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $sched = $row;
+        }
+
+        return $sched;
+
+    }
+
+    public function updateSched($schedid, $scheddesc)
+    {
+
+        $sql = 'UPDATE `SCHED_CODES` SET `DESCRIPTION` = :descript WHERE `CODE` = :thename';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':descript', $scheddesc);
+        $stmt->bindParam(':thename', $schedid);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function getSchedCodeExist($name)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM SCHED_CODES WHERE CODE = :evname');
+        $stmt->execute([
+            ':evname' => $name
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+        $number_of_rows = $stmt->rowCount();
+
+        if ($number_of_rows > 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+
+    }
+
+    public function addSchedCode($schedid, $scheddesc)
+    {
+        $sql = 'INSERT INTO `SCHED_CODES` (`CODE`, `DESCRIPTION`) VALUES (:thename, :descript)';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':thename', $schedid);
+        $stmt->bindParam(':descript', $scheddesc);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function removeSched($name)
+    {
+
+        $sql = "DELETE FROM CART_SCHED_CODES WHERE SCHED_CODE = '$name'";
+        $sql2 = "DELETE FROM DROPBOX_SCHED_CODES WHERE SCHED_CODE = '$name'";
+        $sql3 = "UPDATE EVENTS SET HAVE_CODE = '' WHERE `HAVE_CODE` = '$name'";
+        $sql4 = "UPDATE EVENTS SET HAVE_CODE2 = '' WHERE `HAVE_CODE2` = '$name'";
+        $sql5 = "DELETE FROM SCHED_CODES WHERE CODE = '$name'";
+
+        if ($this->_db->query($sql) === FALSE) {
+            return false;
+        } else {
+            if ($this->_db->query($sql2) === FALSE) {
+                return false;
+            } else {
+                if ($this->_db->query($sql3) === FALSE) {
+                    return false;
+                } else {
+                    if ($this->_db->query($sql4) === FALSE) {
+                        return false;
+                    } else {
+                        if ($this->_db->query($sql5) === FALSE) {
+                            return false;
+                        } else {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+
+    }
+
 }
