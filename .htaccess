@@ -17,6 +17,7 @@ RewriteRule ^admin/schedcodes$ schedcodes.php
 RewriteRule ^admin/hosts$ hosts.php
 RewriteRule ^admin/hosts/rdairplay$ rdairplay.php
 RewriteRule ^install$ installer.php
+RewriteRule ^admin/services$ services.php
 RewriteRule ^cart/audio/(.+)$ cart.php?id=$1
 RewriteRule ^cart/macro/(.+)$ macro.php?id=$1
 RewriteRule ^manager/clock/(.+)$ clock.php?id=$1
@@ -25,3 +26,4 @@ RewriteRule ^logs/log/(.+)$ log.php?log=$1
 RewriteRule ^manager/event/(.+)$ event.php?id=$1
 RewriteRule ^reset/(.+)$ reset.php?token=$1
 RewriteRule ^admin/users/user/(.+)$ user.php?id=$1
+RewriteRule ^admin/services/service/(.+)$ service.php?id=$1

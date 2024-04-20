@@ -263,4 +263,29 @@ class Getinfo
                         return false;
                 }
         }
+
+        public function getServiceInfo($serviceid, $type)
+        {
+                $stmt = $this->_db->prepare('SELECT * FROM SERVICES WHERE NAME = :thename');
+
+                $stmt->execute(['thename' => $serviceid]);
+
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                return $row[$type];
+        }
+
+        public function getServiceHost($serviceid, $host)
+        {
+                $stmt = $this->_db->prepare('SELECT * FROM SERVICE_PERMS WHERE SERVICE_NAME = :name AND STATION_NAME = :station');
+
+                $stmt->execute([
+                        'name' => $serviceid,
+                        'station' => $host
+                ]);
+
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                return $row['STATION_NAME'];
+        }
 }

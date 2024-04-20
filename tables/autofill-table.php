@@ -27,41 +27,9 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-$username = $_POST['username'];
-$error = 0;
-if ($_POST['adminrights'] == 1) {
-    $json_sett["admin"][$username]['username'] = $username;
-    $json_sett["admin"][$username]['settings'] = $_POST['systemdata'];
-    $json_sett["admin"][$username]['users'] = $_POST['manageuser'];
-    $json_sett["admin"][$username]['message'] = $_POST['messages'];
-    $json_sett["admin"][$username]['hosts'] = $_POST['hosts'];
-    $json_sett["admin"][$username]['groups'] = $_POST['modifygroups'];
-    $json_sett["admin"][$username]['sched'] = $_POST['modifysched'];
-    $json_sett["admin"][$username]['services'] = $_POST['modifyservices'];
-
-    $jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
-
-    if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $jsonsettings)) {
-        $error = 1;
-    }
-} else if (isset($json_sett["admin"][$username])) {
-    unset($json_sett["admin"][$username]);
-    $jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
-    if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $jsonsettings)) {
-        $error = 1;
-    }
-}
-
-if ($error == 1) {
-    $echodata = ['error' => 'true', 'errorcode' => '2'];
-    echo json_encode($echodata);
-} else {
-
-    if (!$user->updateUserDataAdmin($username, $_POST['fullname'], $_POST['email'], $_POST['phone'], $_POST['description'])) {
-        $echodata = ['error' => 'true', 'errorcode' => '1'];
-        echo json_encode($echodata);
-    } else {
-        $echodata = ['error' => 'false', 'errorcode' => '0'];
-        echo json_encode($echodata);
-    }
-}
+$service = $dbfunc->getAutoFills($_GET['service']);
+$datatable = array();
+$datatable['data'] = $service; 
+header('Content-Type: application/json; charset=utf-8');
+$jsonData = json_encode($datatable, JSON_PRETTY_PRINT);
+echo $jsonData;

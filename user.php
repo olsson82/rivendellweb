@@ -331,6 +331,38 @@ $page_js = '<script src="'.DIR.'/assets/static/js/user.js"></script>';
                                         </p>
                                     </div>
                                     <div class="col-md-4">
+                                        <label for="modifyservices">
+                                            <?= $ml->tr('MODIFYSERVICES'); ?>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select id="modifyservices" name="modifyservices" class="choices form-select">
+                                            <?php if ($isadmin == 1) { ?>
+                                                <option value="1" <?php if ($json_sett["admin"][$id]["services"] == '1') {
+                                                    echo 'SELECTED';
+                                                } ?>>
+                                                    <?= $ml->tr('YES'); ?>
+                                                </option>
+                                                <option value="0" <?php if ($json_sett["admin"][$id]["services"] == '0') {
+                                                    echo 'SELECTED';
+                                                } ?>>
+                                                    <?= $ml->tr('NO'); ?>
+                                                </option>
+                                            <?php } else { ?>
+                                                <option value="1">
+                                                    <?= $ml->tr('YES'); ?>
+                                                </option>
+                                                <option value="0" SELECTED>
+                                                    <?= $ml->tr('NO'); ?>
+                                                </option>
+                                            <?php } ?>
+                                        </select>
+                                        <p><small class="text-muted">
+                                                <?= $ml->tr('MODIFYSERVICESALLOW'); ?>
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
                                         <label for="systemdata">
                                             <?= $ml->tr('SYSTEMDATA'); ?>
                                         </label>

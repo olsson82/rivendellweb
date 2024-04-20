@@ -1951,4 +1951,419 @@ class DBFunc
 
     }
 
+    public function getRivServices()
+    {
+        $services = array();
+        $sql = 'SELECT * FROM `SERVICES` ORDER BY `NAME` ASC';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $services[] = $row;
+        }
+
+        return $services;
+
+    }
+
+    public function getAutoFills($service)
+    {
+        $autoSet = array();
+        $sql = 'SELECT * FROM `AUTOFILLS`
+                WHERE `SERVICE` = :uname
+                ORDER BY `CART_NUMBER` ASC';
+
+        $results = $this->_db->prepare($sql);
+        $results->bindParam(':uname', $service);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+        $results->execute();
+        while ($row = $results->fetch()) {
+
+            $sql2 = 'SELECT * FROM `CART`
+                WHERE `NUMBER` = :service
+                ORDER BY `NUMBER` ASC';
+
+            $stmt = $this->_db->prepare($sql2);
+            $stmt->bindParam(':service', $row['CART_NUMBER']);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute();
+
+            while ($row1 = $stmt->fetch()) {
+
+                $autoSet[] = array(
+                    'ID' => $row['ID'],
+                    'NUMBER' => $row1['NUMBER'],
+                    'TYPE' => $row1['TYPE'],
+                    'GROUP_NAME' => $row1['GROUP_NAME'],
+                    'TITLE' => $row1['TITLE'],
+                    'ARTIST' => $row1['ARTIST'],
+                    'AVERAGE_LENGTH' => $row1['AVERAGE_LENGTH'],
+                    'FORCED_LENGTH' => $row1['FORCED_LENGTH'],
+                    'SERVICE' => $row['SERVICE'],
+                );
+
+            }
+        }
+        return $autoSet;
+
+    }
+
+    public function getImpTemp()
+    {
+
+        $temp = array();
+        $sql = 'SELECT * FROM `IMPORT_TEMPLATES` ORDER BY `NAME` ASC';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $temp[] = $row;
+        }
+
+        return $temp;
+
+    }
+
+
+    public function getImpTempImp($template)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM IMPORT_TEMPLATES WHERE NAME = :evname');
+        $stmt->execute([
+            ':evname' => $template,
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+
+    }
+
+    public function getServiceData($service)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM SERVICES WHERE NAME = :evname');
+        $stmt->execute([
+            ':evname' => $service,
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+
+    }
+
+    public function copyToCustom($service, $type, $temp)
+    {
+        $autoSet = array();
+        $sql = 'SELECT * FROM `IMPORT_TEMPLATES`
+                WHERE `NAME` = :uname';
+
+        $results = $this->_db->prepare($sql);
+        $results->bindParam(':uname', $temp);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+        $results->execute();
+        $row = $results->fetch();
+
+        if ($type == 1) {
+
+            $sql2 = 'UPDATE `SERVICES` SET `TFC_CART_OFFSET` = :coff, `TFC_CART_LENGTH` = :cleng, `TFC_TITLE_OFFSET` = :tittof, `TFC_TITLE_LENGTH` = :titleng, 
+        `TFC_HOURS_OFFSET` = :hoff, `TFC_HOURS_LENGTH` = :hleng, `TFC_MINUTES_OFFSET` = :moff, `TFC_MINUTES_LENGTH` = :mleng, `TFC_SECONDS_OFFSET` = :soff, `TFC_SECONDS_LENGTH` = :sleng,
+        `TFC_LEN_HOURS_OFFSET` = :lhoff, `TFC_LEN_HOURS_LENGTH` = :lhleng, `TFC_LEN_MINUTES_OFFSET` = :lmoff, `TFC_LEN_MINUTES_LENGTH` = :lmleng,
+        `TFC_LEN_SECONDS_OFFSET` = :lsoff, `TFC_LEN_SECONDS_LENGTH` = :lsleng, `TFC_DATA_OFFSET` = :datoff, `TFC_DATA_LENGTH` = :datleng,
+        `TFC_EVENT_ID_OFFSET` = :evoff, `TFC_EVENT_ID_LENGTH` = :evleng, `TFC_ANNC_TYPE_OFFSET` = :ancoff, `TFC_ANNC_TYPE_LENGTH` = :ancleng WHERE `NAME` = :thename';
+            $stmt = $this->_db->prepare($sql2);
+            $stmt->bindParam(':coff', $row['CART_OFFSET']);
+            $stmt->bindParam(':cleng', $row['CART_LENGTH']);
+            $stmt->bindParam(':tittof', $row['TITLE_OFFSET']);
+            $stmt->bindParam(':titleng', $row['TITLE_LENGTH']);
+            $stmt->bindParam(':hoff', $row['HOURS_OFFSET']);
+            $stmt->bindParam(':hleng', $row['HOURS_LENGTH']);
+            $stmt->bindParam(':moff', $row['MINUTES_OFFSET']);
+            $stmt->bindParam(':mleng', $row['MINUTES_LENGTH']);
+            $stmt->bindParam(':soff', $row['SECONDS_OFFSET']);
+            $stmt->bindParam(':sleng', $row['SECONDS_LENGTH']);
+            $stmt->bindParam(':lhoff', $row['LEN_HOURS_OFFSET']);
+            $stmt->bindParam(':lhleng', $row['LEN_HOURS_LENGTH']);
+            $stmt->bindParam(':lmoff', $row['LEN_MINUTES_OFFSET']);
+            $stmt->bindParam(':lmleng', $row['LEN_MINUTES_LENGTH']);
+            $stmt->bindParam(':lsoff', $row['LEN_SECONDS_OFFSET']);
+            $stmt->bindParam(':lsleng', $row['LEN_SECONDS_LENGTH']);
+            $stmt->bindParam(':datoff', $row['DATA_OFFSET']);
+            $stmt->bindParam(':datleng', $row['DATA_LENGTH']);
+            $stmt->bindParam(':evoff', $row['EVENT_ID_OFFSET']);
+            $stmt->bindParam(':evleng', $row['EVENT_ID_LENGTH']);
+            $stmt->bindParam(':ancoff', $row['ANNC_TYPE_OFFSET']);
+            $stmt->bindParam(':ancleng', $row['ANNC_TYPE_LENGTH']);
+            $stmt->bindParam(':thename', $service);
+
+            if ($stmt->execute() === FALSE) {
+                return false;
+            } else {
+                return true;
+            }
+
+        } else {
+            $sql2 = 'UPDATE `SERVICES` SET `MUS_CART_OFFSET` = :coff, `MUS_CART_LENGTH` = :cleng, `MUS_TITLE_OFFSET` = :tittof, `MUS_TITLE_LENGTH` = :titleng, 
+        `MUS_HOURS_OFFSET` = :hoff, `MUS_HOURS_LENGTH` = :hleng, `MUS_MINUTES_OFFSET` = :moff, `MUS_MINUTES_LENGTH` = :mleng, `MUS_SECONDS_OFFSET` = :soff, `MUS_SECONDS_LENGTH` = :sleng,
+        `MUS_LEN_HOURS_OFFSET` = :lhoff, `MUS_LEN_HOURS_LENGTH` = :lhleng, `MUS_LEN_MINUTES_OFFSET` = :lmoff, `MUS_LEN_MINUTES_LENGTH` = :lmleng,
+        `MUS_LEN_SECONDS_OFFSET` = :lsoff, `MUS_LEN_SECONDS_LENGTH` = :lsleng, `MUS_DATA_OFFSET` = :datoff, `MUS_DATA_LENGTH` = :datleng,
+        `MUS_EVENT_ID_OFFSET` = :evoff, `MUS_EVENT_ID_LENGTH` = :evleng, `MUS_ANNC_TYPE_OFFSET` = :ancoff, `MUS_ANNC_TYPE_LENGTH` = :ancleng,
+        `MUS_TRANS_TYPE_OFFSET` = :transoff, `MUS_TRANS_TYPE_LENGTH` = :transleng, `MUS_TIME_TYPE_OFFSET` = :timeoff, `MUS_TIME_TYPE_LENGTH` = :timeleng WHERE `NAME` = :thename';
+            $stmt = $this->_db->prepare($sql2);
+            $stmt->bindParam(':coff', $row['CART_OFFSET']);
+            $stmt->bindParam(':cleng', $row['CART_LENGTH']);
+            $stmt->bindParam(':tittof', $row['TITLE_OFFSET']);
+            $stmt->bindParam(':titleng', $row['TITLE_LENGTH']);
+            $stmt->bindParam(':hoff', $row['HOURS_OFFSET']);
+            $stmt->bindParam(':hleng', $row['HOURS_LENGTH']);
+            $stmt->bindParam(':moff', $row['MINUTES_OFFSET']);
+            $stmt->bindParam(':mleng', $row['MINUTES_LENGTH']);
+            $stmt->bindParam(':soff', $row['SECONDS_OFFSET']);
+            $stmt->bindParam(':sleng', $row['SECONDS_LENGTH']);
+            $stmt->bindParam(':lhoff', $row['LEN_HOURS_OFFSET']);
+            $stmt->bindParam(':lhleng', $row['LEN_HOURS_LENGTH']);
+            $stmt->bindParam(':lmoff', $row['LEN_MINUTES_OFFSET']);
+            $stmt->bindParam(':lmleng', $row['LEN_MINUTES_LENGTH']);
+            $stmt->bindParam(':lsoff', $row['LEN_SECONDS_OFFSET']);
+            $stmt->bindParam(':lsleng', $row['LEN_SECONDS_LENGTH']);
+            $stmt->bindParam(':datoff', $row['DATA_OFFSET']);
+            $stmt->bindParam(':datleng', $row['DATA_LENGTH']);
+            $stmt->bindParam(':evoff', $row['EVENT_ID_OFFSET']);
+            $stmt->bindParam(':evleng', $row['EVENT_ID_LENGTH']);
+            $stmt->bindParam(':ancoff', $row['ANNC_TYPE_OFFSET']);
+            $stmt->bindParam(':ancleng', $row['ANNC_TYPE_LENGTH']);
+            $stmt->bindParam(':transoff', $row['TRANS_TYPE_OFFSET']);
+            $stmt->bindParam(':transleng', $row['TRANS_TYPE_LENGTH']);
+            $stmt->bindParam(':timeoff', $row['TIME_TYPE_OFFSET']);
+            $stmt->bindParam(':timeleng', $row['TIME_TYPE_LENGTH']);
+            $stmt->bindParam(':thename', $service);
+
+            if ($stmt->execute() === FALSE) {
+                return false;
+            } else {
+                return true;
+            }
+
+        }
+
+    }
+
+    public function addAutofill($cart, $service)
+    {
+        $sql = 'INSERT INTO `AUTOFILLS` (`SERVICE`, `CART_NUMBER`) VALUES (:services, :cart)';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':services', $service);
+        $stmt->bindParam(':cart', $cart);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function removeAutofill($id)
+    {
+
+        $sql = "DELETE FROM AUTOFILLS WHERE ID = '$id'";
+
+        if ($this->_db->query($sql) === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function updateService($service, $descr, $programc, $lognametemp, $logdesctemp, $bypass, $inline, $vtgroup, $autospot, $chainto, $autorefresh, $autodelete, $daysaftertype, $purgeelr, $musimpmark, $trafimpmark, $importpath, $preimpcom, $insertmarkerstring, $insertvtstring, $imptemplate, $importpath_mus, $preimpcom_mus, $insertmarkerstring_mus, $insertvtstring_mus, $imptemplate_mus, $instraficbreak_mus)
+    {
+        if ($imptemplate == 'cust') {
+            $imptemplate = "";
+        }
+        if ($imptemplate_mus == 'cust') {
+            $imptemplate_mus = "";
+        }
+        $sql2 = 'UPDATE `SERVICES` SET `DESCRIPTION` = :descr, `PROGRAM_CODE` = :programc, `NAME_TEMPLATE` = :lognametemp, `DESCRIPTION_TEMPLATE` = :logdesctemp, 
+        `BYPASS_MODE` = :bypass, `SUB_EVENT_INHERITANCE` = :inline, `TRACK_GROUP` = :vtgroup, `AUTOSPOT_GROUP` = :autospot, `CHAIN_LOG` = :chainto, `AUTO_REFRESH` = :autorefresh,
+        `DEFAULT_LOG_SHELFLIFE` = :autodelete, `LOG_SHELFLIFE_ORIGIN` = :daysaftertype, `ELR_SHELFLIFE` = :purgeelr, `INCLUDE_MUS_IMPORT_MARKERS` = :musimpmark,
+        `INCLUDE_TFC_IMPORT_MARKERS` = :trafimpmark, `TFC_PATH` = :importpath, `TFC_PREIMPORT_CMD` = :preimpcom, `TFC_LABEL_CART` = :insertmarkerstring,
+        `TFC_TRACK_STRING` = :insertvtstring, `TFC_IMPORT_TEMPLATE` = :imptemplate, `MUS_PATH` = :importpath_mus, `MUS_PREIMPORT_CMD` = :preimpcom_mus,
+        `MUS_LABEL_CART` = :insertmarkerstring_mus, `MUS_TRACK_STRING` = :insertvtstring_mus, `MUS_BREAK_STRING` = :instraficbreak_mus, `MUS_IMPORT_TEMPLATE` = :imptemplate_mus WHERE `NAME` = :thename';
+        $stmt = $this->_db->prepare($sql2);
+        $stmt->bindParam(':descr', $descr);
+        $stmt->bindParam(':programc', $programc);
+        $stmt->bindParam(':lognametemp', $lognametemp);
+        $stmt->bindParam(':logdesctemp', $logdesctemp);
+        $stmt->bindParam(':bypass', $bypass);
+        $stmt->bindParam(':inline', $inline);
+        $stmt->bindParam(':vtgroup', $vtgroup);
+        $stmt->bindParam(':autospot', $autospot);
+        $stmt->bindParam(':chainto', $chainto);
+        $stmt->bindParam(':autorefresh', $autorefresh);
+        $stmt->bindParam(':autodelete', $autodelete);
+        $stmt->bindParam(':daysaftertype', $daysaftertype);
+        $stmt->bindParam(':purgeelr', $purgeelr);
+        $stmt->bindParam(':musimpmark', $musimpmark);
+        $stmt->bindParam(':trafimpmark', $trafimpmark);
+        $stmt->bindParam(':importpath', $importpath);
+        $stmt->bindParam(':preimpcom', $preimpcom);
+        $stmt->bindParam(':insertmarkerstring', $insertmarkerstring);
+        $stmt->bindParam(':insertvtstring', $insertvtstring);
+        $stmt->bindParam(':imptemplate', $imptemplate);
+        $stmt->bindParam(':importpath_mus', $importpath_mus);
+        $stmt->bindParam(':preimpcom_mus', $preimpcom_mus);
+        $stmt->bindParam(':insertmarkerstring_mus', $insertmarkerstring_mus);
+        $stmt->bindParam(':insertvtstring_mus', $insertvtstring_mus);
+        $stmt->bindParam(':instraficbreak_mus', $instraficbreak_mus);
+        $stmt->bindParam(':imptemplate_mus', $imptemplate_mus);
+        $stmt->bindParam(':thename', $service);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function removeAllServiceHost($service)
+    {
+
+        $sql = "DELETE FROM SERVICE_PERMS WHERE SERVICE_NAME = '$service'";
+
+        if ($this->_db->query($sql) === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function removeServiceHost($host, $service)
+    {
+
+        $sql = "DELETE FROM SERVICE_PERMS WHERE STATION_NAME = '$host' AND SERVICE_NAME = '$service'";
+
+        if ($this->_db->query($sql) === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function AddServiceHost($host, $service)
+    {
+        try {
+
+            $sql = "INSERT INTO SERVICE_PERMS (STATION_NAME, SERVICE_NAME) VALUES (:stat, :serv)";
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':stat' => $host,
+                ':serv' => $service,
+            ]);
+
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+
+    }
+
+    public function updateTFCData($service, $tfccartof, $tfccartlength, $tfctitof, $tfctitlength, $tfchourof, $tfchourslength, $tfcminof, $tfcminlength, $tfcsecof, $tfcseclength, $tfclenhoof, $tfcleholength, $tfclenminof, $tfcleminlength, $tfclensecof, $tfcleseclength, $tfcdataof, $tfcdatalength, $tfceventof, $tfceventlength, $tfcanncof, $tfcannclength)
+    {
+
+        try {
+
+            $sql = "UPDATE SERVICES SET TFC_CART_OFFSET = :coff, TFC_CART_LENGTH = :cleng, TFC_TITLE_OFFSET = :tittof, TFC_TITLE_LENGTH = :titleng, 
+            TFC_HOURS_OFFSET = :hoff, TFC_HOURS_LENGTH = :hleng, TFC_MINUTES_OFFSET = :moff, TFC_MINUTES_LENGTH = :mleng, TFC_SECONDS_OFFSET = :soff, TFC_SECONDS_LENGTH = :sleng,
+            TFC_LEN_HOURS_OFFSET = :lhoff, TFC_LEN_HOURS_LENGTH = :lhleng, TFC_LEN_MINUTES_OFFSET = :lmoff, TFC_LEN_MINUTES_LENGTH = :lmleng,
+            TFC_LEN_SECONDS_OFFSET = :lsoff, TFC_LEN_SECONDS_LENGTH = :lsleng, TFC_DATA_OFFSET = :datoff, TFC_DATA_LENGTH = :datleng,
+            TFC_EVENT_ID_OFFSET = :evoff, TFC_EVENT_ID_LENGTH = :evleng, TFC_ANNC_TYPE_OFFSET = :ancoff, TFC_ANNC_TYPE_LENGTH = :ancleng WHERE NAME = :thename";
+
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':coff' => $tfccartof,
+                ':cleng' => $tfccartlength,
+                ':tittof' => $tfctitof,
+                ':titleng' => $tfctitlength,
+                ':hoff' => $tfchourof,
+                ':hleng' => $tfchourslength,
+                ':moff' => $tfcminof,
+                ':mleng' => $tfcminlength,
+                ':soff' => $tfcsecof,
+                ':sleng' => $tfcseclength,
+                ':lhoff' => $tfclenhoof,
+                ':lhleng' => $tfcleholength,
+                ':lmoff' => $tfclenminof,
+                ':lmleng' => $tfcminof,
+                ':lsoff' => $tfclensecof,
+                ':lsleng' => $tfcleseclength,
+                ':datoff' => $tfcdataof,
+                ':datleng' => $tfcdatalength,
+                ':evoff' => $tfceventof,
+                ':evleng' => $tfceventlength,
+                ':ancoff' => $tfcanncof,
+                ':ancleng' => $tfcannclength,
+                ':thename' => $service,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function updateMUSData($service, $muscartof, $muscartlength, $mustitof, $mustitlength, $mushourof, $mushourslength, $musminof, $musminlength, $mussecof, $musseclength, $muslenhoof, $musleholength, $muslenminof, $musleminlength, $muslensecof, $musleseclength, $musdataof, $musdatalength, $museventof, $museventlength, $musanncof, $musannclength, $mustransof, $mustranslength, $mustimeof, $mustimelength)
+    {
+
+        try {
+
+            $sql = "UPDATE SERVICES SET MUS_CART_OFFSET = :coff, MUS_CART_LENGTH = :cleng, MUS_TITLE_OFFSET = :tittof, MUS_TITLE_LENGTH = :titleng, 
+            MUS_HOURS_OFFSET = :hoff, MUS_HOURS_LENGTH = :hleng, MUS_MINUTES_OFFSET = :moff, MUS_MINUTES_LENGTH = :mleng, MUS_SECONDS_OFFSET = :soff, MUS_SECONDS_LENGTH = :sleng,
+            MUS_LEN_HOURS_OFFSET = :lhoff, MUS_LEN_HOURS_LENGTH = :lhleng, MUS_LEN_MINUTES_OFFSET = :lmoff, MUS_LEN_MINUTES_LENGTH = :lmleng,
+            MUS_LEN_SECONDS_OFFSET = :lsoff, MUS_LEN_SECONDS_LENGTH = :lsleng, MUS_DATA_OFFSET = :datoff, MUS_DATA_LENGTH = :datleng,
+            MUS_EVENT_ID_OFFSET = :evoff, MUS_EVENT_ID_LENGTH = :evleng, MUS_ANNC_TYPE_OFFSET = :ancoff, MUS_ANNC_TYPE_LENGTH = :ancleng,
+            MUS_TRANS_TYPE_OFFSET = :transoff, MUS_TRANS_TYPE_LENGTH = :transleng, MUS_TIME_TYPE_OFFSET = :timeoff, MUS_TIME_TYPE_LENGTH = :timeleng WHERE NAME = :thename";
+
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':coff' => $muscartof,
+                ':cleng' => $muscartlength,
+                ':tittof' => $mustitof,
+                ':titleng' => $mustitlength,
+                ':hoff' => $mushourof,
+                ':hleng' => $mushourslength,
+                ':moff' => $musminof,
+                ':mleng' => $musminlength,
+                ':soff' => $mussecof,
+                ':sleng' => $musseclength,
+                ':lhoff' => $muslenhoof,
+                ':lhleng' => $musleholength,
+                ':lmoff' => $muslenminof,
+                ':lmleng' => $musleminlength,
+                ':lsoff' => $muslensecof,
+                ':lsleng' => $musleseclength,
+                ':datoff' => $musdataof,
+                ':datleng' => $musdatalength,
+                ':evoff' => $museventof,
+                ':evleng' => $museventlength,
+                ':ancoff' => $musanncof,
+                ':ancleng' => $musannclength,
+                ':transoff' => $mustransof,
+                ':transleng' => $mustranslength,
+                ':timeoff' => $mustimeof,
+                ':timeleng' => $mustimelength,
+                ':thename' => $service,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
 }

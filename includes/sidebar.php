@@ -228,7 +228,7 @@ if (isset($_COOKIE['serviceName'])) {
                     </a>
                 </li>
                 <?php if (isset($json_sett["admin"][$_COOKIE['username']]["username"])) { ?>
-                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts') { ?>active<?php } ?> has-sub">
+                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?> has-sub">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-gear"></i>
                             <span>
@@ -237,7 +237,7 @@ if (isset($_COOKIE['serviceName'])) {
                         </a>
 
                         <ul
-                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts') { ?>active<?php } ?>">
+                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?>">
 
 
                             <li class="submenu-item <?php if ($pagecode == 'admindash') { ?>active<?php } ?>">
@@ -270,6 +270,13 @@ if (isset($_COOKIE['serviceName'])) {
                                 <li class="submenu-item <?php if ($pagecode == 'schedcodes') { ?>active<?php } ?>">
                                     <a href="<?php echo DIR; ?>/admin/schedcodes" class="submenu-link">
                                         <?= $ml->tr('SCHEDULERCODES'); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($json_sett["admin"][$_COOKIE['username']]["services"] == 1) { ?>
+                                <li class="submenu-item <?php if ($pagecode == 'services') { ?>active<?php } ?>">
+                                    <a href="<?php echo DIR; ?>/admin/services" class="submenu-link">
+                                        <?= $ml->tr('SERVICES'); ?>
                                     </a>
                                 </li>
                             <?php } ?>
