@@ -2366,4 +2366,173 @@ class DBFunc
         }
     }
 
+    public function getServiceNameNew($service)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM SERVICES WHERE NAME = :servname');
+        $stmt->execute([
+            ':servname' => $service
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+        $number_of_rows = $stmt->rowCount();
+
+        if ($number_of_rows > 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+
+    }
+
+    public function addEmptyService($name, $logtemp, $logtempdescvar)
+    {
+        try {
+            $sql = "INSERT INTO SERVICES (NAME, BYPASS_MODE, NAME_TEMPLATE, DESCRIPTION_TEMPLATE, CHAIN_LOG, SUB_EVENT_INHERITANCE, AUTO_REFRESH, DEFAULT_LOG_SHELFLIFE, LOG_SHELFLIFE_ORIGIN, ELR_SHELFLIFE, INCLUDE_IMPORT_MARKERS, INCLUDE_MUS_IMPORT_MARKERS, INCLUDE_TFC_IMPORT_MARKERS, TFC_IMPORT_TEMPLATE, MUS_IMPORT_TEMPLATE)
+            VALUES (:thename, :bypass, :nametemp, :desctemp, :chainlog, :sub, :autoref, :deflshe, :logshelforg, :elr, :inimp, :inmus, :intfc, :tfcimp, :musimp)";
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':thename' => $name,
+                ':bypass' => 'N',
+                ':nametemp' => $logtemp,
+                ':desctemp' => $logtempdescvar,
+                ':chainlog' => 'N',
+                ':sub' => '0',
+                ':autoref' => 'N',
+                ':deflshe' => '-1',
+                ':logshelforg' => '0',
+                ':elr' => '-1',
+                ':inimp' => 'Y',
+                ':inmus' => 'Y',
+                ':intfc' => 'Y',
+                ':tfcimp' => 'Rivendell Standard Import',
+                ':musimp' => 'Rivendell Standard Import',
+            ]);
+
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function notEmpty($value) {
+        if (isset($value) && !empty($value) && $value != "") {
+            return $value;
+        } else {
+            return null;
+        }
+    }
+
+    public function copyNewService($name, $copyfrom, $logcopydesc)
+    {
+        try {
+            $sql2 = "INSERT INTO SERVICES (NAME, DESCRIPTION, BYPASS_MODE, NAME_TEMPLATE, DESCRIPTION_TEMPLATE, PROGRAM_CODE, CHAIN_LOG, SUB_EVENT_INHERITANCE, TRACK_GROUP, AUTOSPOT_GROUP, AUTO_REFRESH, DEFAULT_LOG_SHELFLIFE, LOG_SHELFLIFE_ORIGIN, ELR_SHELFLIFE, INCLUDE_IMPORT_MARKERS, INCLUDE_MUS_IMPORT_MARKERS, INCLUDE_TFC_IMPORT_MARKERS, 
+            TFC_PATH, TFC_PREIMPORT_CMD, TFC_IMPORT_TEMPLATE, TFC_LABEL_CART, TFC_TRACK_CART, TFC_BREAK_STRING, TFC_TRACK_STRING, TFC_CART_OFFSET, TFC_CART_LENGTH, TFC_TITLE_OFFSET, TFC_TITLE_LENGTH, 
+            TFC_HOURS_OFFSET, TFC_HOURS_LENGTH, TFC_MINUTES_OFFSET, TFC_MINUTES_LENGTH, TFC_SECONDS_OFFSET, TFC_SECONDS_LENGTH, TFC_LEN_HOURS_OFFSET, TFC_LEN_HOURS_LENGTH, TFC_LEN_MINUTES_OFFSET, TFC_LEN_MINUTES_LENGTH,
+            TFC_LEN_SECONDS_OFFSET, TFC_LEN_SECONDS_LENGTH, TFC_DATA_OFFSET, TFC_DATA_LENGTH, TFC_EVENT_ID_OFFSET, TFC_EVENT_ID_LENGTH, TFC_ANNC_TYPE_OFFSET, TFC_ANNC_TYPE_LENGTH, 
+            MUS_PATH, MUS_PREIMPORT_CMD, MUS_IMPORT_TEMPLATE, MUS_LABEL_CART, MUS_TRACK_CART, MUS_BREAK_STRING, MUS_TRACK_STRING, MUS_CART_OFFSET, MUS_CART_LENGTH, MUS_TITLE_OFFSET, MUS_TITLE_LENGTH, 
+            MUS_HOURS_OFFSET, MUS_HOURS_LENGTH, MUS_MINUTES_OFFSET, MUS_MINUTES_LENGTH, MUS_SECONDS_OFFSET, MUS_SECONDS_LENGTH, MUS_LEN_HOURS_OFFSET, MUS_LEN_HOURS_LENGTH, MUS_LEN_MINUTES_OFFSET, MUS_LEN_MINUTES_LENGTH,
+            MUS_LEN_SECONDS_OFFSET, MUS_LEN_SECONDS_LENGTH, MUS_DATA_OFFSET, MUS_DATA_LENGTH, MUS_EVENT_ID_OFFSET, MUS_EVENT_ID_LENGTH, MUS_ANNC_TYPE_OFFSET, MUS_ANNC_TYPE_LENGTH,
+            MUS_TRANS_TYPE_OFFSET, MUS_TRANS_TYPE_LENGTH, MUS_TIME_TYPE_OFFSET, MUS_TIME_TYPE_LENGTH)
+            VALUES (:thename, :thedesc, :bypass, :nametemp, :desctemp, :progcode, :chainlog, :sub, :trackgr, :autospotgr, :autoref, :deflshe, :logshelforg, :elr, :inimp, :inmus, :intfc, 
+            :tfcpath, :tfcpreimp, :tfcimp, :tfclabelcart, :tfctrackc, :tfcbreaks, :tfctracks, :tfccartof, :tfccartlen, :tfctitof, :tfctitleng, :tfchoff, :tfchleng, :tfcminoff, :tfcminleng, :tfcsecoff,
+            :tfcsecleng, :tfclenhooff, :tfclenholeng, :tfclenminof, :tfclenminleng, :tfclensecof, :tfclensecleng, :tfcdataof, :tfcdataleng, :tfcevidof, :tfcevidleng, :tfcannof, :tfcannleng, :muspath, :muspreimp, :musimp,
+            :muslabcart, :mustrackcart, :musbreak, :mustrackst, :muscartof, :muscartlen, :mustitof, :mustitleng, :mushoff, :mushleng, :musminoff, :musminleng, :mussecoff,
+            :mussecleng, :muslenhooff, :muslenholeng, :muslenminof, :muslenminleng, :muslensecof, :muslensecleng, :musdataof, :musdataleng, :musevidof, :musevidleng, :musannof, :musannleng, :mustransoff, :mustransleng, :mustimeoff, :mustimeleng)";
+
+            $stmt = $this->_db->prepare('SELECT * FROM SERVICES WHERE NAME = :thename');
+            $stmt->execute([
+                ':thename' => $copyfrom
+            ]);
+            $result = $stmt->fetchAll();
+            foreach ($result as $row) {           
+                $stmt2 = $this->_db->prepare($sql2);
+                $stmt2->execute([
+                    ':thename' => $name,
+                    ':thedesc' => $logcopydesc,
+                    ':bypass' => $row['BYPASS_MODE'],
+                    ':nametemp' => $this->notEmpty($row['NAME_TEMPLATE']),
+                    ':desctemp' => $this->notEmpty($row['DESCRIPTION_TEMPLATE']),
+                    ':progcode' => $this->notEmpty($row['PROGRAM_CODE']),
+                    ':chainlog' => $row['CHAIN_LOG'],
+                    ':sub' => $row['SUB_EVENT_INHERITANCE'],
+                    ':trackgr' => $this->notEmpty($row['TRACK_GROUP']),
+                    ':autospotgr' => $this->notEmpty($row['AUTOSPOT_GROUP']),
+                    ':autoref' => $row['AUTO_REFRESH'],
+                    ':deflshe' => $this->notEmpty($row['DEFAULT_LOG_SHELFLIFE']),
+                    ':logshelforg' => $this->notEmpty($row['LOG_SHELFLIFE_ORIGIN']),
+                    ':elr' => $this->notEmpty($row['ELR_SHELFLIFE']),
+                    ':inimp' => $row['INCLUDE_IMPORT_MARKERS'],
+                    ':inmus' => $row['INCLUDE_MUS_IMPORT_MARKERS'],
+                    ':intfc' => $this->notEmpty($row['INCLUDE_TFC_IMPORT_MARKERS']),
+                    ':tfcpath' => $this->notEmpty($row['TFC_PATH']),
+                    ':tfcpreimp' => $this->notEmpty($row['TFC_PREIMPORT_CMD']),
+                    ':tfcimp' => $this->notEmpty($row['TFC_IMPORT_TEMPLATE']),
+                    ':tfclabelcart' => $this->notEmpty($row['TFC_LABEL_CART']),
+                    ':tfctrackc' => $this->notEmpty($row['TFC_TRACK_CART']),
+                    ':tfcbreaks' => $this->notEmpty($row['TFC_BREAK_STRING']),
+                    ':tfctracks' => $this->notEmpty($row['TFC_TRACK_STRING']),
+                    ':tfccartof' => $this->notEmpty($row['TFC_CART_OFFSET']),
+                    ':tfccartlen' => $this->notEmpty($row['TFC_CART_LENGTH']),
+                    ':tfctitof' => $this->notEmpty($row['TFC_TITLE_OFFSET']),
+                    ':tfctitleng' => $this->notEmpty($row['TFC_TITLE_LENGTH']),
+                    ':tfchoff' => $this->notEmpty($row['TFC_HOURS_OFFSET']),
+                    ':tfchleng' => $this->notEmpty($row['TFC_HOURS_LENGTH']),
+                    ':tfcminoff' => $this->notEmpty($row['TFC_MINUTES_OFFSET']),
+                    ':tfcminleng' => $this->notEmpty($row['TFC_MINUTES_LENGTH']),
+                    ':tfcsecoff' => $this->notEmpty($row['TFC_SECONDS_OFFSET']),
+                    ':tfcsecleng' => $this->notEmpty($row['TFC_SECONDS_LENGTH']),
+                    ':tfclenhooff' => $this->notEmpty($row['TFC_LEN_HOURS_OFFSET']),
+                    ':tfclenholeng' => $this->notEmpty($row['TFC_LEN_HOURS_LENGTH']),
+                    ':tfclenminof' => $this->notEmpty($row['TFC_LEN_MINUTES_OFFSET']),
+                    ':tfclenminleng' => $this->notEmpty($row['TFC_LEN_MINUTES_LENGTH']),
+                    ':tfclensecof' => $this->notEmpty($row['TFC_LEN_SECONDS_OFFSET']),
+                    ':tfclensecleng' => $this->notEmpty($row['TFC_LEN_SECONDS_LENGTH']),
+                    ':tfcdataof' => $this->notEmpty($row['TFC_DATA_OFFSET']),
+                    ':tfcdataleng' => $this->notEmpty($row['TFC_DATA_LENGTH']),
+                    ':tfcevidof' => $this->notEmpty($row['TFC_EVENT_ID_OFFSET']),
+                    ':tfcevidleng' => $this->notEmpty($row['TFC_EVENT_ID_LENGTH']),
+                    ':tfcannof' => $this->notEmpty($row['TFC_ANNC_TYPE_OFFSET']),
+                    ':tfcannleng' => $this->notEmpty($row['TFC_ANNC_TYPE_LENGTH']),
+                    ':muspath' => $this->notEmpty($row['MUS_PATH']),
+                    ':muspreimp' => $this->notEmpty($row['MUS_PREIMPORT_CMD']),
+                    ':musimp' => $this->notEmpty($row['MUS_IMPORT_TEMPLATE']),
+                    ':muslabcart' => $this->notEmpty($row['MUS_LABEL_CART']),
+                    ':mustrackcart' => $this->notEmpty($row['MUS_TRACK_CART']),
+                    ':musbreak' => $this->notEmpty($row['MUS_BREAK_STRING']),
+                    ':mustrackst' => $this->notEmpty($row['MUS_TRACK_STRING']),
+                    ':muscartof' => $this->notEmpty($row['MUS_TRACK_STRING']),
+                    ':muscartlen' => $this->notEmpty($row['MUS_CART_LENGTH']),
+                    ':mustitof' => $this->notEmpty($row['MUS_TITLE_OFFSET']),
+                    ':mustitleng' => $this->notEmpty($row['MUS_TITLE_LENGTH']),
+                    ':mushoff' => $this->notEmpty($row['MUS_HOURS_OFFSET']),
+                    ':mushleng' => $this->notEmpty($row['MUS_HOURS_LENGTH']),
+                    ':musminoff' => $this->notEmpty($row['MUS_MINUTES_OFFSET']),
+                    ':musminleng' => $this->notEmpty($row['MUS_MINUTES_LENGTH']),
+                    ':mussecoff' => $this->notEmpty($row['MUS_SECONDS_OFFSET']),
+                    ':mussecleng' => $this->notEmpty($row['MUS_SECONDS_LENGTH']),
+                    ':muslenhooff' => $this->notEmpty($row['MUS_LEN_HOURS_OFFSET']),
+                    ':muslenholeng' => $this->notEmpty($row['MUS_LEN_HOURS_LENGTH']),
+                    ':muslenminof' => $this->notEmpty($row['MUS_LEN_MINUTES_OFFSET']),
+                    ':muslenminleng' => $this->notEmpty($row['MUS_LEN_MINUTES_LENGTH']),
+                    ':muslensecof' => $this->notEmpty($row['MUS_LEN_SECONDS_OFFSET']),
+                    ':muslensecleng' => $this->notEmpty($row['MUS_LEN_SECONDS_LENGTH']),
+                    ':musdataof' => $this->notEmpty($row['MUS_DATA_OFFSET']),
+                    ':musdataleng' => $this->notEmpty($row['MUS_DATA_LENGTH']),
+                    ':musevidof' => $this->notEmpty($row['MUS_EVENT_ID_OFFSET']),
+                    ':musevidleng' => $this->notEmpty($row['MUS_EVENT_ID_LENGTH']),
+                    ':musannof' => $this->notEmpty($row['MUS_ANNC_TYPE_OFFSET']),
+                    ':musannleng' => $this->notEmpty($row['MUS_ANNC_TYPE_LENGTH']),
+                    ':mustransoff' => $this->notEmpty($row['MUS_TRANS_TYPE_OFFSET']),
+                    ':mustransleng' => $this->notEmpty($row['MUS_TRANS_TYPE_LENGTH']),
+                    ':mustimeoff' => $this->notEmpty($row['MUS_TIME_TYPE_OFFSET']),
+                    ':mustimeleng' => $this->notEmpty($row['MUS_TIME_TYPE_LENGTH']),
+                ]);
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }

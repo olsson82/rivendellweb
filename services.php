@@ -28,36 +28,37 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 if (!$json_sett["admin"][$_COOKIE['username']]["services"] == 1) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 $username = $_COOKIE['username'];
 $fullname = $_COOKIE['fullname'];
 $users = $dbfunc->getUsers();
+$services = $dbfunc->getServices();
 $pagecode = "services";
 $page_vars = 'services';
 $page_title = $ml->tr('RIVSERVICES');
-$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="' . DIR . '/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="' . DIR . '/assets/compiled/css/table-datatable-jquery.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
-<script src="'.DIR.'/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="'.DIR.'/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
-<script src="'.DIR.'/assets/static/js/pages/datatables.js"></script>';
-$page_js = '<script src="'.DIR.'/assets/static/js/services.js"></script>';
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="' . DIR . '/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script src="' . DIR . '/assets/static/js/pages/datatables.js"></script>';
+$page_js = '<script src="' . DIR . '/assets/static/js/services.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -93,6 +94,9 @@ $page_js = '<script src="'.DIR.'/assets/static/js/services.js"></script>';
                 <h5 class="card-title">
                     <?= $ml->tr('AVALIBLESERVICES'); ?>
                 </h5>
+                <button data-bs-toggle="modal" data-bs-target="#add_window" class="btn btn-light-success">
+                    <?= $ml->tr('ADDSERVICE'); ?>
+                </button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -125,7 +129,64 @@ $page_js = '<script src="'.DIR.'/assets/static/js/services.js"></script>';
             </div>
         </div>
 
-    </section>       
+    </section>
+    <div class="modal fade text-left" id="add_window" data-bs-backdrop="static" role="dialog" aria-labelledby="AddLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-success">
+                    <h4 class="modal-title white" id="AddLabel">
+                        <?= $ml->tr('ADDSERVICE') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-add-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="add_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="service_name">
+                                        <?= $ml->tr('SERVICENAME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="service_name" class="form-control" name="service_name">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="basedon">
+                                        <?= $ml->tr('BASEONSERVICE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="basedon" name="basedon" class="choices form-select">
+                                        <?php foreach ($services as $service) { ?>
+                                            <option value="<?php echo $service; ?>">
+                                                <?php echo $service; ?>
+                                            </option>
+                                        <?php } ?>
+                                        <option value="non">
+                                            <?= $ml->tr('NONBRACKET') ?>
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-kt-add-modal-action="close">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">
+                                <?= $ml->tr('CLOSE') ?>
+                            </span>
+                        </button>
+                        <input type="submit" class="btn btn-success ms-1" value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
 </div>
 

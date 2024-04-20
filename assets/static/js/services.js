@@ -1,5 +1,83 @@
 var dt;
 
+let choices = document.querySelectorAll(".choices")
+let initChoice
+for (let i = 0; i < choices.length; i++) {
+    if (choices[i].classList.contains("multiple-remove")) {
+        initChoice = new Choices(choices[i], {
+            delimiter: ",",
+            editItems: true,
+            maxItemCount: -1,
+            removeItemButton: true,
+        })
+    } else {
+        initChoice = new Choices(choices[i], {
+            noResultsText: TRAN_SELECTNORESULTS,
+            noChoicesText: TRAN_SELECTNOOPTIONS,
+            itemSelectText: TRAN_SELECTPRESSSELECT,
+        })
+    }
+}
+
+$('#add_form').validate({
+    rules: {
+        service_name: {
+            required: true,
+            remote: HOST_URL + "/validation/checkservicename.php",
+            maxlength: 10
+        },
+        basedon: {
+            required: true,
+        },
+    },
+    messages: {
+        service_name: {
+            required: TRAN_NOTBEEMPTY,
+            maxlength: TRAN_SERVNAMETOLONG
+        },
+        basedon: {
+            required: TRAN_NOTBEEMPTY
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#add_form').serialize();
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/addservice.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                var kod = mydata.errorcode;
+                var servicename = mydata.servicename;
+                if (fel == "false") {
+                    location.href = HOST_URL + "/admin/services/service/"+servicename;
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+            }
+        });
+    }
+});
 
 var KTDatatablesServerSide = function () {
     var initDatatable = function () {
@@ -76,11 +154,61 @@ var KTDatatablesServerSide = function () {
             ],
         });
 
-    }    
+    } 
+    
+    const element1 = document.getElementById('add_window');
+    const modal1 = new bootstrap.Modal(element1);
+
+    var initAddModalButtons = function () { 
+        const cancelButton2 = element1.querySelector('[data-kt-add-modal-action="cancel"]');
+        cancelButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal1.hide();
+                }
+            });
+        });
+        const closeButton2 = element1.querySelector('[data-kt-add-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal1.hide();
+
+                }
+            });
+        });
+    }
 
     return {
         init: function () {
             initDatatable();
+            initAddModalButtons();
         }
     }
 }();
