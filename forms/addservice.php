@@ -49,8 +49,21 @@ if ($basedon == 'non') {
         echo json_encode($echodata);
         exit();
     } else {
-        $echodata = ['error' => 'false', 'errorcode' => '0', 'servicename' => $service_name];
-        echo json_encode($echodata);
-        exit();
+        if (!$dbfunc->copyStation($service_name, $basedon)) {
+            $echodata = ['error' => 'true', 'errorcode' => '1', 'servicename' => $service_name];
+            echo json_encode($echodata);
+            exit();
+        } else {
+            if (!$dbfunc->copyAutoFill($service_name, $basedon)) {
+                $echodata = ['error' => 'true', 'errorcode' => '1', 'servicename' => $service_name];
+                echo json_encode($echodata);
+                exit();
+            } else {
+                $echodata = ['error' => 'false', 'errorcode' => '0', 'servicename' => $service_name];
+                echo json_encode($echodata);
+                exit();
+            }
+
+        }
     }
 }

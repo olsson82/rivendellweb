@@ -2385,6 +2385,60 @@ class DBFunc
 
     }
 
+    public function copyAutoFill($service, $copy)
+    {
+        try {
+            $sql = "INSERT INTO AUTOFILLS (SERVICE, CART_NUMBER)
+        VALUES (:servicename, :cartnumber)";
+
+            $stmt = $this->_db->prepare('SELECT * FROM AUTOFILLS WHERE SERVICE = :thename');
+            $stmt->execute([
+                ':thename' => $copy
+            ]);
+            $result = $stmt->fetchAll();
+            foreach ($result as $row) {
+
+                $stmt2 = $this->_db->prepare($sql);
+                $stmt2->execute([
+                    ':servicename' => $service,
+                    ':cartnumber' => $row['CART_NUMBER'],
+                ]);
+
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function copyStation($service, $copy)
+    {
+        try {
+            $sql = "INSERT INTO SERVICE_PERMS (STATION_NAME, SERVICE_NAME)
+            VALUES (:statname, :servicename)";
+            $stmt = $this->_db->prepare('SELECT * FROM SERVICE_PERMS WHERE SERVICE_NAME = :thename');
+            $stmt->execute([
+                ':thename' => $copy
+            ]);
+            $result = $stmt->fetchAll();
+            foreach ($result as $row) {
+
+                $stmt2 = $this->_db->prepare($sql);
+                $stmt2->execute([
+                    ':statname' => $row['STATION_NAME'],
+                    ':servicename' => $service,
+                ]);
+
+            }
+
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+
+    }
+
     public function addEmptyService($name, $logtemp, $logtempdescvar)
     {
         try {
@@ -2415,7 +2469,8 @@ class DBFunc
         }
     }
 
-    public function notEmpty($value) {
+    public function notEmpty($value)
+    {
         if (isset($value) && !empty($value) && $value != "") {
             return $value;
         } else {
@@ -2445,7 +2500,7 @@ class DBFunc
                 ':thename' => $copyfrom
             ]);
             $result = $stmt->fetchAll();
-            foreach ($result as $row) {           
+            foreach ($result as $row) {
                 $stmt2 = $this->_db->prepare($sql2);
                 $stmt2->execute([
                     ':thename' => $name,
