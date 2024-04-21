@@ -28,11 +28,11 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 if (!$json_sett["admin"][$_COOKIE['username']]["users"] == 1) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 $username = $_COOKIE['username'];
@@ -42,23 +42,23 @@ $groups = $dbfunc->getGroupNames();
 $pagecode = "users";
 $page_vars = 'users';
 $page_title = $ml->tr('USERS');
-$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="' . DIR . '/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="' . DIR . '/assets/compiled/css/table-datatable-jquery.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
-<script src="'.DIR.'/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="'.DIR.'/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
-<script src="'.DIR.'/assets/static/js/pages/datatables.js"></script>';
-$page_js = '<script src="'.DIR.'/assets/static/js/users.js"></script>';
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="' . DIR . '/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script src="' . DIR . '/assets/static/js/pages/datatables.js"></script>';
+$page_js = '<script src="' . DIR . '/assets/static/js/users.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -94,6 +94,9 @@ $page_js = '<script src="'.DIR.'/assets/static/js/users.js"></script>';
                 <h5 class="card-title">
                     <?= $ml->tr('AVUSERS'); ?>
                 </h5>
+                <button data-bs-toggle="modal" data-bs-target="#add_window" class="btn btn-light-success">
+                    <?= $ml->tr('ADDUSER'); ?>
+                </button>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -127,6 +130,107 @@ $page_js = '<script src="'.DIR.'/assets/static/js/users.js"></script>';
         </div>
 
     </section>
+    <div class="modal fade text-left" id="add_window" data-bs-backdrop="static" role="dialog" aria-labelledby="AddLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-success">
+                    <h4 class="modal-title white" id="AddLabel">
+                        <?= $ml->tr('ADDUSER') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-add-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="add_form" action="#">
+                    <div class="modal-body">
+                        <P><?= $ml->tr('WHENUSERADDED') ?></P>
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="col-md-4">
+                                    <label for="user_name">
+                                        <?= $ml->tr('USERNAME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="user_name" class="form-control" name="user_name">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="fullname">
+                                        <?= $ml->tr('FULLNAME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="fullname" class="form-control" name="fullname">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="desc">
+                                        <?= $ml->tr('DESCRIPTION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="desc" class="form-control" name="desc">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="email">
+                                        <?= $ml->tr('EMAIL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="email" id="email" class="form-control" name="email">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="phone">
+                                        <?= $ml->tr('PHONE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="phone" class="form-control" name="phone">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="add_activegroups">
+                                        <?= $ml->tr('GROUPPERMISSIONS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="add_activegroups" name="activegroups[]" class="choices form-select" multiple>
+                                        <?php foreach ($groups as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="add_activeservice">
+                                        <?= $ml->tr('SERVICEPERMISSIONS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="add_activeservice" name="activeservice[]" class="choices form-select" multiple>
+                                        <?php foreach ($services as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-light-secondary" data-kt-add-modal-action="close">
+                            <i class="bx bx-x d-block d-sm-none"></i>
+                            <span class="d-none d-sm-block">
+                                <?= $ml->tr('CLOSE') ?>
+                            </span>
+                        </button>
+                        <input type="submit" class="btn btn-success ms-1" value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     <div class="modal fade text-left" id="permission_window" data-bs-backdrop="static" role="dialog"
         aria-labelledby="EditLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -170,7 +274,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/users.js"></script>';
                                             </option>
                                         <?php } ?>
                                     </select>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -523,7 +627,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/users.js"></script>';
                                             <?= $ml->tr('NO') ?>
                                         </option>
                                     </select>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -535,8 +639,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/users.js"></script>';
                                 <?= $ml->tr('CLOSE') ?>
                             </span>
                         </button>
-                        <input type="submit" class="btn btn-primary ms-1"
-                            value="<?= $ml->tr('SAVE') ?>">
+                        <input type="submit" class="btn btn-primary ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
                 </form>
             </div>

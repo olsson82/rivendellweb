@@ -2590,4 +2590,42 @@ class DBFunc
             return false;
         }
     }
+
+    public function getUsernameExist($username)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM USERS WHERE LOGIN_NAME = :usrname');
+        $stmt->execute([
+            ':usrname' => $username
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+        $number_of_rows = $stmt->rowCount();
+
+        if ($number_of_rows > 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+
+    }
+
+    public function getEmailExist($email)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM USERS WHERE EMAIL_ADDRESS = :eadd');
+        $stmt->execute([
+            ':eadd' => $email
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+        $number_of_rows = $stmt->rowCount();
+
+        if ($number_of_rows > 0) {
+            return false;
+        } else {
+            return true;
+        }
+
+
+    }
 }

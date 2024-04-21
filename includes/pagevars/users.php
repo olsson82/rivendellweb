@@ -9,6 +9,7 @@
     var TRAN_BUG = "<?= $ml->tr('BUG') ?>";
     var TRAN_OK = "<?= $ml->tr('OK') ?>";
     var TRAN_NOTBEEMPTY = "<?= $ml->tr('NOTBEEMPTY') ?>";
+    var TRAN_CORREMAILNEEDS = "<?= $ml->tr('CORREMAILNEEDS') ?>";
     var TRAN_TABLEFIRST = "<?= $ml->tr('TAFIRST') ?>";
     var TRAN_TABLELAST = "<?= $ml->tr('TALAST') ?>";
     var TRAN_TABLENEXT = "<?= $ml->tr('TANEXT') ?>";

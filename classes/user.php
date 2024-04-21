@@ -299,5 +299,69 @@ class User
         }
     }
 
+    public function randomGenerator($length)
+    {
+        $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ!';
+        $randomString = '';
+
+        for ($i = 0; $i < $length; $i++) {
+            $index = rand(0, strlen($characters) - 1);
+            $randomString .= $characters[$index];
+        }
+
+        return $randomString;
+    }
+
+    public function addNewUser($username, $fullname, $email, $phone, $desc, $password)
+    {
+        try {
+            $newpass = base64_encode($password);
+            $sql = "INSERT INTO USERS (LOGIN_NAME, FULL_NAME, EMAIL_ADDRESS, PHONE_NUMBER, DESCRIPTION, PASSWORD, WEBAPI_AUTH_TIMEOUT, ENABLE_WEB, LOCAL_AUTH, PAM_SERVICE, ADMIN_CONFIG_PRIV, ADMIN_RSS_PRIV,
+            CREATE_CARTS_PRIV, DELETE_CARTS_PRIV, MODIFY_CARTS_PRIV, EDIT_AUDIO_PRIV, WEBGET_LOGIN_PRIV, ASSIGN_CART_PRIV, CREATE_LOG_PRIV, DELETE_LOG_PRIV, DELETE_REC_PRIV, PLAYOUT_LOG_PRIV,
+            ARRANGE_LOG_PRIV, MODIFY_TEMPLATE_PRIV, ADDTO_LOG_PRIV, REMOVEFROM_LOG_PRIV, CONFIG_PANELS_PRIV, VOICETRACK_LOG_PRIV, EDIT_CATCHES_PRIV, ADD_PODCAST_PRIV, EDIT_PODCAST_PRIV, DELETE_PODCAST_PRIV)
+            VALUES (:username, :fullname, :email, :phone, :descs, :passwords, :webapi, :enabweb, :localaut, :pam, :adminconf, :adminrss, :ccarts, :delcarts, :modcarts, :edaudio, :webgetlog, :asscarts,
+            :clog, :dellog, :delrec, :playout, :arrang, :modtemp, :addtolog, :remlog, :confpan, :voicetrack, :edcatch, :addpod, :edpod, :delpod)";
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':username' => $username,
+                ':fullname' => $fullname,
+                ':email' => $email,
+                ':phone' => $phone,
+                ':descs' => $desc,
+                ':passwords' => $newpass,
+                ':webapi' => '3600',
+                ':enabweb' => 'Y',
+                ':localaut' => 'Y',
+                ':pam' => 'rivendell',
+                ':adminconf' => 'N',
+                ':adminrss' => 'N',
+                ':ccarts' => 'N',
+                ':delcarts' => 'N',
+                ':modcarts' => 'N',
+                ':edaudio' => 'N',
+                ':webgetlog' => 'Y',
+                ':asscarts' => 'N',
+                ':clog' => 'N',
+                ':dellog' => 'N',
+                ':delrec' => 'N',
+                ':playout' => 'N',
+                ':arrang' => 'N',
+                ':modtemp' => 'N',
+                ':addtolog' => 'N',
+                ':remlog' => 'N',
+                ':confpan' => 'N',
+                ':voicetrack' => 'N',
+                ':edcatch' => 'N',
+                ':addpod' => 'N',
+                ':edpod' => 'N',
+                ':delpod' => 'N',
+            ]);
+
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
 
 }

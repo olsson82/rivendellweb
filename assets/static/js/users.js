@@ -27,6 +27,25 @@
  *********************************************************************************************************/
 var dt;
 
+let choices = document.querySelectorAll(".choices")
+let initChoice
+for (let i = 0; i < choices.length; i++) {
+    if (choices[i].classList.contains("multiple-remove")) {
+        initChoice = new Choices(choices[i], {
+            delimiter: ",",
+            editItems: true,
+            maxItemCount: -1,
+            removeItemButton: true,
+        })
+    } else {
+        initChoice = new Choices(choices[i], {
+            noResultsText: TRAN_SELECTNORESULTS,
+            noChoicesText: TRAN_SELECTNOOPTIONS,
+            itemSelectText: TRAN_SELECTPRESSSELECT,
+        })
+    }
+}
+
 const groupBox = document.getElementById('activegroups');
 const SelGroupBox = new Choices(groupBox, {
     noResultsText: TRAN_SELECTNORESULTS,
@@ -103,21 +122,31 @@ function editRights(user) {
     });
 }
 
-$('#perms_form').validate({
+var AddForm = $('#add_form').validate({
     rules: {
-        activegroups: {
+        user_name: {
+            required: true,
+            remote: HOST_URL + "/validation/checkusername.php",
+        },
+        fullname: {
             required: true,
         },
-        activeservice: {
+        email: {
             required: true,
+            remote: HOST_URL + "/validation/checkemail.php",
+            email: true
         },
     },
     messages: {
-        activegroups: {
+        user_name: {
             required: TRAN_NOTBEEMPTY
         },
-        activeservice: {
+        fullname: {
             required: TRAN_NOTBEEMPTY
+        },
+        email: {
+            required: TRAN_NOTBEEMPTY,
+            email: TRAN_CORREMAILNEEDS
         },
     },
     errorElement: 'span',
@@ -132,16 +161,18 @@ $('#perms_form').validate({
         $(element).removeClass('is-invalid');
     },
     submitHandler: function () {
-        var dataString = $('#perms_form').serialize();
+        var dataString = $('#add_form').serialize();
         jQuery.ajax({
             type: "POST",
-            url: HOST_URL + '/forms/edituserperms.php',
+            url: HOST_URL + '/forms/adduser.php',
             data: dataString,
             success: function (data) {
                 var mydata = $.parseJSON(data);
                 var fel = mydata.error;
                 if (fel == "false") {
-                    $('#permission_window').modal('hide');
+                    AddForm.resetForm();
+                    dt.ajax.reload();
+                    $('#add_window').modal('hide');
                 } else {
                     Swal.fire({
                         text: TRAN_BUG,
@@ -384,6 +415,55 @@ var initPermsModalButtons = function () {
         }).then(function (result) {
             if (result.value) {
                 modal2.hide();
+
+            }
+        });
+    });
+}
+
+const element3 = document.getElementById('add_window');
+const modal3 = new bootstrap.Modal(element3);
+
+var initPermsModalButtons = function () {
+    const cancelButton2 = element3.querySelector('[data-kt-add-modal-action="cancel"]');
+    cancelButton2.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal3.hide();
+            }
+        });
+    });
+    const closeButton2 = element3.querySelector('[data-kt-add-modal-action="close"]');
+    closeButton2.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal3.hide();
 
             }
         });
