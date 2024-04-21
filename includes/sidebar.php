@@ -196,6 +196,7 @@ if (isset($_COOKIE['serviceName'])) {
 
 
                 </li>
+                <?php if ($info->checkusrRights('MODIFY_TEMPLATE_PRIV')) { ?>
                 <li class="sidebar-title">
                     <?= $ml->tr('LOGMANAGER'); ?>
                 </li>
@@ -227,6 +228,7 @@ if (isset($_COOKIE['serviceName'])) {
                         </span>
                     </a>
                 </li>
+                <?php } ?>
                 <?php if (isset($json_sett["admin"][$_COOKIE['username']]["username"])) { ?>
                     <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?> has-sub">
                         <a href="#" class='sidebar-link'>
