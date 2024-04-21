@@ -103,12 +103,14 @@ $page_js = '<script src="'.DIR.'/assets/static/js/library.js"></script>';
                     </button>
                 </div>
                 <div data-kt-library-table-toolbar="base">
+                <?php if ($info->checkusrRights('CREATE_CARTS_PRIV')) { ?>
                     <button data-bs-toggle="modal" data-bs-target="#import_music" class="btn btn-light-success">
                         <?= $ml->tr('IMPORTMUSIC'); ?>
                     </button>
                     <button data-bs-toggle="modal" data-bs-target="#add_cart" class="btn btn-light-warning">
                         <?= $ml->tr('ADDCART'); ?>
                     </button>
+                    <?php } ?>
                 </div>
             </div>
             <div class="card-body">
