@@ -226,13 +226,15 @@ class MultiLang
 
 			$this->not_yet_translated($lookup_word);
 
+			$forfallback = $word;
+
 			$word = str_replace("{{", '', $word);
 			$word = str_replace("}}", '', $word);
 
 			$this->last_translated = false;
 
 			//return $word;
-			return $this->fallbacktr($word); //Get the english translation if missing in other.
+			return $this->fallbacktr($forfallback); //Get the english translation if missing in other.
 		}
 
 	}
