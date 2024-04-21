@@ -83,7 +83,8 @@ if (!$user->addNewUser($user_name, $fullname, $email, $phone, $desc, $newpass)) 
         $message = str_replace('%welcometo%', $ml->tr('WELCOMETO {{' . APPNAME . '}}'), $message);
         $message = str_replace('%hello%', $ml->tr('HELLONAME {{' . $fullname . '}}'), $message);
         $message = str_replace('%newaccount%', $ml->tr('NEWACCOUNT'), $message);
-        $message = str_replace('%newpass%', $newpass, $message);
+        $message = str_replace('%newusername%', $ml->tr('YOURUSERLOGIN {{' . $user_name . '}}'), $message);
+        $message = str_replace('%newpass%', $ml->tr('YOURPASSLOGIN {{' . $newpass . '}}'), $message);
         $message = str_replace('%loginbelow%', $ml->tr('CHANGELOGINPASSBUTT'), $message);
         $message = str_replace('%loginaccount%', $ml->tr('LOGINTOYOURACCOUNT'), $message);
         $message = str_replace('%loginurl%', DIR . '/login', $message);
