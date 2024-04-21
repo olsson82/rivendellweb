@@ -199,6 +199,63 @@ function editRights(user) {
     });
 }
 
+$('#perms_form').validate({
+    rules: {
+        activegroups: {
+            required: true,
+        },
+        activeservice: {
+            required: true,
+        },
+    },
+    messages: {
+        activegroups: {
+            required: TRAN_NOTBEEMPTY
+        },
+        activeservice: {
+            required: TRAN_NOTBEEMPTY
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#perms_form').serialize();
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/edituserperms.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                if (fel == "false") {
+                    $('#permission_window').modal('hide');
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+
+
+                }
+            }
+        });
+    }
+});
+
 var AddForm = $('#add_form').validate({
     rules: {
         user_name: {
