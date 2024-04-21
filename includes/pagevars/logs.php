@@ -9,6 +9,7 @@
         var TRAN_YES = "<?= $ml->tr('YES') ?>";
         var TRAN_NO = "<?= $ml->tr('NO') ?>";
         var TRAN_OK = "<?= $ml->tr('OK') ?>";
+        var TRAN_NOSPACEALLOWED = "<?= $ml->tr('NOSPACEALLOWED') ?>";
         var TRAN_DELETEMARKED = "<?= $ml->tr('DELMARKEDLOGS') ?>";
         var TRAN_MARKEDDELETED = "<?= $ml->tr('DELMARKEDLOGSDONE') ?>";
         var TRAN_DELMARKEDLOGSNOT = "<?= $ml->tr('DELMARKEDLOGSNOT') ?>";

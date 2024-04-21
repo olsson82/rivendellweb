@@ -45,6 +45,11 @@ function tr(translate) {
     return result;
 }
 
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+    return value.indexOf(" ") < 0 && value != ""; 
+  }, TRAN_NOSPACEALLOWED);
+
+
 function checkLock(id) {
     jQuery.ajax({
         type: "POST",
@@ -150,6 +155,7 @@ var addLogForm = $('#addlog_form').validate({
         logname: {
             required: true,
             remote: HOST_URL + "/validation/checknewlogname.php",
+            noSpace: true
         },
 
 

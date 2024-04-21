@@ -846,3 +846,4 @@ $sv_SE['REMOVEUSERNOTSELF'] = 'Du kan inte ta bort dig själv.';
 $sv_SE['ABOUTREMOVEUSER '] = 'Du är på väg att ta bort användaren {{1}} från systemet. Användaren kommer inte att ha tillgång till rivendell längre. Vill du göra det?';
 $sv_SE['YOURUSERLOGIN '] = 'Ditt användarnamn: {{1}}';
 $sv_SE['YOURPASSLOGIN '] = 'Ditt lösenord: {{1}}';
+$sv_SE['NOSPACEALLOWED'] = 'Inga mellanslag är tillåtna.';

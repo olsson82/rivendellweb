@@ -846,3 +846,4 @@ $en_US['REMOVEUSERNOTSELF'] = 'You can not remove yourself.';
 $en_US['ABOUTREMOVEUSER '] = 'You are about to remove the user {{1}} from the system. The user will not have access to rivendell anymore. Do you want to do it?';
 $en_US['YOURUSERLOGIN '] = 'Your username: {{1}}';
 $en_US['YOURPASSLOGIN '] = 'Your password: {{1}}';
+$en_US['NOSPACEALLOWED'] = 'No space are allowed.';
