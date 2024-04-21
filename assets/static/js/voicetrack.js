@@ -146,22 +146,46 @@ for (let i = 0; i < choices.length; i++) {
 }
 
 function recordvoice(i, o, u, z, w) {
-    lineid = i;
-    vtgroup = o;
-    cartid = u;
-    logname = z;
-    username = w;
-    createWaveSurfer()
-    $("#record_voice").modal("show");
+    if (ALLOW_CREATE == 1) {
+        lineid = i;
+        vtgroup = o;
+        cartid = u;
+        logname = z;
+        username = w;
+        createWaveSurfer()
+        $("#record_voice").modal("show");
+    } else {
+        Swal.fire({
+            text: TRAN_NORIGHTS,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: TRAN_OK,
+            customClass: {
+                confirmButton: "btn fw-bold btn-primary"
+            }
+        });
+    }
 }
 
 function uploadvoice(i, o, u, z, w) {
-    lineid = i;
-    vtgroup = o;
-    cartid = u;
-    logname = z;
-    username = w;
-    $("#upload_voice").modal("show");
+    if (ALLOW_CREATE == 1) {
+        lineid = i;
+        vtgroup = o;
+        cartid = u;
+        logname = z;
+        username = w;
+        $("#upload_voice").modal("show");
+    } else {
+        Swal.fire({
+            text: TRAN_NORIGHTS,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: TRAN_OK,
+            customClass: {
+                confirmButton: "btn fw-bold btn-primary"
+            }
+        });
+    }
 }
 
 Dropzone.autoDiscover = false;
@@ -213,21 +237,21 @@ var myDropzone = new Dropzone("#dropzone_upload", {
                         $("#title_" + lineid).html(data['TITLE']);
                         $("#length_" + lineid).html(getTimeFromMillis(data['AVERAGE_LENGTH']));
                         $("#buttons_" + lineid).html(`<div class="btn-group mb-3" role="group"
-                        aria-label="`+TRAN_VOICETRACKER+`">
+                        aria-label="`+ TRAN_VOICETRACKER + `">
                         <button type="button"
-                            onclick="recordvoice(`+lineid+`,'`+VT_GROUP+`','`+data['CART_NUMBER']+`', '`+logname+`', '`+VT_USERNAME+`')"
+                            onclick="recordvoice(`+ lineid + `,'` + VT_GROUP + `','` + data['CART_NUMBER'] + `', '` + logname + `', '` + VT_USERNAME + `')"
                             data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="`+TRAN_RECORD+`"
+                            title="`+ TRAN_RECORD + `"
                             class="btn btn-danger"><i
                                 class="bi bi-mic"></i></button>
                         <button type="button"
-                            onclick="uploadvoice(`+lineid+`,'`+VT_GROUP+`','`+data['CART_NUMBER']+`', '`+logname+`', '`+VT_USERNAME+`')"
+                            onclick="uploadvoice(`+ lineid + `,'` + VT_GROUP + `','` + data['CART_NUMBER'] + `', '` + logname + `', '` + VT_USERNAME + `')"
                             data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="`+TRAN_UPLOAD+`"
+                            title="`+ TRAN_UPLOAD + `"
                             class="btn btn-warning"><i
                                 class="bi bi-cloud-upload"></i></button>
                     </div>`);
-                    $("#upload_voice").modal("hide");
+                        $("#upload_voice").modal("hide");
                     }
                 });
             },
@@ -269,56 +293,56 @@ function getTimeFromMillis(millis) {
 function getWavBytes(buffer, options) {
     const type = options.isFloat ? Float32Array : Uint16Array
     const numFrames = buffer.byteLength / type.BYTES_PER_ELEMENT
-  
+
     const headerBytes = getWavHeader(Object.assign({}, options, { numFrames }))
     const wavBytes = new Uint8Array(headerBytes.length + buffer.byteLength);
-  
+
     // prepend header, then add pcmBytes
     wavBytes.set(headerBytes, 0)
     wavBytes.set(new Uint8Array(buffer), headerBytes.length)
-  
-    return wavBytes
-  }
 
-  function getWavHeader(options) {
-    const numFrames =      options.numFrames
-    const numChannels =    options.numChannels || 2
-    const sampleRate =     options.sampleRate || 44100
-    const bytesPerSample = options.isFloat? 4 : 2
-    const format =         options.isFloat? 3 : 1
-  
+    return wavBytes
+}
+
+function getWavHeader(options) {
+    const numFrames = options.numFrames
+    const numChannels = options.numChannels || 2
+    const sampleRate = options.sampleRate || 44100
+    const bytesPerSample = options.isFloat ? 4 : 2
+    const format = options.isFloat ? 3 : 1
+
     const blockAlign = numChannels * bytesPerSample
     const byteRate = sampleRate * blockAlign
     const dataSize = numFrames * blockAlign
-  
+
     const buffer = new ArrayBuffer(44)
     const dv = new DataView(buffer)
-  
+
     let p = 0
-  
+
     function writeString(s) {
-      for (let i = 0; i < s.length; i++) {
-        dv.setUint8(p + i, s.charCodeAt(i))
-      }
-      p += s.length
+        for (let i = 0; i < s.length; i++) {
+            dv.setUint8(p + i, s.charCodeAt(i))
+        }
+        p += s.length
     }
-  
+
     function writeUint32(d) {
-      dv.setUint32(p, d, true)
-      p += 4
+        dv.setUint32(p, d, true)
+        p += 4
     }
-  
+
     function writeUint16(d) {
-      dv.setUint16(p, d, true)
-      p += 2
+        dv.setUint16(p, d, true)
+        p += 2
     }
-  
-    writeString('RIFF') 
-    writeUint32(dataSize + 36) 
+
+    writeString('RIFF')
+    writeUint32(dataSize + 36)
     writeString('WAVE')
     writeString('fmt ')
-    writeUint32(16) 
-    writeUint16(format) 
+    writeUint32(16)
+    writeUint16(format)
     writeUint16(numChannels)
     writeUint32(sampleRate)
     writeUint32(byteRate)
@@ -326,60 +350,60 @@ function getWavBytes(buffer, options) {
     writeUint16(bytesPerSample * 8)
     writeString('data')
     writeUint32(dataSize)
-  
+
     return new Uint8Array(buffer)
-  }
+}
 
-  function convertAudioBufferToBlob(audioBuffer) {
+function convertAudioBufferToBlob(audioBuffer) {
     var channelData = [],
-      totalLength = 0,
-      channelLength = 0;
+        totalLength = 0,
+        channelLength = 0;
 
-      for (var i = 0; i < audioBuffer.numberOfChannels; i++) {
+    for (var i = 0; i < audioBuffer.numberOfChannels; i++) {
         channelData.push(audioBuffer.getChannelData(i));
         totalLength += channelData[i].length;
         if (i == 0) channelLength = channelData[i].length;
-      }
+    }
 
-      const interleaved = new Float32Array(totalLength);
+    const interleaved = new Float32Array(totalLength);
 
-      for (
+    for (
         let src = 0, dst = 0;
         src < channelLength;
         src++, dst += audioBuffer.numberOfChannels
-      ) {
+    ) {
         for (var j = 0; j < audioBuffer.numberOfChannels; j++) {
-          interleaved[dst + j] = channelData[j][src];
+            interleaved[dst + j] = channelData[j][src];
         }
-      }
+    }
 
-      const wavBytes = getWavBytes(interleaved.buffer, {
+    const wavBytes = getWavBytes(interleaved.buffer, {
         isFloat: true,
         numChannels: audioBuffer.numberOfChannels,
         sampleRate: 48000,
-      });
-      const wav = new Blob([wavBytes], { type: "audio/wav" });
-      return wav;
+    });
+    const wav = new Blob([wavBytes], { type: "audio/wav" });
+    return wav;
 }
 
 function convertBlobToAudioBuffer(myBlob, rdline, rdgroup) {
     const audioContext = new AudioContext();
     const fileReader = new FileReader();
-  
-    fileReader.onloadend = () => {
-  
-      let myArrayBuffer = fileReader.result;
-  
-      audioContext.decodeAudioData(myArrayBuffer, (audioBuffer) => {
-          
-        let blob = convertAudioBufferToBlob(audioBuffer);
-        importToCart(blob, rdline, rdgroup)
-      });
-    };
-    fileReader.readAsArrayBuffer(myBlob); 
-  }
 
-  function importToCart(thefile, rdline, rdgroup) {
+    fileReader.onloadend = () => {
+
+        let myArrayBuffer = fileReader.result;
+
+        audioContext.decodeAudioData(myArrayBuffer, (audioBuffer) => {
+
+            let blob = convertAudioBufferToBlob(audioBuffer);
+            importToCart(blob, rdline, rdgroup)
+        });
+    };
+    fileReader.readAsArrayBuffer(myBlob);
+}
+
+function importToCart(thefile, rdline, rdgroup) {
     var fd = new FormData();
     fd.append("audio_data", thefile, rdline);
     fd.append("line", rdline);
@@ -415,20 +439,20 @@ function convertBlobToAudioBuffer(myBlob, rdline, rdgroup) {
                     $("#title_" + lineid).html(data['TITLE']);
                     $("#length_" + lineid).html(getTimeFromMillis(data['AVERAGE_LENGTH']));
                     $("#buttons_" + lineid).html(`<div class="btn-group mb-3" role="group"
-                        aria-label="`+TRAN_VOICETRACKER+`">
+                        aria-label="`+ TRAN_VOICETRACKER + `">
                         <button type="button"
-                            onclick="recordvoice(`+lineid+`,'`+VT_GROUP+`','`+data['CART_NUMBER']+`', '`+logname+`', '`+VT_USERNAME+`')"
+                            onclick="recordvoice(`+ lineid + `,'` + VT_GROUP + `','` + data['CART_NUMBER'] + `', '` + logname + `', '` + VT_USERNAME + `')"
                             data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="`+TRAN_RECORD+`"
+                            title="`+ TRAN_RECORD + `"
                             class="btn btn-danger"><i
                                 class="bi bi-mic"></i></button>
                         <button type="button"
-                            onclick="uploadvoice(`+lineid+`,'`+VT_GROUP+`','`+data['CART_NUMBER']+`', '`+logname+`', '`+VT_USERNAME+`')"
+                            onclick="uploadvoice(`+ lineid + `,'` + VT_GROUP + `','` + data['CART_NUMBER'] + `', '` + logname + `', '` + VT_USERNAME + `')"
                             data-bs-toggle="tooltip" data-bs-placement="top"
-                            title="`+TRAN_UPLOAD+`"
+                            title="`+ TRAN_UPLOAD + `"
                             class="btn btn-warning"><i
                                 class="bi bi-cloud-upload"></i></button>
-                    </div>`);                    
+                    </div>`);
                 }
             });
 
@@ -443,7 +467,7 @@ function convertBlobToAudioBuffer(myBlob, rdline, rdgroup) {
 const element1 = document.getElementById('upload_voice');
 const modal1 = new bootstrap.Modal(element1);
 
-var initUploadVoiceButtons = function () { 
+var initUploadVoiceButtons = function () {
     const cancelButton2 = element1.querySelector('[data-kt-upload-modal-action="cancel"]');
     cancelButton2.addEventListener('click', e => {
         e.preventDefault();
