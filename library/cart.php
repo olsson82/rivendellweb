@@ -65,7 +65,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/cart.js"></script>';
 
 
 if (!$info->checkMacroNormal($id, 1)) {
-    header('Location: '.DIR.'/cart/macro/'.$_GET['id']);
+    header('Location: '.DIR.'/library/carts/cart/macro/'.$_GET['id']);
     exit();
 }
 
@@ -90,7 +90,7 @@ if (!$info->checkMacroNormal($id, 1)) {
                         <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/dash">
                                 <?= $ml->tr('DASHBOARD'); ?>
                             </a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/library">
+                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/library/carts">
                                 <?= $ml->tr('LIBRARY'); ?>
                             </a></li>
                         <li class="breadcrumb-item active" aria-current="page">

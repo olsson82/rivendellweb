@@ -54,7 +54,7 @@ function doLogout() {
             var fel = mydata.error;
             var kod = mydata.errorcode;
             if (fel == "false") {
-                location.href = HOST_URL + '/logs';
+                location.href = HOST_URL + '/logedit/logs';
             }
         }
     });
@@ -1394,7 +1394,7 @@ var KTDatatablesServerSide = function () {
                             var fel = mydata.error;
                             var kod = mydata.errorcode;
                             if (fel == "false") {
-                                location.href = HOST_URL + '/logs';
+                                location.href = HOST_URL + '/logedit/logs';
                             }
                         }
                     });

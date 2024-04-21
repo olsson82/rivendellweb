@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteRule ^carts$ library.php
+RewriteRule ^carts/cart/audio/(.+)$ cart.php?id=$1
+RewriteRule ^carts/cart/macro/(.+)$ macro.php?id=$1

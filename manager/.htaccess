@@ -1,0 +1,6 @@
+RewriteEngine On
+RewriteRule ^clocks$ clocks.php
+RewriteRule ^events$ events.php
+RewriteRule ^grids$ grids.php
+RewriteRule ^clock/(.+)$ clock.php?id=$1
+RewriteRule ^event/(.+)$ event.php?id=$1

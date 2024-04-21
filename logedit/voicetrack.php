@@ -83,7 +83,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/voicetrack.js"></script>';
                         <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/dash">
                                 <?= $ml->tr('DASHBOARD'); ?>
                             </a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/logs">
+                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/logedit/logs">
                                 <?= $ml->tr('LOGS'); ?>
                             </a></li>
                         <li class="breadcrumb-item active" aria-current="page">

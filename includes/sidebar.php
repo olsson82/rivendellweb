@@ -177,7 +177,7 @@ if (isset($_COOKIE['serviceName'])) {
 
                 </li>
                 <li class="sidebar-item <?php if ($pagecode == 'library') { ?>active<?php } ?>">
-                    <a href="<?php echo DIR; ?>/library" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/library/carts" class='sidebar-link'>
                         <i class="bi bi-collection-play-fill"></i>
                         <span>
                             <?= $ml->tr('LIBRARY'); ?>
@@ -187,7 +187,7 @@ if (isset($_COOKIE['serviceName'])) {
 
                 </li>
                 <li class="sidebar-item <?php if ($pagecode == 'logs') { ?>active<?php } ?>">
-                    <a href="<?php echo DIR; ?>/logs" class='sidebar-link'>
+                    <a href="<?php echo DIR; ?>/logedit/logs" class='sidebar-link'>
                         <i class="bi bi-receipt"></i>
                         <span>
                             <?= $ml->tr('LOGS'); ?>

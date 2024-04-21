@@ -349,10 +349,10 @@ var KTDatatablesServerSide = function () {
                             if (ALLOW_MOD == 1) {
 
                                 if (row.TYPE == 2) {
-                                    return '<a href="'+HOST_URL +'/cart/macro/' + row.NUMBER + '" class="text-gray-800 text-hover-primary mb-1">' + data + '</a>';
+                                    return '<a href="'+HOST_URL +'/library/carts/cart/macro/' + row.NUMBER + '" class="text-gray-800 text-hover-primary mb-1">' + data + '</a>';
                                 } else {
 
-                                    return '<a href="'+HOST_URL +'/cart/audio/' + row.NUMBER + '" class="text-gray-800 text-hover-primary mb-1">' + data + '</a>';
+                                    return '<a href="'+HOST_URL +'/library/carts/cart/audio/' + row.NUMBER + '" class="text-gray-800 text-hover-primary mb-1">' + data + '</a>';
                                 }
 
                             } else {
@@ -409,10 +409,10 @@ var KTDatatablesServerSide = function () {
                             if (ALLOW_MOD == 1) {
 
                                 if (row.TYPE == 2) {
-                                    URL = HOST_URL +'/cart/macro/' + row.NUMBER;
+                                    URL = HOST_URL +'/library/carts/cart/macro/' + row.NUMBER;
                                 } else {
 
-                                    URL = HOST_URL +'/cart/audio/' + row.NUMBER;
+                                    URL = HOST_URL +'/library/carts/cart/audio/' + row.NUMBER;
                                 }
 
                             } else {
@@ -916,9 +916,9 @@ $('#add_cart_form').validate({
                 var cart = mydata.cart;
                 if (fel == "false") {
                     if ($("#carttype").val() == 'audio') {
-                        location.href = HOST_URL + "/cart.php?id=" + cart;
+                        location.href = HOST_URL + "/library/carts/cart/audio/" + cart;
                     } else {
-                        location.href = HOST_URL + "/macro.php?id=" + cart;
+                        location.href = HOST_URL + "/library/carts/cart/macro/" + cart;
                     }
                 } else {
 

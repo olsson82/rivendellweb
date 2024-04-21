@@ -41,7 +41,7 @@ $id = $_GET['id'];
 $pagecode = "library";
 
 if (!$info->checkMacroNormal($id, 2)) {
-    header('Location: '.DIR.'/cart/audio/'.$_GET['id']);
+    header('Location: '.DIR.'/library/carts/cart/audio/'.$_GET['id']);
     exit();
 }
 
@@ -89,7 +89,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/macro.js"></script>';
                         <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/dash">
                                 <?= $ml->tr('DASHBOARD'); ?>
                             </a></li>
-                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/library">
+                        <li class="breadcrumb-item"><a href="<?php echo DIR; ?>/library/carts">
                                 <?= $ml->tr('LIBRARY'); ?>
                             </a></li>
                         <li class="breadcrumb-item active" aria-current="page">

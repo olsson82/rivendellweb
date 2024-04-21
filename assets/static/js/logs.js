@@ -58,7 +58,7 @@ function checkLock(id) {
             var fel = mydata.error;
             var kod = mydata.errorcode;
             if (fel == "false") {
-                location.href=HOST_URL + '/logs/log/'+id;          
+                location.href=HOST_URL + '/logedit/logs/log/'+id;          
 
            } else {
             Swal.fire({
@@ -328,7 +328,7 @@ var KTDatatablesServerSide = function () {
                         if (ALLOW_VOICE == 0) {
                             vtrack = 'javascript:;';
                         } else {
-                            vtrack = HOST_URL+ '/logs/voicetrack/' + row.name;
+                            vtrack = HOST_URL+ '/logedit/logs/voicetrack/' + row.name;
                         }
                         return `
                         <div class="btn-group mb-3" role="group">

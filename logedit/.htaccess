@@ -1,0 +1,4 @@
+RewriteEngine On
+RewriteRule ^logs$ logs.php
+RewriteRule ^logs/log/(.+)$ log.php?log=$1
+RewriteRule ^logs/voicetrack/(.+)$ voicetrack.php?log=$1

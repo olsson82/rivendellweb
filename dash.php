@@ -159,7 +159,7 @@ $page_css = '<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/iconly.css
                                                         } ?>">
                                                             <h4><?php echo $log['NAME']; ?></h4>
                                                             <P><?= $ml->trp('SINGVOICETRACK {{'.$needsrecord.'}}', 'PLURVOICETRACK {{'.$needsrecord.'}}'); ?></P>
-                                                            <P><a href="<?php echo DIR; ?>/logs/voicetrack/<?php echo $log['NAME']; ?>" class="btn btn-danger rounded-pill"><?= $ml->tr('FIXITNOW'); ?></a></P>
+                                                            <P><a href="<?php echo DIR; ?>/logedit/logs/voicetrack/<?php echo $log['NAME']; ?>" class="btn btn-danger rounded-pill"><?= $ml->tr('FIXITNOW'); ?></a></P>
                                                         </div>
                                                     <?php $i++; } ?>
                                                 </div>
