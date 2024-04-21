@@ -8,7 +8,7 @@
     <meta charset="UTF-8">
     <meta name="apple-mobile-web-app-status-bar" content="#aa7700">
     <meta name="theme-color" content="black">
-    <link rel="manifest" href="manifest.json">
+    <link rel="manifest" href="<?php echo DIR; ?>/manifest.json">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta property="og:locale" content="<?php if (isset($_COOKIE['lang'])) { echo $_COOKIE['lang']; } else { echo DEFAULTLANG; } ?>" />
 	<meta property="og:type" content="article" />
