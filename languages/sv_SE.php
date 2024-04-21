@@ -841,3 +841,6 @@ $sv_SE['WELCOMETO '] = 'Välkommen till {{1}}';
 $sv_SE['NEWACCOUNT'] = 'Vi har skapat ett konto för dig med ett tillfälligt lösenord. Du hittar lösenordet nedan.';
 $sv_SE['CHANGELOGINPASSBUTT'] = 'Du kan ändra ditt lösenord när du har loggat in. Klicka på knappen nedan för att logga in:';
 $sv_SE['NEWACCOUNTFORYOU'] = 'Ett konto skapat för dig';
+$sv_SE['REMOVEUSER'] = 'Ta bort användare';
+$sv_SE['REMOVEUSERNOTSELF'] = 'Du kan inte ta bort dig själv.';
+$sv_SE['ABOUTREMOVEUSER '] = 'Du är på väg att ta bort användaren {{1}} från systemet. Användaren kommer inte att ha tillgång till rivendell längre. Vill du göra det?';

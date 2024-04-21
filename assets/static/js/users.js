@@ -27,6 +27,24 @@
  *********************************************************************************************************/
 var dt;
 
+function tr(translate) {
+    var result = false;
+    jQuery.ajax({
+        type: "POST",
+        url: HOST_URL + '/forms/jstrans.php',
+        async: false,
+        data: {
+            translate: translate
+        },
+        datatype: 'html',
+        success: function (data) {
+            var mydata = $.parseJSON(data);
+            result  = mydata.translated;
+        }
+    });
+    return result;
+}
+
 let choices = document.querySelectorAll(".choices")
 let initChoice
 for (let i = 0; i < choices.length; i++) {
@@ -59,6 +77,65 @@ const SelServiceBox = new Choices(serviceBox, {
     noChoicesText: TRAN_SELECTNOOPTIONS,
     itemSelectText: TRAN_SELECTPRESSSELECT,
 });
+
+function removeUser(user) {
+    var trans = tr('ABOUTREMOVEUSER {{' + user + '}}');
+    if (user == USERNAME) {
+        Swal.fire({
+            text: TRAN_REMOVEUSERNOTSELF,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: TRAN_OK,
+            customClass: {
+                confirmButton: "btn btn-primary"
+            }
+        });
+    } else {
+        Swal.fire({
+            text: trans,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn fw-bold btn-danger",
+                cancelButton: "btn fw-bold btn-active-light-primary"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                jQuery.ajax({
+                    type: "POST",
+                    url: HOST_URL + '/forms/deluser.php',
+                    data: {
+                        idet: user
+                    },
+                    datatype: 'html',
+                    success: function (data) {
+                        var mydata = $.parseJSON(data);
+                        var fel = mydata.error;
+                        var kod = mydata.errorcode;
+                        if (fel == "false") {
+                            dt.ajax.reload();
+
+                        } else {
+                            Swal.fire({
+                                text: TRAN_BUG,
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: TRAN_OK,
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+}
 
 function editperms(user) {
     $.ajax({
@@ -314,6 +391,8 @@ var KTDatatablesServerSide = function () {
                                     title="`+ TRAN_EDITRIVRIGHTS + `"><i class="bi bi-universal-access"></i></a>
                                     <a href="javascript:;" onclick="editperms('` + row.LOGIN_NAME + `')" class="btn icon btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_GROUPSERVICEPERMS + `"><i class="bi bi-database-lock"></i></a>
+                                    <a href="javascript:;" onclick="removeUser('` + row.LOGIN_NAME + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_REMOVEUSER + `"><i class="bi bi-x-square"></i></a>
                                 </div>
                         `;
                     }
@@ -424,7 +503,7 @@ var initPermsModalButtons = function () {
 const element3 = document.getElementById('add_window');
 const modal3 = new bootstrap.Modal(element3);
 
-var initPermsModalButtons = function () {
+var initAddUserModalButtons = function () {
     const cancelButton2 = element3.querySelector('[data-kt-add-modal-action="cancel"]');
     cancelButton2.addEventListener('click', e => {
         e.preventDefault();
@@ -475,6 +554,7 @@ var initPermsModalButtons = function () {
             initDatatable();
             initUserRightsModalButtons();
             initPermsModalButtons();
+            initAddUserModalButtons();
         }
     }
 }();

@@ -1,6 +1,8 @@
 <script>
     var HOST_URL = "<?php echo DIR; ?>";
+    var USERNAME = "<?php echo $username; ?>";
     var TRAN_EDITUSER = "<?= $ml->tr('EDITUSER') ?>";
+    var TRAN_REMOVEUSER = "<?= $ml->tr('REMOVEUSER') ?>";
     var TRAN_EDITRIVRIGHTS = "<?= $ml->tr('EDITRIVRIGHTS') ?>";
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
     var TRAN_GROUPSERVICEPERMS = "<?= $ml->tr('GROUPSERVICEPERMS') ?>";
@@ -9,6 +11,7 @@
     var TRAN_BUG = "<?= $ml->tr('BUG') ?>";
     var TRAN_OK = "<?= $ml->tr('OK') ?>";
     var TRAN_NOTBEEMPTY = "<?= $ml->tr('NOTBEEMPTY') ?>";
+    var TRAN_REMOVEUSERNOTSELF = "<?= $ml->tr('REMOVEUSERNOTSELF') ?>";
     var TRAN_CORREMAILNEEDS = "<?= $ml->tr('CORREMAILNEEDS') ?>";
     var TRAN_TABLEFIRST = "<?= $ml->tr('TAFIRST') ?>";
     var TRAN_TABLELAST = "<?= $ml->tr('TALAST') ?>";

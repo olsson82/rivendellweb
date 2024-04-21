@@ -841,3 +841,6 @@ $en_US['WELCOMETO '] = 'Welcome to {{1}}';
 $en_US['NEWACCOUNT'] = 'We have created an account for you with an temporarily password. You will find the password below.';
 $en_US['CHANGELOGINPASSBUTT'] = 'You can change your password when you have logged in. Click on the button below to login:';
 $en_US['NEWACCOUNTFORYOU'] = 'An account created for you';
+$en_US['REMOVEUSER'] = 'Remove User';
+$en_US['REMOVEUSERNOTSELF'] = 'You can not remove yourself.';
+$en_US['ABOUTREMOVEUSER '] = 'You are about to remove the user {{1}} from the system. The user will not have access to rivendell anymore. Do you want to do it?';

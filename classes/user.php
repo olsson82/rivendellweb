@@ -363,5 +363,30 @@ class User
         }
     }
 
+    public function removeUser($username) {
+        $sql = "DELETE FROM USERS WHERE LOGIN_NAME = '$username'";
+        $sql2 = "DELETE FROM USER_PERMS WHERE USER_NAME = '$username'";
+        $sql3 = "DELETE FROM USER_SERVICE_PERMS WHERE USER_NAME = '$username'";
+        $sql4 = "DELETE FROM FEED_PERMS WHERE USER_NAME = '$username'";
+
+        if ($this->_db->query($sql) === FALSE) {
+            return false;
+        } else {
+            if ($this->_db->query($sql2) === FALSE) {
+                return false;
+            } else {
+                if ($this->_db->query($sql3) === FALSE) {
+                    return false;
+                } else {
+                    if ($this->_db->query($sql4) === FALSE) {
+                        return false;
+                    } else {
+                        return true;
+                    }
+                }
+            }
+        }
+    }
+
 
 }
