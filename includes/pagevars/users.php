@@ -27,5 +27,8 @@
     var TRAN_TABLENSORTRISE = "<?= $ml->tr('ENABLERISING') ?>";
     var TRAN_TABLENSORTFALL = "<?= $ml->tr('ENABLEFALLING') ?>";
     var TRAN_TABLENORESULTS = "<?= $ml->tr('NORESULTS') ?>";
+    var TRAN_SELECTNORESULTS = "<?= $ml->tr('NORESULTSFOUNDSELECT') ?>";
+    var TRAN_SELECTNOOPTIONS = "<?= $ml->tr('NOOPTIONSSELECT') ?>";
+    var TRAN_SELECTPRESSSELECT = "<?= $ml->tr('PRESSSELECTSELECT') ?>";
 
 </script>

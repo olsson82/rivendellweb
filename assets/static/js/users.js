@@ -27,17 +27,30 @@
  *********************************************************************************************************/
 var dt;
 
+const groupBox = document.getElementById('activegroups');
+const SelGroupBox = new Choices(groupBox, {
+    noResultsText: TRAN_SELECTNORESULTS,
+    noChoicesText: TRAN_SELECTNOOPTIONS,
+    itemSelectText: TRAN_SELECTPRESSSELECT,
+});
+
+const serviceBox = document.getElementById('activeservice');
+const SelServiceBox = new Choices(serviceBox, {
+    noResultsText: TRAN_SELECTNORESULTS,
+    noChoicesText: TRAN_SELECTNOOPTIONS,
+    itemSelectText: TRAN_SELECTPRESSSELECT,
+});
+
 function editperms(user) {
-    $("#activeservice option:selected").removeAttr("selected");
-    $("#activegroups option:selected").removeAttr("selected");
     $.ajax({
         url: HOST_URL + '/forms/loaduserservice.php',
         data: "id=" + user,
         dataType: 'json',
         success: function (data) {
             var i;
+            SelServiceBox.removeActiveItems();
             for (i = 0; i < data.length; i++) {
-                $('#activeservice option[value=' + data[i] + ']').attr('selected', true);
+                SelServiceBox.setChoiceByValue(data[i]);
             }
         }
     });
@@ -48,8 +61,9 @@ function editperms(user) {
         dataType: 'json',
         success: function (data) {
             var i;
+            SelGroupBox.removeActiveItems();
             for (i = 0; i < data.length; i++) {
-                $('#activegroups option[value=' + data[i] + ']').attr('selected', true);
+                SelGroupBox.setChoiceByValue(data[i]);
             }
         }
     });
