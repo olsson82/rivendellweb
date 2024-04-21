@@ -69,7 +69,7 @@ define('SMTPUSER', $json_sett['smtpusr']);
 define('SMTPPASS', $json_sett['smtppass']);
 define('SMTPFROM', $json_sett['smtpfrom']);
 define('DEFAULTLANG', $json_sett['deflang']);
-define('VERS', '0.2.9'); //DO NOT CHANGE THIS!
+define('VERS', '0.3.0'); //DO NOT CHANGE THIS!
 define('DBOK', '374'); //DO NOT CHANGE THIS!
 define('SYSTIT', 'Rivendell Web Broadcast'); //DO NOT CHANGE THIS!
 define('USERESET', $json_sett['usereset']);
