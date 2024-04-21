@@ -69,40 +69,23 @@ class Log
 
     }
 
-    public function getRivendellClocksTable($service) {
+    public function getRivendellClocksTable($service)
+    {
 
         $clocks = array();
 
-        $sql = 'SELECT `CLOCK_NAME` FROM `CLOCK_PERMS`
-                WHERE `SERVICE_NAME` = :service
-                ORDER BY `CLOCK_NAME` ASC';
+        $sql = 'SELECT * FROM `CLOCK_PERMS` grid LEFT JOIN `CLOCKS` clk ON grid.CLOCK_NAME=clk.NAME WHERE grid.SERVICE_NAME LIKE :services ORDER BY clk.NAME ASC';
 
-        $stmt = $this->_db->prepare($sql);
-        $stmt->bindParam(':service', $service);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
+        $results = $this->_db->prepare($sql);
+        $results->execute([':services' => $service]);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
 
-        while ($row = $stmt->fetch())
-            $clocks[] = $row['CLOCK_NAME'];
-
-        $stmt = NULL;
-
-        $clockNames = join(',', array_fill(0, count($clocks), '?'));
-        $sql = 'SELECT `NAME`, `SHORT_NAME`, `COLOR` FROM `CLOCKS`
-                WHERE `NAME` IN (' . $clockNames . ')'; 
-
-        $stmt = $this->_db->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute($clocks);
-
-        $clockslines = array();
-
-        while ($row = $stmt->fetch())
-        $clockslines[] = $row;
+        while ($row = $results->fetch()) {
+            $clocks[] = $row;
+        }
 
 
-        return $clockslines;
-
+        return $clocks;
 
     }
 
