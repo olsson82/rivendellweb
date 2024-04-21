@@ -32,12 +32,6 @@ if (!$user->is_logged_in()) {
     exit();
 }
 
-if (!$info->checkusrRights('VOICETRACK_LOG_PRIV')) {
-    header('Location: '.DIR.'/login');
-    exit();
-}
-
-
 $username = $_COOKIE['username'];
 $fullname = $_COOKIE['fullname'];
 $groupinfo = $dbfunc->getUserGroup($username);
@@ -113,9 +107,11 @@ $page_js = '<script src="'.DIR.'/assets/static/js/logs.js"></script>';
                     </button>
                 </div>
                 <div data-kt-logs-table-toolbar="base">
+                <?php if ($info->checkusrRights('CREATE_LOG_PRIV')) { ?>
                     <button data-bs-toggle="modal" data-bs-target="#add_log" class="btn btn-light-warning">
                         <?= $ml->tr('ADDLOG'); ?>
                     </button>
+                    <?php } ?>
                 </div>
             </div>
             <div class="card-body">

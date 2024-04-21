@@ -89,25 +89,37 @@ function setupTimers() {
 }
 
 function removeLogLine(rowid, count) {
-    jQuery.ajax({
-        type: "POST",
-        url: HOST_URL + '/forms/logs/removelogline.php',
-        data: {
-            rowid: rowid,
-            log: LOG_ID,
-            countplace: count
-        },
-        datatype: 'html',
-        success: function (data) {
-            var mydata = $.parseJSON(data);
-            var fel = mydata.error;
-            var kod = mydata.errorcode;
-            if (fel == "false") {
-                dt.ajax.reload();
-
+    if (ALLOW_REMOVEFROM == 0) {
+        Swal.fire({
+            text: TRAN_NORIGHTS,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: TRAN_OK,
+            customClass: {
+                confirmButton: "btn fw-bold btn-primary"
             }
-        }
-    });
+        });
+    } else {
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/logs/removelogline.php',
+            data: {
+                rowid: rowid,
+                log: LOG_ID,
+                countplace: count
+            },
+            datatype: 'html',
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                var kod = mydata.errorcode;
+                if (fel == "false") {
+                    dt.ajax.reload();
+
+                }
+            }
+        });
+    }
 }
 
 function updateLock() {
@@ -555,263 +567,277 @@ function addchain(logname, description) {
 
 function addtolog(log, type, rowplace, cartid) {
 
-    if (type == 4) {
-        $('#add_logchain').modal('show');
-        $('#rowplace_chain').val(rowplace);
-        $('#addcart_chain').val(log);
-        $('#logChainLabel').html(TRAN_ADDCHAINTEXT);
-        $('#iseditmode_chain').val('0');
-        $('#subbut_chain').prop("disabled", true);
-        therowplace = rowplace;
-    }
+    if (ALLOW_ADDTO == 0) {
+        Swal.fire({
+            text: TRAN_NORIGHTS,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: TRAN_OK,
+            customClass: {
+                confirmButton: "btn fw-bold btn-primary"
+            }
+        });
+    } else {
 
-    if (type == 40) {
-        $.ajax({
-            url: HOST_URL + '/forms/logs/cartinfo.php',
-            data: "log=" + LOG_ID + "&cart=" + cartid,
-            dataType: 'json',
-            success: function (data) {
-                if (data['TIME_TYPE'] == 1) {
-                    $("#startat_logchain").prop('checked', true);
-                    $("#startattime_logchain").removeAttr('disabled');
-                    $("#hard_select_logchain").removeAttr('disabled');
-                    $("#hard_next_logchain").removeAttr('disabled');
-                    $("#hard_wait_logchain").removeAttr('disabled');
-                    $('#startattime_logchain').val(msToTime(data['START_TIME']));
-                    if (data['GRACE_TIME'] > 0) {
-                        $("#hard_wait_logchain").prop('checked', true);
-                        $("#waitupto_logchain").removeAttr('disabled');
-                        $('#waitupto_logchain').val(getMillisFromTime(data['GRACE_TIME']));
-                    } else if (data['GRACE_TIME'] == -1) {
+        if (type == 4) {
+            $('#add_logchain').modal('show');
+            $('#rowplace_chain').val(rowplace);
+            $('#addcart_chain').val(log);
+            $('#logChainLabel').html(TRAN_ADDCHAINTEXT);
+            $('#iseditmode_chain').val('0');
+            $('#subbut_chain').prop("disabled", true);
+            therowplace = rowplace;
+        }
+
+        if (type == 40) {
+            $.ajax({
+                url: HOST_URL + '/forms/logs/cartinfo.php',
+                data: "log=" + LOG_ID + "&cart=" + cartid,
+                dataType: 'json',
+                success: function (data) {
+                    if (data['TIME_TYPE'] == 1) {
+                        $("#startat_logchain").prop('checked', true);
+                        $("#startattime_logchain").removeAttr('disabled');
+                        $("#hard_select_logchain").removeAttr('disabled');
+                        $("#hard_next_logchain").removeAttr('disabled');
+                        $("#hard_wait_logchain").removeAttr('disabled');
+                        $('#startattime_logchain').val(msToTime(data['START_TIME']));
+                        if (data['GRACE_TIME'] > 0) {
+                            $("#hard_wait_logchain").prop('checked', true);
+                            $("#waitupto_logchain").removeAttr('disabled');
+                            $('#waitupto_logchain').val(getMillisFromTime(data['GRACE_TIME']));
+                        } else if (data['GRACE_TIME'] == -1) {
+                            $('#waitupto_logchain').prop("disabled", true);
+                            $('#waitupto_logchain').val('00:00');
+                            $("#hard_next_logchain").prop('checked', true);
+                        } else {
+                            $('#waitupto_logchain').prop("disabled", true);
+                            $('#waitupto_logchain').val('00:00');
+                            $("#hard_select_logchain").prop('checked', true);
+                        }
+                    } else {
+                        $("#startat_logchain").prop('checked', false);
+                        $('#startattime_logchain').prop("disabled", true);
+                        $('#startattime_logchain').val('00:00:00.0');
+                        $('#hard_select_logchain').prop("disabled", true);
+                        $('#hard_next_logchain').prop("disabled", true);
+                        $('#hard_wait_logchain').prop("disabled", true);
                         $('#waitupto_logchain').prop("disabled", true);
-                        $('#waitupto_logchain').val('00:00');
-                        $("#hard_next_logchain").prop('checked', true);
-                    } else {
-                        $('#waitupto_logchain').prop("disabled", true);
-                        $('#waitupto_logchain').val('00:00');
-                        $("#hard_select_logchain").prop('checked', true);
                     }
-                } else {
-                    $("#startat_logchain").prop('checked', false);
-                    $('#startattime_logchain').prop("disabled", true);
-                    $('#startattime_logchain').val('00:00:00.0');
-                    $('#hard_select_logchain').prop("disabled", true);
-                    $('#hard_next_logchain').prop("disabled", true);
-                    $('#hard_wait_logchain').prop("disabled", true);
-                    $('#waitupto_logchain').prop("disabled", true);
+
+                    $('#ifprevends_logchain').val(data['TRANS_TYPE']);
+                    $('#ifprevends_logchain').trigger('change');
+                    $("#logname_logchain").val(data['LABEL']);
+                    $("#logdesc_logchain").val(data['COMMENT']);
+                    $('#addcart_chain').val(log);
+                    $('#rowplace_chain').val(rowplace);
+                    $('#add_logchain').modal('show');
+                    $('#iseditmode_chain').val('1');
+                    $('#therowidno_chain').val(data['ID']);
+                    $('#logChainLabel').html(TRAN_EDITLOGCHAINTEXT);
+                    therowplace = rowplace;
                 }
+            });
 
-                $('#ifprevends_logchain').val(data['TRANS_TYPE']);
-                $('#ifprevends_logchain').trigger('change');
-                $("#logname_logchain").val(data['LABEL']);
-                $("#logdesc_logchain").val(data['COMMENT']);
-                $('#addcart_chain').val(log);
-                $('#rowplace_chain').val(rowplace);
-                $('#add_logchain').modal('show');
-                $('#iseditmode_chain').val('1');
-                $('#therowidno_chain').val(data['ID']);
-                $('#logChainLabel').html(TRAN_EDITLOGCHAINTEXT);
-                therowplace = rowplace;
-            }
-        });
+        }
 
-    }
+        if (type == 2) {
+            $('#add_voicetrack').modal('show');
+            $('#rowplace_voice').val(rowplace);
+            $('#addcart_voice').val(log);
+            $('#VoicetrackLabel').html(TRAN_ADDVOICETEXT);
+            $('#iseditmode_voice').val('0');
+            $('#isvoicetrack_voice').val('1');
+            therowplace = rowplace;
+        }
 
-    if (type == 2) {
-        $('#add_voicetrack').modal('show');
-        $('#rowplace_voice').val(rowplace);
-        $('#addcart_voice').val(log);
-        $('#VoicetrackLabel').html(TRAN_ADDVOICETEXT);
-        $('#iseditmode_voice').val('0');
-        $('#isvoicetrack_voice').val('1');
-        therowplace = rowplace;
-    }
-
-    if (type == 20) {
-        $.ajax({
-            url: HOST_URL + '/forms/logs/cartinfo.php',
-            data: "log=" + LOG_ID + "&cart=" + cartid,
-            dataType: 'json',
-            success: function (data) {
-                if (data['TIME_TYPE'] == 1) {
-                    $("#startat_voice").prop('checked', true);
-                    $("#startattime_voice").removeAttr('disabled');
-                    $("#hard_select_voice").removeAttr('disabled');
-                    $("#hard_next_voice").removeAttr('disabled');
-                    $("#hard_wait_voice").removeAttr('disabled');
-                    $('#startattime_voice').val(msToTime(data['START_TIME']));
-                    if (data['GRACE_TIME'] > 0) {
-                        $("#hard_wait_voice").prop('checked', true);
-                        $("#waitupto_voice").removeAttr('disabled');
-                        $('#waitupto_voice').val(getMillisFromTime(data['GRACE_TIME']));
-                    } else if (data['GRACE_TIME'] == -1) {
+        if (type == 20) {
+            $.ajax({
+                url: HOST_URL + '/forms/logs/cartinfo.php',
+                data: "log=" + LOG_ID + "&cart=" + cartid,
+                dataType: 'json',
+                success: function (data) {
+                    if (data['TIME_TYPE'] == 1) {
+                        $("#startat_voice").prop('checked', true);
+                        $("#startattime_voice").removeAttr('disabled');
+                        $("#hard_select_voice").removeAttr('disabled');
+                        $("#hard_next_voice").removeAttr('disabled');
+                        $("#hard_wait_voice").removeAttr('disabled');
+                        $('#startattime_voice').val(msToTime(data['START_TIME']));
+                        if (data['GRACE_TIME'] > 0) {
+                            $("#hard_wait_voice").prop('checked', true);
+                            $("#waitupto_voice").removeAttr('disabled');
+                            $('#waitupto_voice').val(getMillisFromTime(data['GRACE_TIME']));
+                        } else if (data['GRACE_TIME'] == -1) {
+                            $('#waitupto_voice').prop("disabled", true);
+                            $('#waitupto_voice').val('00:00');
+                            $("#hard_next_voice").prop('checked', true);
+                        } else {
+                            $('#waitupto_voice').prop("disabled", true);
+                            $('#waitupto_voice').val('00:00');
+                            $("#hard_select_voice").prop('checked', true);
+                        }
+                    } else {
+                        $("#startat_voice").prop('checked', false);
+                        $('#startattime_voice').prop("disabled", true);
+                        $('#startattime_voice').val('00:00:00.0');
+                        $('#hard_select_voice').prop("disabled", true);
+                        $('#hard_next_voice').prop("disabled", true);
+                        $('#hard_wait_voice').prop("disabled", true);
                         $('#waitupto_voice').prop("disabled", true);
-                        $('#waitupto_voice').val('00:00');
-                        $("#hard_next_voice").prop('checked', true);
-                    } else {
-                        $('#waitupto_voice').prop("disabled", true);
-                        $('#waitupto_voice').val('00:00');
-                        $("#hard_select_voice").prop('checked', true);
                     }
-                } else {
-                    $("#startat_voice").prop('checked', false);
-                    $('#startattime_voice').prop("disabled", true);
-                    $('#startattime_voice').val('00:00:00.0');
-                    $('#hard_select_voice').prop("disabled", true);
-                    $('#hard_next_voice').prop("disabled", true);
-                    $('#hard_wait_voice').prop("disabled", true);
-                    $('#waitupto_voice').prop("disabled", true);
+
+                    $('#ifprevends_voice').val(data['TRANS_TYPE']);
+                    $('#ifprevends_voice').trigger('change');
+
+                    $("#comment_voice").val(data['COMMENT']);
+                    $('#addcart_voice').val(log);
+                    $('#rowplace_voice').val(rowplace);
+                    $('#add_voicetrack').modal('show');
+                    $('#iseditmode_voice').val('1');
+                    $('#isvoicetrack_voice').val('1');
+                    $('#therowidno_voice').val(data['ID']);
+                    $('#VoicetrackLabel').html(TRAN_EDITVOICETEXT);
+                    therowplace = rowplace;
                 }
+            });
 
-                $('#ifprevends_voice').val(data['TRANS_TYPE']);
-                $('#ifprevends_voice').trigger('change');
+        }
 
-                $("#comment_voice").val(data['COMMENT']);
-                $('#addcart_voice').val(log);
-                $('#rowplace_voice').val(rowplace);
-                $('#add_voicetrack').modal('show');
-                $('#iseditmode_voice').val('1');
-                $('#isvoicetrack_voice').val('1');
-                $('#therowidno_voice').val(data['ID']);
-                $('#VoicetrackLabel').html(TRAN_EDITVOICETEXT);
-                therowplace = rowplace;
-            }
-        });
+        if (type == 3) {
+            $('#add_marker').modal('show');
+            $('#rowplace_marker').val(rowplace);
+            $('#addcart_marker').val(log);
+            $('#MarkerLabel').html(TRAN_ADDMARKERTEXT);
+            $('#iseditmode_marker').val('0');
+            $('#isvoicetrack_marker').val('0');
+            therowplace = rowplace;
+        }
 
-    }
-
-    if (type == 3) {
-        $('#add_marker').modal('show');
-        $('#rowplace_marker').val(rowplace);
-        $('#addcart_marker').val(log);
-        $('#MarkerLabel').html(TRAN_ADDMARKERTEXT);
-        $('#iseditmode_marker').val('0');
-        $('#isvoicetrack_marker').val('0');
-        therowplace = rowplace;
-    }
-
-    if (type == 30) {
-        $.ajax({
-            url: HOST_URL + '/forms/logs/cartinfo.php',
-            data: "log=" + LOG_ID + "&cart=" + cartid,
-            dataType: 'json',
-            success: function (data) {
-                if (data['TIME_TYPE'] == 1) {
-                    $("#startat_marker").prop('checked', true);
-                    $("#startattime_marker").removeAttr('disabled');
-                    $("#hard_select_marker").removeAttr('disabled');
-                    $("#hard_next_marker").removeAttr('disabled');
-                    $("#hard_wait_marker").removeAttr('disabled');
-                    $('#startattime_marker').val(msToTime(data['START_TIME']));
-                    if (data['GRACE_TIME'] > 0) {
-                        $("#hard_wait_marker").prop('checked', true);
-                        $("#waitupto_marker").removeAttr('disabled');
-                        $('#waitupto_marker').val(getMillisFromTime(data['GRACE_TIME']));
-                    } else if (data['GRACE_TIME'] == -1) {
+        if (type == 30) {
+            $.ajax({
+                url: HOST_URL + '/forms/logs/cartinfo.php',
+                data: "log=" + LOG_ID + "&cart=" + cartid,
+                dataType: 'json',
+                success: function (data) {
+                    if (data['TIME_TYPE'] == 1) {
+                        $("#startat_marker").prop('checked', true);
+                        $("#startattime_marker").removeAttr('disabled');
+                        $("#hard_select_marker").removeAttr('disabled');
+                        $("#hard_next_marker").removeAttr('disabled');
+                        $("#hard_wait_marker").removeAttr('disabled');
+                        $('#startattime_marker').val(msToTime(data['START_TIME']));
+                        if (data['GRACE_TIME'] > 0) {
+                            $("#hard_wait_marker").prop('checked', true);
+                            $("#waitupto_marker").removeAttr('disabled');
+                            $('#waitupto_marker').val(getMillisFromTime(data['GRACE_TIME']));
+                        } else if (data['GRACE_TIME'] == -1) {
+                            $('#waitupto_marker').prop("disabled", true);
+                            $('#waitupto_marker').val('00:00');
+                            $("#hard_next_marker").prop('checked', true);
+                        } else {
+                            $('#waitupto_marker').prop("disabled", true);
+                            $('#waitupto_marker').val('00:00');
+                            $("#hard_select_marker").prop('checked', true);
+                        }
+                    } else {
+                        $("#startat_marker").prop('checked', false);
+                        $('#startattime_marker').prop("disabled", true);
+                        $('#startattime_marker').val('00:00:00.0');
+                        $('#hard_select_marker').prop("disabled", true);
+                        $('#hard_next_marker').prop("disabled", true);
+                        $('#hard_wait_marker').prop("disabled", true);
                         $('#waitupto_marker').prop("disabled", true);
-                        $('#waitupto_marker').val('00:00');
-                        $("#hard_next_marker").prop('checked', true);
-                    } else {
-                        $('#waitupto_marker').prop("disabled", true);
-                        $('#waitupto_marker').val('00:00');
-                        $("#hard_select_marker").prop('checked', true);
                     }
-                } else {
-                    $("#startat_marker").prop('checked', false);
-                    $('#startattime_marker').prop("disabled", true);
-                    $('#startattime_marker').val('00:00:00.0');
-                    $('#hard_select_marker').prop("disabled", true);
-                    $('#hard_next_marker').prop("disabled", true);
-                    $('#hard_wait_marker').prop("disabled", true);
-                    $('#waitupto_marker').prop("disabled", true);
+
+                    $('#ifprevends_marker').val(data['TRANS_TYPE']);
+                    $('#ifprevends_marker').trigger('change');
+
+                    $("#comment_marker").val(data['COMMENT']);
+                    $("#label_marker").val(data['LABEL']);
+                    $('#addcart_marker').val(log);
+                    $('#rowplace_marker').val(rowplace);
+                    $('#add_marker').modal('show');
+                    $('#iseditmode_marker').val('1');
+                    $('#isvoicetrack_marker').val('0');
+                    $('#therowidno_marker').val(data['ID']);
+                    $('#MarkerLabel').html(TRAN_EDITMARKERTEXT);
+                    therowplace = rowplace;
                 }
+            });
 
-                $('#ifprevends_marker').val(data['TRANS_TYPE']);
-                $('#ifprevends_marker').trigger('change');
+        }
 
-                $("#comment_marker").val(data['COMMENT']);
-                $("#label_marker").val(data['LABEL']);
-                $('#addcart_marker').val(log);
-                $('#rowplace_marker').val(rowplace);
-                $('#add_marker').modal('show');
-                $('#iseditmode_marker').val('1');
-                $('#isvoicetrack_marker').val('0');
-                $('#therowidno_marker').val(data['ID']);
-                $('#MarkerLabel').html(TRAN_EDITMARKERTEXT);
-                therowplace = rowplace;
-            }
-        });
+        if (type == 1) {
+            $('#add_cart').modal('show');
+            $('#rowplace_imp').val(rowplace);
+            $('#addcart_id').val(log);
+            $('#CartLabel').html(TRAN_ADDCARTTEXT);
+            $('#iseditmode_imp').val('0');
+            $('#subbut_cart').prop("disabled", true);
+            therowplace = rowplace;
+        }
 
-    }
-
-    if (type == 1) {
-        $('#add_cart').modal('show');
-        $('#rowplace_imp').val(rowplace);
-        $('#addcart_id').val(log);
-        $('#CartLabel').html(TRAN_ADDCARTTEXT);
-        $('#iseditmode_imp').val('0');
-        $('#subbut_cart').prop("disabled", true);
-        therowplace = rowplace;
-    }
-
-    if (type == 10) {
-        $.ajax({
-            url: HOST_URL + '/forms/logs/cartinfo.php',
-            data: "log=" + LOG_ID + "&cart=" + cartid,
-            dataType: 'json',
-            success: function (data) {
-                if (data['TIME_TYPE'] == 1) {
-                    $("#startat_cart").prop('checked', true);
-                    $("#startattime_cart").removeAttr('disabled');
-                    $("#hard_select_im").removeAttr('disabled');
-                    $("#hard_next").removeAttr('disabled');
-                    $("#hard_wait").removeAttr('disabled');
-                    $('#startattime_cart').val(msToTime(data['START_TIME']));
-                    if (data['GRACE_TIME'] > 0) {
-                        $("#hard_wait").prop('checked', true);
-                        $("#waitupto_cart").removeAttr('disabled');
-                        $('#waitupto_cart').val(getMillisFromTime(data['GRACE_TIME']));
-                    } else if (data['GRACE_TIME'] == -1) {
-                        $('#waitupto_cart').prop("disabled", true);
-                        $('#waitupto_cart').val('00:00');
-                        $("#hard_next").prop('checked', true);
+        if (type == 10) {
+            $.ajax({
+                url: HOST_URL + '/forms/logs/cartinfo.php',
+                data: "log=" + LOG_ID + "&cart=" + cartid,
+                dataType: 'json',
+                success: function (data) {
+                    if (data['TIME_TYPE'] == 1) {
+                        $("#startat_cart").prop('checked', true);
+                        $("#startattime_cart").removeAttr('disabled');
+                        $("#hard_select_im").removeAttr('disabled');
+                        $("#hard_next").removeAttr('disabled');
+                        $("#hard_wait").removeAttr('disabled');
+                        $('#startattime_cart').val(msToTime(data['START_TIME']));
+                        if (data['GRACE_TIME'] > 0) {
+                            $("#hard_wait").prop('checked', true);
+                            $("#waitupto_cart").removeAttr('disabled');
+                            $('#waitupto_cart').val(getMillisFromTime(data['GRACE_TIME']));
+                        } else if (data['GRACE_TIME'] == -1) {
+                            $('#waitupto_cart').prop("disabled", true);
+                            $('#waitupto_cart').val('00:00');
+                            $("#hard_next").prop('checked', true);
+                        } else {
+                            $('#waitupto_cart').prop("disabled", true);
+                            $('#waitupto_cart').val('00:00');
+                            $("#hard_select_im").prop('checked', true);
+                        }
                     } else {
+                        $("#startat_cart").prop('checked', false);
+                        $('#startattime_cart').prop("disabled", true);
+                        $('#startattime_cart').val('00:00:00.0');
+                        $('#hard_select_im').prop("disabled", true);
+                        $('#hard_next').prop("disabled", true);
+                        $('#hard_wait').prop("disabled", true);
                         $('#waitupto_cart').prop("disabled", true);
-                        $('#waitupto_cart').val('00:00');
-                        $("#hard_select_im").prop('checked', true);
                     }
-                } else {
-                    $("#startat_cart").prop('checked', false);
-                    $('#startattime_cart').prop("disabled", true);
-                    $('#startattime_cart').val('00:00:00.0');
-                    $('#hard_select_im').prop("disabled", true);
-                    $('#hard_next').prop("disabled", true);
-                    $('#hard_wait').prop("disabled", true);
-                    $('#waitupto_cart').prop("disabled", true);
+
+                    $('#ifprevends_cart').val(data['TRANS_TYPE']);
+                    $('#ifprevends_cart').trigger('change');
+
+                    if (data['SEGUE_GAIN'] == 0) {
+                        $("#nofadesegue_cart").prop('checked', true);
+                    } else {
+                        $("#nofadesegue_cart").prop('checked', false);
+                    }
+
+                    $("#cart_value").val(data['CART_NUMBER']);
+                    $("#title_value").val(data['TITLE']);
+                    $("#artist_value").val(data['ARTIST']);
+                    $('#addcart_id').val(log);
+                    $('#rowplace_imp').val(rowplace);
+                    $('#cartno_imp').val(data['CART_NUMBER']);
+                    $('#add_cart').modal('show');
+                    $('#iseditmode_imp').val('1');
+                    $('#therowidno_imp').val(data['ID']);
+                    $('#CartLabel').html(TRAN_EDITCARTTEXT);
+                    therowplace = rowplace;
                 }
+            });
 
-                $('#ifprevends_cart').val(data['TRANS_TYPE']);
-                $('#ifprevends_cart').trigger('change');
-
-                if (data['SEGUE_GAIN'] == 0) {
-                    $("#nofadesegue_cart").prop('checked', true);
-                } else {
-                    $("#nofadesegue_cart").prop('checked', false);
-                }
-
-                $("#cart_value").val(data['CART_NUMBER']);
-                $("#title_value").val(data['TITLE']);
-                $("#artist_value").val(data['ARTIST']);
-                $('#addcart_id').val(log);
-                $('#rowplace_imp').val(rowplace);
-                $('#cartno_imp').val(data['CART_NUMBER']);
-                $('#add_cart').modal('show');
-                $('#iseditmode_imp').val('1');
-                $('#therowidno_imp').val(data['ID']);
-                $('#CartLabel').html(TRAN_EDITCARTTEXT);
-                therowplace = rowplace;
-            }
-        });
+        }
 
     }
 }
@@ -857,24 +883,37 @@ for (let i = 0; i < choices.length; i++) {
 }
 
 function roworder(id, rowid, order, up, log) {
-    jQuery.ajax({
-        type: "POST",
-        async: false,
-        url: HOST_URL + '/forms/logs/roworder.php',
-        data: {
-            id: id,
-            rowid: rowid,
-            order: order,
-            up: up,
-            log: LOG_ID
-        },
-        datatype: 'html',
-        success: function (data) {
-            var mydata = $.parseJSON(data);
-            dt.ajax.reload();
+    if (ALLOW_ARRANGE == 0) {
+        Swal.fire({
+            text: TRAN_NORIGHTS,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: TRAN_OK,
+            customClass: {
+                confirmButton: "btn fw-bold btn-primary"
+            }
+        });
+    } else {
+        jQuery.ajax({
+            type: "POST",
+            async: false,
+            url: HOST_URL + '/forms/logs/roworder.php',
+            data: {
+                id: id,
+                rowid: rowid,
+                order: order,
+                up: up,
+                log: LOG_ID
+            },
+            datatype: 'html',
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                dt.ajax.reload();
 
-        }
-    });
+            }
+        });
+
+    }
 }
 
 function msToTime(s) {
@@ -974,7 +1013,7 @@ var KTDatatablesServerSide = function () {
                 "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
                 "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
                 "infoThousands": " ",
-                "lengthMenu": TRAN_TABLESHOW+ " _MENU_ " +TRAN_TABLEROWS,
+                "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
                 "loadingRecords": TRAN_TABLELOADING,
                 "processing": TRAN_TABLEWORKING,
                 "search": TRAN_TABLESEARCH,
@@ -1159,7 +1198,7 @@ var KTDatatablesServerSide = function () {
             title="`+ TRAN_ADDMARKER + `"><i class="bi bi-card-text"></i></button>
             <button type="button" onclick="addtolog('`+ LOG_ID + `', '4','` + row.COUNT + `','0')" class="btn btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
             title="`+ TRAN_ADDLOGCHAIN + `"><i class="bi bi-link-45deg"></i></button>
-            <button type="button" onclick="addtolog('`+ LOG_ID + `', '`+ edittypes + `','` + row.COUNT + `','` + row.ID + `')" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
+            <button type="button" onclick="addtolog('`+ LOG_ID + `', '` + edittypes + `','` + row.COUNT + `','` + row.ID + `')" class="btn btn-secondary" data-bs-toggle="tooltip" data-bs-placement="top"
             title="`+ TRAN_EDIT + `"><i class="bi bi-pencil"></i></button>
             <button type="button" onclick="removeLogLine('`+ row.ID + `','` + row.COUNT + `',)" class="btn btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
             title="`+ TRAN_DELLOGLINE + `"><i class="bi bi-x-square"></i></button>
@@ -1414,7 +1453,7 @@ var KTDatatablesServerSide = function () {
     }
 }();
 
-var KTDatatablesServerSideChain = function () { 
+var KTDatatablesServerSideChain = function () {
     var initDatatableChain = function () {
         dt1 = $("#chain_table").DataTable({
             searchDelay: 500,
@@ -1440,7 +1479,7 @@ var KTDatatablesServerSideChain = function () {
                 "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
                 "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
                 "infoThousands": " ",
-                "lengthMenu": TRAN_TABLESHOW+ " _MENU_ " +TRAN_TABLEROWS,
+                "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
                 "loadingRecords": TRAN_TABLELOADING,
                 "processing": TRAN_TABLEWORKING,
                 "search": TRAN_TABLESEARCH,
@@ -1590,7 +1629,7 @@ var KTDatatablesServerSideChain = function () {
     }
 }();
 
-var KTDatatablesServerSideLibrary = function () { 
+var KTDatatablesServerSideLibrary = function () {
     var initDatatableLibrary = function () {
         dt2 = $("#cartadd_table").DataTable({
             searchDelay: 500,
@@ -1616,7 +1655,7 @@ var KTDatatablesServerSideLibrary = function () {
                 "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
                 "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
                 "infoThousands": " ",
-                "lengthMenu": TRAN_TABLESHOW+ " _MENU_ " +TRAN_TABLEROWS,
+                "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
                 "loadingRecords": TRAN_TABLELOADING,
                 "processing": TRAN_TABLEWORKING,
                 "search": TRAN_TABLESEARCH,

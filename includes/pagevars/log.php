@@ -32,6 +32,7 @@
         var TRAN_LOGHASSAVED = "<?= $ml->tr('LOGHASSAVED') ?>";
         var TRAN_NOTPOSSIBLESAVELOG = "<?= $ml->tr('NOTPOSSIBLESAVELOG') ?>";
         var TRAN_CLOSELOGLOCKPAGE = "<?= $ml->tr('CLOSELOGLOCKPAGE') ?>";
+        var TRAN_NORIGHTS = "<?= $ml->tr('NORIGHTS') ?>";
         var TRAN_YES = "<?= $ml->tr('YES') ?>";
         var TRAN_NO = "<?= $ml->tr('NO') ?>";
         var TRAN_OK = "<?= $ml->tr('OK') ?>";
@@ -96,4 +97,19 @@
         var TRAN_SELECTNORESULTS = "<?= $ml->tr('NORESULTSFOUNDSELECT') ?>";
         var TRAN_SELECTNOOPTIONS = "<?= $ml->tr('NOOPTIONSSELECT') ?>";
         var TRAN_SELECTPRESSSELECT = "<?= $ml->tr('PRESSSELECTSELECT') ?>";
+        <?php if ($info->checkusrRights('ADDTO_LOG_PRIV')) { ?>
+			var ALLOW_ADDTO = "1";
+		<?php } else { ?>
+			var ALLOW_ADDTO = "0";
+		<?php } ?>
+        <?php if ($info->checkusrRights('ARRANGE_LOG_PRIV')) { ?>
+			var ALLOW_ARRANGE = "1";
+		<?php } else { ?>
+			var ALLOW_ARRANGE = "0";
+		<?php } ?>
+        <?php if ($info->checkusrRights('REMOVEFROM_LOG_PRIV')) { ?>
+			var ALLOW_REMOVEFROM = "1";
+		<?php } else { ?>
+			var ALLOW_REMOVEFROM = "0";
+		<?php } ?>
     </script>
