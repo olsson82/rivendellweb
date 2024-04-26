@@ -310,7 +310,7 @@ if (isset($_COOKIE['serviceName'])) {
                     </a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="https://github.com/olsson82/rivendellweb/wiki" target="_blank" class='sidebar-link'>
+                    <a href="https://olsson82.github.io/rivwebdoc/" target="_blank" class='sidebar-link'>
                         <i class="bi bi-question-circle"></i>
                         <span>
                             <?= $ml->tr('DOCUMENTATION'); ?>
