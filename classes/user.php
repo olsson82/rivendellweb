@@ -97,21 +97,18 @@ class User
                 $expire = time() + (30 * 24 * 60 * 60);
                 setcookie('loggedin', 'true', $expire, '/');
                 setcookie('username', $row['LOGIN_NAME'], $expire, '/');
-                setcookie('password', $row['PASSWORD'], $expire, '/');
                 setcookie('fullname', $row['FULL_NAME'], $expire, '/');
                 setcookie('rdWebAPI', 'http://localhost/rd-bin/rdxport.cgi', $expire, '/');
             } else {
                 $expire = time() + (3600 * 4);
                 setcookie('loggedin', 'true', $expire, '/');
                 setcookie('username', $row['LOGIN_NAME'], $expire, '/');
-                setcookie('password', $row['PASSWORD'], $expire, '/');
                 setcookie('fullname', $row['FULL_NAME'], $expire, '/');
                 setcookie('rdWebAPI', 'http://localhost/rd-bin/rdxport.cgi', $expire, '/');
             }
             $_SESSION['loggedin'] = true;
             $_SESSION['id'] = $username;
             $_SESSION['username'] = $username;
-            $_SESSION['password'] = $password;
             $_SESSION['fullname'] = $row['FULL_NAME'];
             $_SESSION['rdWebAPI'] = 'http://localhost/rd-bin/rdxport.cgi';
 
@@ -126,7 +123,6 @@ class User
         session_destroy();
         setcookie('loggedin', '', time() - 3600, '/');
         setcookie('username', '', time() - 3600, '/');
-        setcookie('password', '', time() - 3600, '/');
         setcookie('fullname', '', time() - 3600, '/');
         setcookie('rdWebAPI', '', time() - 3600, '/');
     }

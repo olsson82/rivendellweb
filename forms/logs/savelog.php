@@ -28,7 +28,7 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 $rd_username = $_COOKIE["username"];
-$rd_password = $_COOKIE["password"];
+$rd_password = $functions->loadPass($rd_username);
 $rd_web_api = $_COOKIE["rdWebAPI"];
 $logname = $_POST['logname'];
 $description = $_POST['description'];

@@ -47,6 +47,17 @@ class Functions
         return $this->_ignoreCase;
     }
 
+    public function loadPass($username)
+    {
+        $stmt = $this->_db->prepare('SELECT * FROM USERS WHERE LOGIN_NAME = :name');
+
+        $stmt->execute(['name' => $username]);
+
+        $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $row['PASSWORD'];
+    }
+
 
     public function msToHHMMSS_fromMID($milliSeconds)
     {
@@ -172,7 +183,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -209,7 +220,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -247,7 +258,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -284,7 +295,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -333,7 +344,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -368,7 +379,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -405,7 +416,7 @@ class Functions
 
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -440,7 +451,7 @@ class Functions
     public function rd_edit_VTcart($cartNumber, $artist, $title, $comment, $log)
     {
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -482,7 +493,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -556,7 +567,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -605,7 +616,7 @@ class Functions
     {
 
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -660,7 +671,7 @@ class Functions
     public function addLogg($logname, $service)
     {
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -695,7 +706,7 @@ class Functions
     public function locklog($log)
     {
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -737,7 +748,7 @@ class Functions
     public function updateLock($log, $gui)
     {
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -769,7 +780,7 @@ class Functions
     public function removelock($log, $gui)
     {
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -801,7 +812,7 @@ class Functions
     public function deletelog($log)
     {
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -837,7 +848,7 @@ class Functions
     public function deletecart($cart)
     {
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $ch = curl_init();
@@ -873,7 +884,7 @@ class Functions
     public function deletecut($cart, $cut)
     {
         $rd_username = $_COOKIE["username"];
-        $rd_password = $_COOKIE["password"];
+        $rd_password = $this->loadPass($rd_username);
         $rd_web_api = $_COOKIE["rdWebAPI"];
 
         $cutsid = substr($cut, strpos($cut, '_') + 1);
