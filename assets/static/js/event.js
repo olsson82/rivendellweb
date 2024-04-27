@@ -931,6 +931,7 @@ var KTDatatablesServerSide = function () {
         dt2 = $("#cartadd_table").DataTable({
             searchDelay: 500,
             processing: true,
+            serverSide: true,
             ordering: true,
             autoWidth: false,
             order: [
@@ -939,7 +940,7 @@ var KTDatatablesServerSide = function () {
             stateSave: true,
             serverMethod: 'post',
             ajax: {
-                url: HOST_URL + "/tables/event-implibrarytable.php",
+                url: HOST_URL + "/tables/event-implibrarydata.php",
                 data: function (d) {
                     d.ausr = USERNAME;
                     d.all = allgroups;
