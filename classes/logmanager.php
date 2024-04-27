@@ -102,24 +102,27 @@ class Log
         $stmt->bindParam(':service', $service);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
+        if ($stmt->rowCount() > 0) {
 
-        while ($row = $stmt->fetch())
-            $clocks[] = $row['CLOCK_NAME'];
+            while ($row = $stmt->fetch())
+                $clocks[] = $row['CLOCK_NAME'];
 
-        $stmt = NULL;
+            $stmt = NULL;
 
-        $clockNames = join(',', array_fill(0, count($clocks), '?'));
-        $sql = 'SELECT `NAME`, `SHORT_NAME`, `COLOR` FROM `CLOCKS`
+            $clockNames = join(',', array_fill(0, count($clocks), '?'));
+            $sql = 'SELECT `NAME`, `SHORT_NAME`, `COLOR` FROM `CLOCKS`
                 WHERE `NAME` IN (' . $clockNames . ')';
 
-        $stmt = $this->_db->prepare($sql);
-        $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute($clocks);
+            $stmt = $this->_db->prepare($sql);
+            $stmt->setFetchMode(PDO::FETCH_ASSOC);
+            $stmt->execute($clocks);
 
-        $clocks = array();
+            $clocks = array();
 
-        while ($row = $stmt->fetch())
-            $clocks[$row['NAME']] = $row;
+            while ($row = $stmt->fetch())
+                $clocks[$row['NAME']] = $row;
+
+        }
 
 
         return $clocks;
@@ -210,7 +213,7 @@ class Log
 
             $results = NULL;
 
-        } 
+        }
         return $events;
 
     }
@@ -912,7 +915,7 @@ class Log
         } else {
             return true;
         }
-            
+
 
     }
 
