@@ -313,12 +313,35 @@ $('#service_form').validate({
         'services[]': {
             required: true,
         },
+        colors: {
+            required: true,
+        },
+        ccode: {
+            required: true,
+            maxlength: 3,
+            remote: {
+                url: HOST_URL + "/validation/checkclockcodeupdate.php",
+                type: "post",
+                data: {
+                    oldclockcode: function () {
+                        return $("#oldclockcode").val();
+                    }
+                }
+            }
+        },
 
 
     },
     messages: {
         'services[]': {
             required: TRAN_SERVICEREQUIRED
+        },
+        colors: {
+            required: TRAN_COLORREQ
+        },
+        ccode: {
+            required: TRAN_CLOCKCODEREQ,
+            maxlength: TRAN_CLOCLCODEMAX3
         },
     },
     errorElement: 'span',
@@ -355,9 +378,9 @@ $('#service_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    } else {
+                    } else if (kod == 2) {
                         Swal.fire({
-                            text: TRAN_BUG,
+                            text: TRAN_NOTPOSSIBLECOLORCLOCK,
                             icon: "error",
                             buttonsStyling: false,
                             confirmButtonText: TRAN_OK,
@@ -365,54 +388,9 @@ $('#service_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    }
-                }
-            }
-        });
-    }
-});
-
-$('#color_form').validate({
-    rules: {
-        colors: {
-            required: true,
-        },
-
-
-    },
-    messages: {
-        colors: {
-            required: TRAN_COLORREQ
-        },
-    },
-    errorElement: 'span',
-    errorPlacement: function (error, element) {
-        error.addClass('parsley-error');
-        element.closest('.form-group').append(error);
-    },
-    highlight: function (element, errorClass, validClass) {
-        $(element).addClass('is-invalid');
-    },
-    unhighlight: function (element, errorClass, validClass) {
-        $(element).removeClass('is-invalid');
-    },
-    submitHandler: function () {
-        var dataString = $('#color_form').serialize();
-        jQuery.ajax({
-            type: "POST",
-            url: HOST_URL + '/forms/clock/savecolor.php',
-            data: dataString,
-            success: function (data) {
-                var mydata = $.parseJSON(data);
-                var fel = mydata.error;
-                var kod = mydata.errorcode;
-                if (fel == "false") {
-                    $('#color_clock').modal('hide');
-                    $("#id_color").css('background-color', $("#colors").val());
-                } else {
-                    if (kod == 1) {
+                    } else if (kod == 3) {
                         Swal.fire({
-                            text: TRAN_NOTPOSSIBLECOLORCLOCK,
+                            text: TRAN_NOTPOSSCLOCKSETT,
                             icon: "error",
                             buttonsStyling: false,
                             confirmButtonText: TRAN_OK,
@@ -901,55 +879,6 @@ var KTDatatablesServerSide = function () {
         });
     }
 
-    const element2 = document.getElementById('color_clock');
-    const modal2 = new bootstrap.Modal(element2);
-
-    var initColorClockButtons = function () {
-        const cancelButton2 = element2.querySelector('[data-kt-color-modal-action="cancel"]');
-        cancelButton2.addEventListener('click', e => {
-            e.preventDefault();
-
-            Swal.fire({
-                text: TRAN_CLOSECOLORWINDOW,
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: TRAN_YES,
-                cancelButtonText: TRAN_NO,
-                customClass: {
-                    confirmButton: "btn btn-primary",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then(function (result) {
-                if (result.value) {
-                    modal2.hide();
-                }
-            });
-        });
-        const closeButton2 = element2.querySelector('[data-kt-color-modal-action="close"]');
-        closeButton2.addEventListener('click', e => {
-            e.preventDefault();
-
-            Swal.fire({
-                text: TRAN_CLOSECOLORWINDOW,
-                icon: "warning",
-                showCancelButton: true,
-                buttonsStyling: false,
-                confirmButtonText: TRAN_YES,
-                cancelButtonText: TRAN_NO,
-                customClass: {
-                    confirmButton: "btn btn-primary",
-                    cancelButton: "btn btn-active-light"
-                }
-            }).then(function (result) {
-                if (result.value) {
-                    modal2.hide();
-
-                }
-            });
-        });
-    }
-
     const element3 = document.getElementById('service_clock');
     const modal3 = new bootstrap.Modal(element3);
 
@@ -959,7 +888,7 @@ var KTDatatablesServerSide = function () {
             e.preventDefault();
 
             Swal.fire({
-                text: TRAN_CLOSESERVICEWINDOWCLOCK,
+                text: TRAN_CLOSETHEWINDOW,
                 icon: "warning",
                 showCancelButton: true,
                 buttonsStyling: false,
@@ -980,7 +909,7 @@ var KTDatatablesServerSide = function () {
             e.preventDefault();
 
             Swal.fire({
-                text: TRAN_CLOSESERVICEWINDOWCLOCK,
+                text: TRAN_CLOSETHEWINDOW,
                 icon: "warning",
                 showCancelButton: true,
                 buttonsStyling: false,
@@ -1150,7 +1079,6 @@ var KTDatatablesServerSide = function () {
         init: function () {
             initDatatable();
             initSaveAsClockButtons();
-            initColorClockButtons();
             initServiceClockButtons();
             initSchedulerClockButtons();
             initRuleClockButtons();

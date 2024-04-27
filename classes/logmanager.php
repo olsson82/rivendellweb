@@ -1229,4 +1229,21 @@ class Log
 
     }
 
+    public function updateClockData($clockName, $clockcode, $remarks)
+    {
+
+        $sql = 'UPDATE `CLOCKS` SET `SHORT_NAME` = :shortName, `REMARKS` = :remarks WHERE `NAME` = :clockName';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':shortName', $clockcode);
+        $stmt->bindParam(':remarks', $remarks);
+        $stmt->bindParam(':clockName', $clockName);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

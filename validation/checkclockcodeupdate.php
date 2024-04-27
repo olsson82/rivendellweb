@@ -26,39 +26,19 @@
  *             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE             *
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
-require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-$clockid = $_POST["clockid"];
-$services = $_POST["services"];
-$colors = $_POST["colors"];
-$ccode = $_POST["ccode"];
-$usernotes = $_POST["usernotes"];
-$totaldata = count($services);
-$ok = 0;
-$notok = 0;
-if (!$logfunc->removeClockPerms($clockid)) {
-    $echodata = ['error' => 'true', 'errorcode' => '1'];
-    echo json_encode($echodata);
-} else {
-    foreach ($services as $item) {
-        if (!$logfunc->addClockPerms($clockid, $item)) {
-            $notok = $notok + 1;
-        } else {
-            $ok = $ok + 1;
-        }
-    }
-}
+require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 
-if ($ok == $totaldata) {
-    if (!$logfunc->updateClockColour($clockid, $colors)) {
-        $echodata = ['error' => 'true', 'errorcode' => '2'];
-        echo json_encode($echodata);
+$newccode = $_POST['ccode'];
+$oldclockcode = $_POST['oldclockcode'];
+if ($newccode != $oldclockcode) {
+    if ($dbfunc->getClockCodeExist($newccode)) {
+        $response = "true";
     } else {
-        if (!$logfunc->updateClockData($clockid, $ccode, $usernotes)) {
-            $echodata = ['error' => 'true', 'errorcode' => '3'];
-            echo json_encode($echodata);
-        } else {
-            $echodata = ['error' => 'false', 'errorcode' => '0'];
-            echo json_encode($echodata);
-        }
+        $response = $ml->tr('CLOCKCODEEXIST');
     }
+} else {
+    $response = "true";
 }
+header("HTTP/1.1 200 OK");
+header('Content-Type: application/json');
+echo json_encode($response);

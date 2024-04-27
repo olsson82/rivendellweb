@@ -847,3 +847,6 @@ $en_US['ABOUTREMOVEUSER '] = 'You are about to remove the user {{1}} from the sy
 $en_US['YOURUSERLOGIN '] = 'Your username: {{1}}';
 $en_US['YOURPASSLOGIN '] = 'Your password: {{1}}';
 $en_US['NOSPACEALLOWED'] = 'No space are allowed.';
+$en_US['CLOCLCODEMAX3'] = 'Clock code can only be 3 characters max.';
+$en_US['CLCODE '] = 'Code {{1}}';
+$en_US['NOTPOSSCLOCKSETT'] = 'Not possible to save clock settings.';

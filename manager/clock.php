@@ -108,8 +108,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/clock.js"></script>';
                                 <?php echo $info->getClockInfo($clockid, 'NAME'); ?>
                             </h5>
                             <h6 class="card-subtitle">
-                                <?= $ml->tr('CODE') ?>
-                                <?php echo $info->getClockInfo($clockid, 'SHORT_NAME'); ?>
+                                <?= $ml->tr('CLCODE {{'.$info->getClockInfo($clockid, 'SHORT_NAME').'}}') ?>
                             </h6>
                             <div class="d-flex justify-content-end align-items-center d-none"
                                 data-kt-clocks-table-select="selected">
@@ -128,14 +127,9 @@ $page_js = '<script src="'.DIR.'/assets/static/js/clock.js"></script>';
                                     class="btn btn-light-info">
                                     <?= $ml->tr('SCHEDULERRULES'); ?>
                                 </button>
-                                <button style="background-color: <?php echo $info->getClockInfo($clockid, 'COLOR'); ?>"
-                                    id="id_color" data-bs-toggle="modal" data-bs-target="#color_clock"
-                                    class="btn btn-light-secondary">
-                                    <?= $ml->tr('COLOR'); ?>
-                                </button>
                                 <button data-bs-toggle="modal" data-bs-target="#service_clock"
                                     class="btn btn-light-danger">
-                                    <?= $ml->tr('SERVICES'); ?>
+                                    <?= $ml->tr('SETTINGS'); ?>
                                 </button>
                                 <button data-bs-toggle="modal" data-bs-target="#saveas_clock"
                                     class="btn btn-light-warning">
@@ -259,60 +253,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/clock.js"></script>';
                         </div>
                     </div>
                 </div>
-                <div class="modal fade text-left" id="color_clock" data-bs-backdrop="static" role="dialog"
-                    aria-labelledby="ClockColorLabel" aria-hidden="true">
-                    <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
-                        <div class="modal-content">
-                            <div class="modal-header  bg-success">
-                                <h4 class="modal-title white" id="ClockColorLabel">
-                                    <?= $ml->tr('CLOCKCOLOR') ?>
-                                </h4>
-                                <button type="button" class="close" data-kt-color-modal-action="cancel"
-                                    aria-label="Close">
-                                    <i data-feather="x"></i>
-                                </button>
-                            </div>
-                            <form class="form form-horizontal" id="color_form" action="#">
-                                <div class="modal-body">
-                                    <div class="form-body">
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <label for="colors">
-                                                    <?= $ml->tr('CLOCKCOLOR') ?>
-                                                </label>
-                                            </div>
-                                            <div class="col-md-8 form-group">
-                                                <input data-huebee='{ "notation": "hex", "saturations": 2 }' type="text"
-                                                    id="colors" class="form-control color-input" name="colors"
-                                                    value="<?php echo $info->getClockInfo($clockid, 'COLOR'); ?>">
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer">
-                                    <input type="hidden" name="service" value="<?php echo $_COOKIE['serviceName'] ?>">
-                                    <input type="hidden" id="clockidcolor" name="clockid"
-                                        value="<?php echo $clockid; ?>">
-                                    <button type="button" class="btn btn-light-secondary"
-                                        data-kt-color-modal-action="close">
-                                        <i class="bx bx-x d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">
-                                            <?= $ml->tr('CLOSE') ?>
-                                        </span>
-                                    </button>
-                                    <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('SAVE') ?>">
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
                 <div class="modal fade text-left" id="service_clock" data-bs-backdrop="static" role="dialog"
                     aria-labelledby="ClockServiceLabel" aria-hidden="true">
                     <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
                         <div class="modal-content">
                             <div class="modal-header  bg-danger">
                                 <h4 class="modal-title white" id="ClockServiceLabel">
-                                    <?= $ml->tr('ENABLEDSERVICES') ?>
+                                    <?= $ml->tr('SETTINGS') ?>
                                 </h4>
                                 <button type="button" class="close" data-kt-service-modal-action="cancel"
                                     aria-label="Close">
@@ -339,11 +286,39 @@ $page_js = '<script src="'.DIR.'/assets/static/js/clock.js"></script>';
 
                                                 </select>
                                             </div>
+                                            <div class="col-md-4">
+                                                <label for="colors">
+                                                    <?= $ml->tr('CLOCKCOLOR') ?>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <input data-huebee='{ "notation": "hex", "saturations": 2 }' type="text"
+                                                    id="colors" class="form-control color-input" name="colors"
+                                                    value="<?php echo $info->getClockInfo($clockid, 'COLOR'); ?>">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="ccode">
+                                                    <?= $ml->tr('CLOCKCODE') ?>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <input type="text" id="ccode" class="form-control" name="ccode"
+                                                    value="<?php echo $info->getClockInfo($clockid, 'SHORT_NAME'); ?>">
+                                            </div>
+                                            <div class="col-md-4">
+                                                <label for="usernotes">
+                                                    <?= $ml->tr('USERNOTES') ?>
+                                                </label>
+                                            </div>
+                                            <div class="col-md-8 form-group">
+                                                <textarea name="usernotes" id="usernotes" class="form-control"><?php echo $info->getClockInfo($clockid, 'REMARKS'); ?></textarea>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="modal-footer">
                                     <input type="hidden" name="service" value="<?php echo $_COOKIE['serviceName'] ?>">
+                                    <input type="hidden" name="oldclockcode" value="<?php echo $info->getClockInfo($clockid, 'SHORT_NAME'); ?>" id="oldclockcode">
                                     <input type="hidden" id="clockidservice" name="clockid"
                                         value="<?php echo $clockid; ?>">
                                     <button type="button" class="btn btn-light-secondary"
