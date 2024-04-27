@@ -63,6 +63,7 @@ function editgroup(name) {
             $('#inctraffic').val(data['REPORT_TFC']);
             $('#incmusic').val(data['REPORT_MUS']);
             $('#color').val(data['COLOR']);
+            hueb.setColor(data['COLOR']);
             if (data['DEFAULT_CUT_LIFE'] == '-1') {
                 $('#cutcreation').prop("disabled", true);
                 $("#enddatetime").prop("checked", false);
