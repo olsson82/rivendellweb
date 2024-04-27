@@ -165,11 +165,20 @@ function clone(event, edit) {
         data: "id=" + event,
         dataType: 'json',
         success: function (data) {
-            var end = data['START_TIME'] + data['LENGTH'];
-            eventselbox.setChoiceByValue(data['EVENT_NAME']);
-            $('#starttime').val(getTimeFromMillis(data['START_TIME']));
-            $('#endtime').val(getTimeFromMillis(end));
-            $('#addevent_clock').modal('show');
+            if (doedit == 0) {
+                var start = data['START_TIME'] + data['LENGTH'];
+                var end = start + data['LENGTH'];
+                eventselbox.setChoiceByValue(data['EVENT_NAME']);
+                $('#starttime').val(getTimeFromMillis(start));
+                $('#endtime').val(getTimeFromMillis(end));
+                $('#addevent_clock').modal('show');
+            } else {
+                var end = data['START_TIME'] + data['LENGTH'];
+                eventselbox.setChoiceByValue(data['EVENT_NAME']);
+                $('#starttime').val(getTimeFromMillis(data['START_TIME']));
+                $('#endtime').val(getTimeFromMillis(end));
+                $('#addevent_clock').modal('show');
+            }
         }
     });
 }
@@ -710,7 +719,7 @@ var KTDatatablesServerSide = function () {
                 "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
                 "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
                 "infoThousands": " ",
-                "lengthMenu": TRAN_TABLESHOW+ " _MENU_ " +TRAN_TABLEROWS,
+                "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
                 "loadingRecords": TRAN_TABLELOADING,
                 "processing": TRAN_TABLEWORKING,
                 "search": TRAN_TABLESEARCH,
