@@ -175,6 +175,7 @@ $('#add_form').validate({
         ccode: {
             required: true,
             remote: HOST_URL + "/validation/checkclockcodenew.php",
+            maxlength: 3,
         },
         colors: {
             required: true,
@@ -187,7 +188,8 @@ $('#add_form').validate({
             required: TRAN_CLOCKNAMENOTEMPTY
         },
         ccode: {
-            required: TRAN_CLOCKCODEREQ
+            required: TRAN_CLOCKCODEREQ,
+            maxlength: TRAN_CLOCLCODEMAX3
         },
         colors: {
             required: TRAN_COLORREQ

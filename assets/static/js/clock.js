@@ -424,6 +424,7 @@ $('#saveas_form').validate({
         ccode: {
             required: true,
             remote: HOST_URL + "/validation/checkclockcodenew.php",
+            maxlength: 3,
         },
 
 
@@ -433,7 +434,8 @@ $('#saveas_form').validate({
             required: TRAN_CLOCKNAMENOTEMPTY
         },
         ccode: {
-            required: TRAN_CLOCKCODEREQ
+            required: TRAN_CLOCKCODEREQ,
+            maxlength: TRAN_CLOCLCODEMAX3
         },
     },
     errorElement: 'span',
