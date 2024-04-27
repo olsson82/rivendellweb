@@ -150,7 +150,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/settings.js"></script>';
                                     </div>
                                     <div class="col-md-4">
                                         <label for="urladd">
-                                            <?= $ml->tr('SYSTEMNAME'); ?>
+                                            <?= $ml->tr('SYSTEMURL'); ?>
                                         </label>
                                     </div>
                                     <div class="col-md-8 form-group">
