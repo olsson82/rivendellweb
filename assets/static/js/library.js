@@ -249,6 +249,7 @@ var KTDatatablesServerSide = function () {
         dt = $("#library_table").DataTable({
             searchDelay: 500,
             processing: true,
+            serverSide: true,
             responsive: true,
             select: {
                 style: 'multi',
@@ -259,9 +260,10 @@ var KTDatatablesServerSide = function () {
                 [1, 'desc']
             ],
             stateSave: true,
+            serverMethod: 'post',
 
             ajax: {
-                url: HOST_URL + "/tables/library-table.php",
+                url: HOST_URL + "/tables/library-data.php",
                 data: function (d) {
                     d.ausr = USERNAME;
                     d.all = allgroups;
