@@ -287,6 +287,7 @@ var KTDatatablesServerSide = function () {
         dt = $("#events_table").DataTable({
             searchDelay: 500,
             processing: true,
+            serverSide: true,
             responsive: true,
             select: {
                 style: 'multi',
@@ -297,8 +298,9 @@ var KTDatatablesServerSide = function () {
                 [1, 'desc']
             ],
             stateSave: true,
+            serverMethod: 'post',
             ajax: {
-                url: HOST_URL + "/tables/events-table.php",
+                url: HOST_URL + "/tables/events-data.php",
             },
             language: {
                 "emptyTable": TRAN_TABLENODATA,

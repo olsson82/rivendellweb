@@ -148,26 +148,6 @@ class Log
 
     }
 
-    public function getRivendellEventsTable($serviceName)
-    {
-
-        $events = array();
-
-        $sql = 'SELECT * FROM `EVENTS` grid LEFT JOIN `EVENT_PERMS` clk ON grid.NAME=clk.EVENT_NAME WHERE clk.SERVICE_NAME LIKE :services ORDER BY grid.NAME ASC';
-
-        $results = $this->_db->prepare($sql);
-        $results->execute([':services' => $serviceName]);
-        $results->setFetchMode(PDO::FETCH_ASSOC);
-
-        while ($row = $results->fetch()) {
-            $events[] = $row;
-        }
-
-
-        return $events;
-
-    }
-
     public function getRules($clockName)
     {
 
