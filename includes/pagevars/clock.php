@@ -32,6 +32,7 @@
     var TRAN_SELCLOCKEND = "<?= $ml->tr('SELCLOCKEND') ?>";
     var TRAN_ENDSTARTNOTCLOCK = "<?= $ml->tr('ENDSTARTNOTCLOCK') ?>";
     var TRAN_CLOCLCODEMAX3 = "<?= $ml->tr('CLOCLCODEMAX3') ?>";
+    var TRAN_NOSPACEALLOWED = "<?= $ml->tr('NOSPACEALLOWED') ?>";
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
     var TRAN_NOTPOSSCLOCKSETT = "<?= $ml->tr('NOTPOSSCLOCKSETT') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";

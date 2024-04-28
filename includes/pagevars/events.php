@@ -22,6 +22,7 @@
         var TRAN_CLOSEADDEVENTWINDOW = "<?= $ml->tr('CLOSEADDEVENTWINDOW') ?>";
         var TRAN_CLOSERENAMEEVENTWINDOW = "<?= $ml->tr('CLOSERENAMEEVENTWINDOW') ?>";
         var TRAN_EVNAMENOTEMPTY = "<?= $ml->tr('EVNAMENOTEMPTY') ?>";
+        var TRAN_NOSPACEALLOWED = "<?= $ml->tr('NOSPACEALLOWED') ?>";
         var TRAN_YES = "<?= $ml->tr('YES') ?>";
         var TRAN_NO = "<?= $ml->tr('NO') ?>";
         var TRAN_OK = "<?= $ml->tr('OK') ?>";        

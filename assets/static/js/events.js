@@ -45,6 +45,10 @@ function tr(translate) {
     return result;
 }
 
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+    return value.indexOf(" ") < 0 && value != ""; 
+  }, TRAN_NOSPACEALLOWED);
+
 function renameEvent(name) {
     $("#neweventname").val(name);
     $("#oldname").val(name);
@@ -127,6 +131,7 @@ var RenameEventForm = $('#renameevent_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkeventnamenew.php",
+            noSpace: true
         },
     },
     messages: {
@@ -181,6 +186,7 @@ var addEventForm = $('#addevent_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkeventnamenew.php",
+            noSpace: true
         },
     },
     messages: {

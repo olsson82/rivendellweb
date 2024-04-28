@@ -20,6 +20,7 @@
     var TRAN_CLOSEADDCLOCK = "<?= $ml->tr('CLOSEADDCLOCKWINDOW') ?>";
     var TRAN_CLOSERENAMECLOCKWINDOW = "<?= $ml->tr('CLOSERENAMECLOCKWINDOW') ?>";
     var TRAN_CLOCLCODEMAX3 = "<?= $ml->tr('CLOCLCODEMAX3') ?>";
+    var TRAN_NOSPACEALLOWED = "<?= $ml->tr('NOSPACEALLOWED') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";
     var TRAN_NO = "<?= $ml->tr('NO') ?>";
     var TRAN_OK = "<?= $ml->tr('OK') ?>";

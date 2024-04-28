@@ -45,6 +45,10 @@ function tr(translate) {
     return result;
 }
 
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+    return value.indexOf(" ") < 0 && value != ""; 
+  }, TRAN_NOSPACEALLOWED);
+
 $("#checkall").on("click", function (e) {
     if ($(this).is(":checked")) {
         dt.rows().select();
@@ -65,6 +69,7 @@ $('#rename_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkclocknamenew.php",
+            noSpace: true
         },
         
     
@@ -171,10 +176,12 @@ $('#add_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkclocknamenew.php",
+            noSpace: true
         },
         ccode: {
             required: true,
             remote: HOST_URL + "/validation/checkclockcodenew.php",
+            noSpace: true,
             maxlength: 3,
         },
         colors: {

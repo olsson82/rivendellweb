@@ -63,6 +63,10 @@ function tr(translate) {
     });
 }
 
+jQuery.validator.addMethod("noSpace", function(value, element) { 
+    return value.indexOf(" ") < 0 && value != ""; 
+  }, TRAN_NOSPACEALLOWED);
+
 let choices = document.querySelectorAll(".choices")
 let initChoice
 for (let i = 0; i < choices.length; i++) {
@@ -319,6 +323,7 @@ $('#service_form').validate({
         ccode: {
             required: true,
             maxlength: 3,
+            noSpace: true,
             remote: {
                 url: HOST_URL + "/validation/checkclockcodeupdate.php",
                 type: "post",
@@ -420,11 +425,13 @@ $('#saveas_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkclocknamenew.php",
+            noSpace: true
         },
         ccode: {
             required: true,
             remote: HOST_URL + "/validation/checkclockcodenew.php",
             maxlength: 3,
+            noSpace: true
         },
 
 
