@@ -28,9 +28,63 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 $servicename = $_COOKIE['serviceName'];
-$clocks = $logfunc->getRivendellClocksTable($servicename);
-$datatable = array();
-$datatable['data'] = $clocks; 
-header('Content-Type: application/json; charset=utf-8');
-$jsonData = json_encode($datatable, JSON_PRETTY_PRINT);
-echo $jsonData;
+$draw = $_POST['draw'];
+$row = $_POST['start'];
+$rowperpage = $_POST['length'];
+$columnIndex = $_POST['order'][0]['column'];
+$columnName = $_POST['columns'][$columnIndex]['data'];
+$columnSortOrder = $_POST['order'][0]['dir'];
+$searchValue = $_POST['search']['value'];
+
+$searchArray = array();
+$searchQuery = " ";
+
+if ($searchValue != '') {
+    $searchQuery = " AND grid.SERVICE_NAME = :service AND (clk.NAME LIKE :name OR 
+    clk.SHORT_NAME LIKE :short) ";
+    $searchArray = array(
+        'service' => $servicename,
+        'name' => "%$searchValue%",
+        'short' => "%$searchValue%"
+    );
+} else {
+    $searchQuery = " AND grid.SERVICE_NAME = :service ";
+    $searchArray = array(
+        'service' => $servicename
+    );
+}
+
+$stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CLOCK_PERMS grid LEFT JOIN CLOCKS clk ON grid.CLOCK_NAME=clk.NAME WHERE grid.SERVICE_NAME = :service");
+$stmt->execute([':service' => $servicename]);
+$records = $stmt->fetch();
+$totalRecords = $records['allcount'];
+
+$stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CLOCK_PERMS grid LEFT JOIN CLOCKS clk ON grid.CLOCK_NAME=clk.NAME WHERE 1 " . $searchQuery);
+$stmt->execute($searchArray);
+$records = $stmt->fetch();
+$totalRecordwithFilter = $records['allcount'];
+
+$stmt = $db->prepare("SELECT * FROM CLOCK_PERMS grid LEFT JOIN CLOCKS clk ON grid.CLOCK_NAME=clk.NAME WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+foreach ($searchArray as $key => $search) {
+    $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
+}
+
+$stmt->bindValue(':limit', (int) $row, PDO::PARAM_INT);
+$stmt->bindValue(':offset', (int) $rowperpage, PDO::PARAM_INT);
+$stmt->execute();
+$empRecords = $stmt->fetchAll();
+
+$data = array();
+
+foreach ($empRecords as $row) {
+    $data[] = $row;
+}
+
+$response = array(
+    "draw" => intval($draw),
+    "iTotalRecords" => $totalRecords,
+    "iTotalDisplayRecords" => $totalRecordwithFilter,
+    "aaData" => $data
+);
+
+echo json_encode($response);

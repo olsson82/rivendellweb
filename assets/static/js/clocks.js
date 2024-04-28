@@ -341,6 +341,7 @@ var KTDatatablesServerSide = function () {
         dt = $("#clocks_table").DataTable({
             searchDelay: 500,
             processing: true,
+            serverSide: true,
             responsive: true,
             select: {
                 style: 'multi',
@@ -351,9 +352,9 @@ var KTDatatablesServerSide = function () {
                 [1, 'desc']
             ],
             stateSave: true,
-
+            serverMethod: 'post',
             ajax: {
-                url: HOST_URL + "/tables/clocks-table.php",
+                url: HOST_URL + "/tables/clocks-data.php",
                 data: function (d) {
                     d.servicename = SERVICENAME;
                 }

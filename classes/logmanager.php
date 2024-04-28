@@ -69,26 +69,6 @@ class Log
 
     }
 
-    public function getRivendellClocksTable($service)
-    {
-
-        $clocks = array();
-
-        $sql = 'SELECT * FROM `CLOCK_PERMS` grid LEFT JOIN `CLOCKS` clk ON grid.CLOCK_NAME=clk.NAME WHERE grid.SERVICE_NAME LIKE :services ORDER BY clk.NAME ASC';
-
-        $results = $this->_db->prepare($sql);
-        $results->execute([':services' => $service]);
-        $results->setFetchMode(PDO::FETCH_ASSOC);
-
-        while ($row = $results->fetch()) {
-            $clocks[] = $row;
-        }
-
-
-        return $clocks;
-
-    }
-
     public function getRivendellClocks($service)
     {
 
