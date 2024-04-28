@@ -1458,6 +1458,7 @@ var KTDatatablesServerSideChain = function () {
         dt1 = $("#chain_table").DataTable({
             searchDelay: 500,
             processing: true,
+            serverSide: true,
             ordering: true,
             order: [
                 [0, 'desc']
@@ -1466,7 +1467,7 @@ var KTDatatablesServerSideChain = function () {
             serverMethod: 'post',
             autoWidth: false,
             ajax: {
-                url: HOST_URL + "/tables/logchain-table.php",
+                url: HOST_URL + "/tables/logchain-data.php",
                 data: function (d) {
                     d.username = USERNAME;
                     d.all = allservice;
@@ -1504,22 +1505,22 @@ var KTDatatablesServerSideChain = function () {
             },
             columns: [
                 {
-                    data: 'name'
+                    data: 'NAME'
                 },
                 {
-                    data: 'description'
+                    data: 'DESCRIPTION'
                 },
                 {
-                    data: 'service'
+                    data: 'SERVICE'
                 },
                 {
-                    data: 'music_merged'
+                    data: 'MUSIC_LINKED'
                 },
                 {
-                    data: 'traffic_merged'
+                    data: 'TRAFFIC_LINKED'
                 },
                 {
-                    data: 'scheduled'
+                    data: 'SCHEDULED_TRACKS'
                 },
                 {
                     data: null
@@ -1531,10 +1532,10 @@ var KTDatatablesServerSideChain = function () {
                     targets: 0,
                     render: function (data, type, row) {
 
-                        if (row.scheduled > 0 && row.completed < row.scheduled) {
-                            return `<a href="javascript:;" onclick="addchain('` + row.name + `', '` + row.description + `')" class="text-danger">` + data + `</a>`;
+                        if (row.SCHEDULED_TRACKS > 0 && row.COMPLETED_TRACKS < row.SCHEDULED_TRACKS) {
+                            return `<a href="javascript:;" onclick="addchain('` + row.NAME + `', '` + row.DESCRIPTION + `')" class="text-danger">` + data + `</a>`;
                         } else {
-                            return `<a href="javascript:;" onclick="addchain('` + row.name + `', '` + row.description + `')" class="text-success">` + data + `</a>`;
+                            return `<a href="javascript:;" onclick="addchain('` + row.NAME + `', '` + row.DESCRIPTION + `')" class="text-success">` + data + `</a>`;
                         }
 
 
@@ -1546,12 +1547,12 @@ var KTDatatablesServerSideChain = function () {
                     targets: 5,
                     render: function (data, type, row) {
 
-                        if (row.scheduled > 0 && row.completed < row.scheduled) {
-                            return '<span class="badge bg-danger">' + row.completed + '/' + row.scheduled + '</span>';
-                        } else if (row.scheduled > 0 && row.scheduled == row.completed) {
-                            return '<span class="badge bg-success">' + row.completed + '/' + row.scheduled + '</span>';
+                        if (row.SCHEDULED_TRACKS > 0 && row.COMPLETED_TRACKS < row.SCHEDULED_TRACKS) {
+                            return '<span class="badge bg-danger">' + row.COMPLETED_TRACKS + '/' + row.SCHEDULED_TRACKS + '</span>';
+                        } else if (row.SCHEDULED_TRACKS > 0 && row.SCHEDULED_TRACKS == row.completed) {
+                            return '<span class="badge bg-success">' + row.COMPLETED_TRACKS + '/' + row.SCHEDULED_TRACKS + '</span>';
                         } else {
-                            return '<span class="badge bg-primary">' + row.completed + '/' + row.scheduled + '</span>';
+                            return '<span class="badge bg-primary">' + row.COMPLETED_TRACKS + '/' + row.SCHEDULED_TRACKS + '</span>';
                         }
 
                     }
@@ -1565,7 +1566,7 @@ var KTDatatablesServerSideChain = function () {
                     className: 'text-end',
                     render: function (data, type, row) {
                         return `
-                        <a href="javascript:;" onclick="addchain('`+ row.name + `', '` + row.description + `')" class="btn icon btn-primary"><i class="bi bi-plus-square"></i></a>`;
+                        <a href="javascript:;" onclick="addchain('`+ row.NAME + `', '` + row.DESCRIPTION + `')" class="btn icon btn-primary"><i class="bi bi-plus-square"></i></a>`;
                     }
                 },
             ],

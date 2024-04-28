@@ -212,6 +212,7 @@ var KTDatatablesServerSide = function () {
         dt = $("#logs_table").DataTable({
             searchDelay: 500,
             processing: true,
+            serverSide: true,
             responsive: true,
             select: {
                 style: 'multi',
@@ -222,9 +223,9 @@ var KTDatatablesServerSide = function () {
                 [1, 'desc']
             ],
             stateSave: true,
-
+            serverMethod: 'post',
             ajax: {
-                url: HOST_URL + "/tables/logs-table.php",
+                url: HOST_URL + "/tables/logs-data.php",
                 data: function (d) {
                     d.servicename = SERVICENAME;
                 }
@@ -260,25 +261,25 @@ var KTDatatablesServerSide = function () {
             },
             columns: [
                 {
-                    data: 'name'
+                    data: 'NAME'
                 },
                 {
-                    data: 'name'
+                    data: 'NAME'
                 },
                 {
-                    data: 'description'
+                    data: 'DESCRIPTION'
                 },
                 {
-                    data: 'auto_refresh'
+                    data: 'AUTO_REFRESH'
                 },
                 {
-                    data: 'music_merged'
+                    data: 'MUSIC_LINKED'
                 },
                 {
-                    data: 'traffic_merged'
+                    data: 'TRAFFIC_LINKED'
                 },
                 {
-                    data: 'scheduled'
+                    data: 'SCHEDULED_TRACKS'
                 },
                 {
                     data: null
@@ -299,10 +300,10 @@ var KTDatatablesServerSide = function () {
                     targets: 1,
                     render: function (data, type, row) {
 
-                        if (row.scheduled > 0 && row.completed < row.scheduled) {
-                            return `<a href="javascript:;" onclick="checkLock('` + row.name + `')" class="text-danger">` + data + `</a>`;
+                        if (row.SCHEDULED_TRACKS > 0 && row.COMPLETED_TRACKS < row.SCHEDULED_TRACKS) {
+                            return `<a href="javascript:;" onclick="checkLock('` + row.NAME + `')" class="text-danger">` + data + `</a>`;
                         } else {
-                            return `<a href="javascript:;" onclick="checkLock('` + row.name + `')" class="text-success">` + data + `</a>`;
+                            return `<a href="javascript:;" onclick="checkLock('` + row.NAME + `')" class="text-success">` + data + `</a>`;
                         }
 
 
@@ -314,12 +315,12 @@ var KTDatatablesServerSide = function () {
                     targets: 6,
                     render: function (data, type, row) {
 
-                        if (row.scheduled > 0 && row.completed < row.scheduled) {
-                            return '<span class="badge bg-danger">' + row.completed + '/' + row.scheduled + '</span>';
-                        } else if (row.scheduled > 0 && row.scheduled == row.completed) {
-                            return '<span class="badge bg-success">' + row.completed + '/' + row.scheduled + '</span>';
+                        if (row.SCHEDULED_TRACKS > 0 && row.COMPLETED_TRACKS < row.SCHEDULED_TRACKS) {
+                            return '<span class="badge bg-danger">' + row.COMPLETED_TRACKS + '/' + row.SCHEDULED_TRACKS + '</span>';
+                        } else if (row.SCHEDULED_TRACKS > 0 && row.SCHEDULED_TRACKS == row.COMPLETED_TRACKS) {
+                            return '<span class="badge bg-success">' + row.COMPLETED_TRACKS + '/' + row.SCHEDULED_TRACKS + '</span>';
                         } else {
-                            return '<span class="badge bg-primary">' + row.completed + '/' + row.scheduled + '</span>';
+                            return '<span class="badge bg-primary">' + row.COMPLETED_TRACKS + '/' + row.SCHEDULED_TRACKS + '</span>';
                         }
 
                     }
@@ -334,13 +335,13 @@ var KTDatatablesServerSide = function () {
                         if (ALLOW_VOICE == 0) {
                             vtrack = 'javascript:;';
                         } else {
-                            vtrack = HOST_URL+ '/logedit/logs/voicetrack/' + row.name;
+                            vtrack = HOST_URL+ '/logedit/logs/voicetrack/' + row.NAME;
                         }
                         return `
                         <div class="btn-group mb-3" role="group">
                                     <a href="`+ vtrack + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_VOICETRACKER + `"><i class="bi bi-mic"></i></a>
-                                    <a href="javascript:;" onclick="delLog('` + row.name + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    <a href="javascript:;" onclick="delLog('` + row.NAME + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_REMOVELOG + `"><i class="bi bi-x-square"></i></a>
                                 </div>
                         `;
