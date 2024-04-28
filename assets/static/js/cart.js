@@ -44,6 +44,7 @@ var sampleOne = ["32000", "44100", "48000"];
 var sampleTwo = ["16000", "22050", "32000", "44100", "48000"];
 var bitOne = ["32", "48", "56", "64", "80", "96", "112", "128", "160", "192", "224", "256", "320", "384"];
 var bitTwo = ["32", "40", "48", "56", "64", "80", "96", "112", "128", "160", "192", "224", "256", "320", "VBR"];
+var ordtype = CUT_ORDER;
 
 function tr(translate) {
     var result = false;
@@ -837,7 +838,7 @@ dt = $("#cuts_table").DataTable({
         url: HOST_URL + "/tables/cuts-table.php",
         data: function (d) {
             d.cartid = CART_ID;
-            d.theorder = CUT_ORDER;
+            d.theorder = ordtype;
         }
     },
     language: {
@@ -899,7 +900,7 @@ dt = $("#cuts_table").DataTable({
             render: function (data, type, row) {
 
 
-                if (CUT_ORDER == 1) {
+                if (ordtype == 1) {
                     return data;
                 } else {
                     return row.playorder;
@@ -1440,8 +1441,13 @@ function cutinfo(i) {
                 var originname = data['ORIGIN_NAME'];
                 var originlogin = data['ORIGIN_LOGIN_NAME'];
                 var sourcehost = data['SOURCE_HOSTNAME'];
+                if (ordtype == 1) {
                 var weight = data['WEIGHT'];
-                var playorder = data['PLAY_ORDER'];
+                $("#cutwalab").html(TRAN_WEIGHT);
+            } else {
+                var weight = data['PLAY_ORDER'];
+                $("#cutwalab").html(TRAN_ORDER);
+            }
                 var lastplaydate = data['LAST_PLAY_DATETIME'];
                 var uploaddate = data['UPLOAD_DATETIME'];
                 var playcounter = data['PLAY_COUNTER'];
@@ -1774,6 +1780,21 @@ $("#adayend").flatpickr({
     dateFormat: "H:i:S",
     enableSeconds: true,
     time_24hr: true
+});
+
+$('#schedcuts').on('change', function (e) {
+
+    if ($('#schedcuts').val() == 'Y') {
+        ordtype = 1;
+        $("#tabord1").html(TRAN_WT);
+        $("#tabord2").html(TRAN_WT);
+        dt.ajax.reload();
+    } else {
+        ordtype = 2;
+        $("#tabord1").html(TRAN_ORD);
+        $("#tabord2").html(TRAN_ORD);
+        dt.ajax.reload();
+    }
 });
 
 

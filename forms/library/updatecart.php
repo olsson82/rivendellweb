@@ -27,8 +27,8 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-$schedcodesold = $dbfunc->getCartSchedulerCodes($number);
 $number = $_POST['number'];
+$schedcodesold = $dbfunc->getCartSchedulerCodes($number);
 $group = $_POST['group'];
 $title = $_POST['title'];
 $artist = $_POST['artist'];
@@ -45,6 +45,7 @@ $shedcodes = $_POST['schedcodes'];
 $beatmin = $_POST['beatmin'];
 $songid = $_POST['songid'];
 $conductor = $_POST['conductor'];
+$schedcuts = $_POST['schedcuts'];
 if (isset($_POST['enflength'])) {
     $enflength = 1;
 } else {
@@ -99,6 +100,12 @@ if (isset($conductor) && $conductor != '') {
         echo json_encode($echodata);
         exit();
     }
+}
+
+if (!$dbfunc->updateCartOrder($number, $schedcuts)) {
+    $echodata = ['error' => 'true', 'errorcode' => '1'];
+    echo json_encode($echodata);
+    exit();
 }
 
 if (!$functions->rd_edit_cart($number, $group, $album, $year, $record, $client, $agency, $publisher, $composer, $userdef, $usagecode, $enflength, $frlength, $asynchronous, $artist, $title, $notes)) {

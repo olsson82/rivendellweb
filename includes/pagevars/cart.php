@@ -9,6 +9,10 @@
             echo "2";
         } ?>";
 
+        var TRAN_ORDER = "<?= $ml->tr('ORDER') ?>";
+        var TRAN_WEIGHT = "<?= $ml->tr('WEIGHT') ?>";
+        var TRAN_WT = "<?= $ml->tr('WT') ?>";
+        var TRAN_ORD = "<?= $ml->tr('ORD') ?>";
         var TRAN_CUTINFOEDIT = "<?= $ml->tr('EDITCUTINFO') ?>";
         var TRAN_REMOVECUT = "<?= $ml->tr('REMOVECUT') ?>";
         var TRAN_EDITAUDIOMARKERS = "<?= $ml->tr('EDITAUDIOMARKERS') ?>";

@@ -612,7 +612,7 @@ class Functions
         }
     }
 
-    public function rd_edit_cut($cartNumber, $cutnumber, $evergreen, $cdesc, $coutcue, $cisrc, $ciscicode, $adstart, $adend, $daymon, $daytue, $daywed, $daythu, $dayfri, $daysat, $daysun, $adaystart, $adayend, $weight)
+    public function rd_edit_cut($cartNumber, $cutnumber, $evergreen, $cdesc, $coutcue, $cisrc, $ciscicode, $adstart, $adend, $daymon, $daytue, $daywed, $daythu, $dayfri, $daysat, $daysun, $adaystart, $adayend, $weight, $useorder)
     {
 
         $rd_username = $_COOKIE["username"];
@@ -622,31 +622,56 @@ class Functions
         $ch = curl_init();
         $headers = array("Content-Type:multipart/form-data");
 
-
-        $parameters = array(
-            'COMMAND' => '15',
-            'LOGIN_NAME' => $rd_username,
-            'PASSWORD' => $rd_password,
-            'CART_NUMBER' => $cartNumber,
-            'CUT_NUMBER' => $cutnumber,
-            'EVERGREEN' => $evergreen,
-            'DESCRIPTION' => $cdesc,
-            'OUTCUE' => $coutcue,
-            'ISCI' => $ciscicode,
-            'ISRC' => $cisrc,
-            'START_DATETIME' => $adstart,
-            'END_DATETIME' => $adend,
-            'MON' => $daymon,
-            'TUE' => $daytue,
-            'WED' => $daywed,
-            'THU' => $daythu,
-            'FRI' => $dayfri,
-            'SAT' => $daysat,
-            'SUN' => $daysun,
-            'START_DAYPART' => $adaystart,
-            'END_DAYPART' => $adayend,
-            'WEIGHT' => $weight,
-        );
+        if ($useorder == 1) {
+            $parameters = array(
+                'COMMAND' => '15',
+                'LOGIN_NAME' => $rd_username,
+                'PASSWORD' => $rd_password,
+                'CART_NUMBER' => $cartNumber,
+                'CUT_NUMBER' => $cutnumber,
+                'EVERGREEN' => $evergreen,
+                'DESCRIPTION' => $cdesc,
+                'OUTCUE' => $coutcue,
+                'ISCI' => $ciscicode,
+                'ISRC' => $cisrc,
+                'START_DATETIME' => $adstart,
+                'END_DATETIME' => $adend,
+                'MON' => $daymon,
+                'TUE' => $daytue,
+                'WED' => $daywed,
+                'THU' => $daythu,
+                'FRI' => $dayfri,
+                'SAT' => $daysat,
+                'SUN' => $daysun,
+                'START_DAYPART' => $adaystart,
+                'END_DAYPART' => $adayend
+            );
+        } else {
+            $parameters = array(
+                'COMMAND' => '15',
+                'LOGIN_NAME' => $rd_username,
+                'PASSWORD' => $rd_password,
+                'CART_NUMBER' => $cartNumber,
+                'CUT_NUMBER' => $cutnumber,
+                'EVERGREEN' => $evergreen,
+                'DESCRIPTION' => $cdesc,
+                'OUTCUE' => $coutcue,
+                'ISCI' => $ciscicode,
+                'ISRC' => $cisrc,
+                'START_DATETIME' => $adstart,
+                'END_DATETIME' => $adend,
+                'MON' => $daymon,
+                'TUE' => $daytue,
+                'WED' => $daywed,
+                'THU' => $daythu,
+                'FRI' => $dayfri,
+                'SAT' => $daysat,
+                'SUN' => $daysun,
+                'START_DAYPART' => $adaystart,
+                'END_DAYPART' => $adayend,
+                'WEIGHT' => $weight,
+            );
+        }
 
         $options = array(
             CURLOPT_URL => $rd_web_api,

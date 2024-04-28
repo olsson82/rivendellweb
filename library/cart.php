@@ -358,6 +358,24 @@ if (!$info->checkMacroNormal($id, 1)) {
                                 </div>
                             </div>
                             <div class="form-group my-2">
+                                <label for="schedcuts" class="form-label">
+                                    <?= $ml->tr('SCHEDULECUTS') ?>
+                                </label>
+                                <select id="schedcuts" name="schedcuts" class="choices form-select">
+                                            <option value="Y" <?php if ($info->getCartInfo($_GET["id"], "USE_WEIGHTING") == 'Y') {
+                                                echo "SELECTED";
+                                            } ?>>
+                                                <?= $ml->tr('SCHEDULECUTSW') ?>
+                                            </option>
+                                            <option value="N" <?php if ($info->getCartInfo($_GET["id"], "USE_WEIGHTING") == "N") {
+                                                echo "SELECTED";
+                                            } ?>>
+                                                <?= $ml->tr('SCHEDULECUTSO') ?>
+                                            </option>
+
+                                        </select>
+                            </div>
+                            <div class="form-group my-2">
                                 <label for="notes" class="form-label">
                                     <?= $ml->tr('NOTES') ?>
                                 </label>
@@ -394,11 +412,11 @@ if (!$info->checkMacroNormal($id, 1)) {
                                             <?= $ml->tr('NAME') ?>
                                         </th>
                                         <?php if ($info->getCartInfo($_GET["id"], "USE_WEIGHTING") == 'Y') { ?>
-                                            <th>
+                                            <th id="tabord1">
                                                 <?= $ml->tr('WT') ?>
                                             </th>
                                         <?php } else { ?>
-                                            <th>
+                                            <th id="tabord1">
                                                 <?= $ml->tr('ORD') ?>
                                             </th>
                                         <?php } ?>
@@ -429,11 +447,11 @@ if (!$info->checkMacroNormal($id, 1)) {
                                             <?= $ml->tr('NAME') ?>
                                         </th>
                                         <?php if ($info->getCartInfo($_GET["id"], "USE_WEIGHTING") == 'Y') { ?>
-                                            <th>
+                                            <th id="tabord2">
                                                 <?= $ml->tr('WT') ?>
                                             </th>
                                         <?php } else { ?>
-                                            <th>
+                                            <th id="tabord2">
                                                 <?= $ml->tr('ORD') ?>
                                             </th>
                                         <?php } ?>
@@ -787,7 +805,7 @@ if (!$info->checkMacroNormal($id, 1)) {
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="weight">
+                                    <label id="cutwalab" for="weight">
                                         <?= $ml->tr('WEIGHT') ?>
                                     </label>
                                 </div>

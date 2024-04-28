@@ -35,8 +35,14 @@ $cart = $_POST['idet'];
 $cutid = $_POST['cutid'];
 $cutnumber = substr($cutid, strpos($cutid, "_") + 1);
 
+if ($info->getCartInfo($cart, "USE_WEIGHTING") == 'N') {
+    $useorder = 1;
+} else {
+    $useorder = 0;
+}
+
 if (isset($_POST['evergreen'])) {
-    $evergreen = 1; 
+    $evergreen = 1;
 } else {
     $evergreen = 0;
 }
@@ -44,7 +50,7 @@ $weight = $_POST['weight'];
 if (isset($_POST['airenable'])) {
     $airenable = 1;
 } else {
-    $airenable = 0; 
+    $airenable = 0;
 }
 if (isset($_POST['airdaypartactive'])) {
     $airdaypartactive = 1;
@@ -52,55 +58,62 @@ if (isset($_POST['airdaypartactive'])) {
     $airdaypartactive = 0;
 }
 if ($airenable == 1) {
-$adstart = $_POST['adstart'];
-$adstart = strtotime($adstart);
-$adstart = date(DATE_RFC2822, $adstart);
-$adend = $_POST['adend'];
-$adend = strtotime($adend);
-$adend = date(DATE_RFC2822, $adend);
+    $adstart = $_POST['adstart'];
+    $adstart = strtotime($adstart);
+    $adstart = date(DATE_RFC2822, $adstart);
+    $adend = $_POST['adend'];
+    $adend = strtotime($adend);
+    $adend = date(DATE_RFC2822, $adend);
 } else {
-    $adstart = ""; 
+    $adstart = "";
     $adend = "";
 }
 $adaystart = $_POST['adaystart'];
 $adayend = $_POST['adayend'];
 if (isset($_POST['daymon'])) {
-    $daymon = 1;  
+    $daymon = 1;
 } else {
-    $daymon = 0; 
+    $daymon = 0;
 }
 if (isset($_POST['daytue'])) {
-    $daytue = 1;  
+    $daytue = 1;
 } else {
-    $daytue = 0; 
+    $daytue = 0;
 }
 if (isset($_POST['daywed'])) {
-    $daywed = 1;  
+    $daywed = 1;
 } else {
-    $daywed = 0; 
+    $daywed = 0;
 }
 if (isset($_POST['daythu'])) {
-    $daythu = 1;  
+    $daythu = 1;
 } else {
-    $daythu = 0; 
+    $daythu = 0;
 }
 if (isset($_POST['dayfri'])) {
-    $dayfri = 1;  
+    $dayfri = 1;
 } else {
-    $dayfri = 0; 
+    $dayfri = 0;
 }
 if (isset($_POST['daysat'])) {
-    $daysat = 1;  
+    $daysat = 1;
 } else {
-    $daysat = 0; 
+    $daysat = 0;
 }
 if (isset($_POST['daysun'])) {
-    $daysun = 1;  
+    $daysun = 1;
 } else {
-    $daysun = 0; 
+    $daysun = 0;
 }
 
-if (!$functions->rd_edit_cut($cart, $cutnumber, $evergreen, $cdesc, $coutcue, $cisrc, $ciscicode, $adstart, $adend, $daymon, $daytue, $daywed, $daythu, $dayfri, $daysat, $daysun, $adaystart, $adayend, $weight)) {
+if ($useorder == 1) {
+    if (!$dbfunc->updateCutOrder($cutid, $weight)) {
+        $echodata = ['error' => 'true', 'errorcode' => '1'];
+        echo json_encode($echodata);
+    }
+}
+
+if (!$functions->rd_edit_cut($cart, $cutnumber, $evergreen, $cdesc, $coutcue, $cisrc, $ciscicode, $adstart, $adend, $daymon, $daytue, $daywed, $daythu, $dayfri, $daysat, $daysun, $adaystart, $adayend, $weight, $useorder)) {
     $echodata = ['error' => 'true', 'errorcode' => '1'];
     echo json_encode($echodata);
 } else {

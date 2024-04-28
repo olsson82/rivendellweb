@@ -2552,4 +2552,40 @@ class DBFunc
 
 
     }
+
+    public function updateCutOrder($cut, $order)
+    {
+
+        try {
+
+            $sql = "UPDATE CUTS SET PLAY_ORDER = :pord WHERE CUT_NAME = :thename";
+
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':pord' => $order,
+                ':thename' => $cut,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function updateCartOrder($cart, $schedord)
+    {
+
+        try {
+
+            $sql = "UPDATE CART SET USE_WEIGHTING = :sched WHERE NUMBER = :thenumber";
+
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':sched' => $schedord,
+                ':thenumber' => $cart,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
