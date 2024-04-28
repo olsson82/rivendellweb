@@ -94,3 +94,8 @@ $('#login_form').validate({
     });
   }
 });
+
+$(document).ready(function() {
+  $.cookieConsent({message: TRAN_THISSITEUSECOOKIE,
+  consentMessage: TRAN_THISSITEUSECOOKIEOK});
+});

@@ -850,3 +850,5 @@ $sv_SE['NOSPACEALLOWED'] = 'Inga mellanslag är tillåtna.';
 $sv_SE['CLOCLCODEMAX3'] = 'Klockkoden får endast vara 3 tecken max.';
 $sv_SE['CLCODE '] = 'Kod {{1}}';
 $sv_SE['NOTPOSSCLOCKSETT'] = 'Inte möjligt att spara klockinställningar.';
+$sv_SE['THISSITEUSECOOKIE'] = 'Denna webbplats använder cookies. Genom att använda denna webbplats samtycker du till vår användning av dessa cookies.';
+$sv_SE['THISSITEUSECOOKIEOK'] = 'Jag förstår';

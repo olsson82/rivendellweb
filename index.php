@@ -123,13 +123,16 @@ if ($user->is_logged_in()) {
     <script src="<?php echo DIR; ?>/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
     <script src="<?php echo DIR; ?>/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
     <script src="<?php echo DIR; ?>/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/jquery.cookie-consent/dist/jquery.cookie-consent.min.js"></script>
     <script>
         var HOST_URL = "<?= DIR ?>";
         var TRAN_ENTERUSERNAME = "<?= $ml->tr('ENTERUSERNAME'); ?>";
         var TRAN_ENTERPASSWORD = "<?= $ml->tr('ENTERPASSWORD'); ?>";
         var TRAN_CHECKUSERPASS = "<?= $ml->tr('CHECKUSERPASS'); ?>";
-        var TRAN_OK = "<?= $ml->tr('OK'); ?>";
         var TRAN_CHECKUSERPASS = "<?= $ml->tr('CHECKUSERPASS'); ?>";
+        var TRAN_OK = "<?= $ml->tr('OK'); ?>";
+        var TRAN_THISSITEUSECOOKIE = "<?= $ml->tr('THISSITEUSECOOKIE'); ?>";
+        var TRAN_THISSITEUSECOOKIEOK = "<?= $ml->tr('THISSITEUSECOOKIEOK'); ?>";
         var TRAN_BUG = "<?= $ml->tr('BUG'); ?>";
     </script>
     <script src="<?php echo DIR; ?>/assets/static/js/login.js"></script>
