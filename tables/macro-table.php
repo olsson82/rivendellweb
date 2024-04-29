@@ -39,6 +39,7 @@ foreach ($macroArray as $key => $val) {
     $macroArray[$key] = $macroArray[$key].'!';
     $dataArray[$key] = array(
         'ID' => $rows,
+        'KEY' => $key,
         'MACRO' => $macroArray[$key]
     );
 

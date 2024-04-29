@@ -8,6 +8,8 @@
         var TRAN_REMOVEMACROCOMMAND = "<?= $ml->tr('REMOVEMACROCOMMAND') ?>";
         var TRAN_CARTSAVED = "<?= $ml->tr('CARTSAVED') ?>";
         var TRAN_NORIGHTS = "<?= $ml->tr('NORIGHTS') ?>";
+        var TRAN_MOVEUP = "<?= $ml->tr('MOVEUP') ?>";
+        var TRAN_MOVEDOWN = "<?= $ml->tr('MOVEDOWN') ?>";
         var TRAN_YES = "<?= $ml->tr('YES') ?>";
         var TRAN_NO = "<?= $ml->tr('NO') ?>";
         var TRAN_OK = "<?= $ml->tr('OK') ?>";

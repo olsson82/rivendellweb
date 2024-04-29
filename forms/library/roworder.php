@@ -27,24 +27,63 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-$cart = $_POST['cartid'];
-$commando = $_POST['macro'];
-$lineid = $_POST['lineid'];
-$newstring;
-$rows = 0;
+$id = $_POST["id"];
+$macro = $_POST["macro"];
+$order = $_POST["order"];
+$cart = $_POST["cart"];
 $macrodata = $info->getCartInfo($cart, 'MACROS');
 $macroArray = explode('!', rtrim($macrodata, '!'));
-unset($macroArray[$lineid - 1]);
-foreach ($macroArray as $key => $val) {
-    $rows = $rows + 1;
-    $macroArray[$key] = $macroArray[$key] . '!';
-    $newstring = $newstring .= $macroArray[$key];
+$newstring;
+$rows = 0;
+$last = count($macroArray) - 1;
+if ($order == 0 && $id != 0) {
+    $beforeplace = $id - 1;
+    $oldone = $macroArray[$beforeplace];
+    $newone = $macroArray[$id];     
+
+    foreach ($macroArray as $key => $val) {
+        $rows = $rows + 1;
+        if ($key == $beforeplace) {
+            $macroArray[$key] = $newone;            
+        }
+        if ($key == $id) {
+            $macroArray[$key] = $oldone;            
+        }
+        $macroArray[$key] = $macroArray[$key] . '!';
+        $newstring = $newstring .= $macroArray[$key];
+    }
+
+    if (!$dbfunc->updateMacro($cart, $newstring)) {
+        $echodata = ['error' => 'true', 'errorcode' => '1'];
+        echo json_encode($echodata);
+    } else {
+        $echodata = ['error' => 'false', 'errorcode' => '0'];
+        echo json_encode($echodata);
+    }
 }
 
-if (!$dbfunc->updateMacro($cart, $newstring)) {
-    $echodata = ['error' => 'true', 'errorcode' => '1'];
-    echo json_encode($echodata);
-} else {
-    $echodata = ['error' => 'false', 'errorcode' => '0'];
-    echo json_encode($echodata);
+if ($order == 1 && $id != $last) {
+    $beforeplace = $id + 1;
+    $oldone = $macroArray[$beforeplace];
+    $newone = $macroArray[$id];     
+
+    foreach ($macroArray as $key => $val) {
+        $rows = $rows + 1;
+        if ($key == $beforeplace) {
+            $macroArray[$key] = $newone;            
+        }
+        if ($key == $id) {
+            $macroArray[$key] = $oldone;            
+        }
+        $macroArray[$key] = $macroArray[$key] . '!';
+        $newstring = $newstring .= $macroArray[$key];
+    }
+
+    if (!$dbfunc->updateMacro($cart, $newstring)) {
+        $echodata = ['error' => 'true', 'errorcode' => '1'];
+        echo json_encode($echodata);
+    } else {
+        $echodata = ['error' => 'false', 'errorcode' => '0'];
+        echo json_encode($echodata);
+    }
 }

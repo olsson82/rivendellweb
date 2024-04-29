@@ -46,6 +46,25 @@ for (let i = 0; i < choices.length; i++) {
     }
 }
 
+function roworder(id, macro, dir, cart) {
+    jQuery.ajax({
+        type: "POST",
+        async: false,
+        url: HOST_URL + '/forms/library/roworder.php',
+        data: {
+            id: id,
+            macro: macro,
+            order: dir,
+            cart: cart
+        },
+        datatype: 'html',
+        success: function (data) {
+            var mydata = $.parseJSON(data);
+            dt.ajax.reload();
+        }
+    });
+}
+
 function addcommand(i) {
     if (ALLOW_MOD == 1) {
         $('#isedit').val('0');
@@ -335,6 +354,10 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         return `
                 <div class="btn-group mb-3" role="group">
+                <a href="javascript:;" onclick="roworder('` + row.KEY + `', '` + row.MACRO + `',0,'`+CART_ID+`')" class="btn icon btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="`+ TRAN_MOVEUP + `"><i class="bi bi-arrow-up-circle"></i></a>
+                <a href="javascript:;" onclick="roworder('` + row.KEY + `', '` + row.MACRO + `', '1','`+CART_ID+`')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="`+ TRAN_MOVEDOWN + `"><i class="bi bi-arrow-down-circle"></i></a>  
                 <a href="javascript:;" onclick="editmacro('`+ row.ID + `','` + row.MACRO + `')" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="`+ TRAN_EDITCOMMAND + `"><i class="bi bi-pencil"></i></a>
                 <a href="javascript:;" onclick="deletemacro('`+ row.ID + `','` + row.MACRO + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
