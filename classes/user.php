@@ -106,11 +106,6 @@ class User
                 setcookie('fullname', $row['FULL_NAME'], $expire, '/');
                 setcookie('rdWebAPI', 'http://localhost/rd-bin/rdxport.cgi', $expire, '/');
             }
-            $_SESSION['loggedin'] = true;
-            $_SESSION['id'] = $username;
-            $_SESSION['username'] = $username;
-            $_SESSION['fullname'] = $row['FULL_NAME'];
-            $_SESSION['rdWebAPI'] = 'http://localhost/rd-bin/rdxport.cgi';
 
             return true;
         }
@@ -125,6 +120,8 @@ class User
         setcookie('username', '', time() - 3600, '/');
         setcookie('fullname', '', time() - 3600, '/');
         setcookie('rdWebAPI', '', time() - 3600, '/');
+        setcookie('serviceName', '', time() - 3600, '/');
+        setcookie('groupsel', '', time() - 3600, '/');
     }
 
     public function is_logged_in()
