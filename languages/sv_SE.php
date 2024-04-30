@@ -855,3 +855,4 @@ $sv_SE['THISSITEUSECOOKIEOK'] = 'Jag förstår';
 $sv_SE['SCHEDULECUTS'] = 'Schemalägg cuts';
 $sv_SE['SCHEDULECUTSW'] = 'Efter vikt';
 $sv_SE['SCHEDULECUTSO'] = 'Efter angiven order';
+$sv_SE['CLONECOMMANDO'] = 'Klona kommando';

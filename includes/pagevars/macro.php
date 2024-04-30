@@ -6,6 +6,7 @@
         var TRAN_CLOSECOMMANDOWINDOW = "<?= $ml->tr('CLOSECOMMANDOWINDOW') ?>";
         var TRAN_COMMANDONOTPOSSIBLE = "<?= $ml->tr('COMMANDONOTPOSSIBLE') ?>";
         var TRAN_REMOVEMACROCOMMAND = "<?= $ml->tr('REMOVEMACROCOMMAND') ?>";
+        var TRAN_CLONECOMMANDO = "<?= $ml->tr('CLONECOMMANDO') ?>";
         var TRAN_CARTSAVED = "<?= $ml->tr('CARTSAVED') ?>";
         var TRAN_NORIGHTS = "<?= $ml->tr('NORIGHTS') ?>";
         var TRAN_MOVEUP = "<?= $ml->tr('MOVEUP') ?>";

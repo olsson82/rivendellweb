@@ -83,12 +83,16 @@ function addcommand(i) {
     }
 }
 
-function editmacro(i, o) {
+function editmacro(i, o, i) {
     if (ALLOW_MOD == 1) {
+        if (i == 1) {
         $('#lineid').val(i);
         $('#oldcommand').val(o);
-        $('#commando').val(o);
         $('#isedit').val('1');
+    } else {
+        $('#isedit').val('0');
+    }        
+        $('#commando').val(o);        
         $('#add_macro').modal('show');
 
     } else {
@@ -358,8 +362,10 @@ var KTDatatablesServerSide = function () {
                 title="`+ TRAN_MOVEUP + `"><i class="bi bi-arrow-up-circle"></i></a>
                 <a href="javascript:;" onclick="roworder('` + row.KEY + `', '` + row.MACRO + `', '1','`+CART_ID+`')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="`+ TRAN_MOVEDOWN + `"><i class="bi bi-arrow-down-circle"></i></a>  
-                <a href="javascript:;" onclick="editmacro('`+ row.ID + `','` + row.MACRO + `')" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                <a href="javascript:;" onclick="editmacro('`+ row.ID + `','` + row.MACRO + `', 1)" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="`+ TRAN_EDITCOMMAND + `"><i class="bi bi-pencil"></i></a>
+                <a href="javascript:;" onclick="editmacro('`+ row.ID + `','` + row.MACRO + `', 0)" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="`+ TRAN_CLONECOMMANDO + `"><i class="bi bi-copy"></i></a>
                 <a href="javascript:;" onclick="deletemacro('`+ row.ID + `','` + row.MACRO + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="`+ TRAN_REMOVECOMMAND + `"><i class="bi bi-x-square"></i></a>
             </div>
