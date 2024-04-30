@@ -102,9 +102,9 @@ $tzlist = timezone_list();
             </div>
             <div class="card-body">
                 <P>Before you begin you need to install the system on your server. This will install a json settings
-                    file in the include folder. You don't need to modify any files. All settings will be done in the
+                    file in the data folder. You don't need to modify any files. All settings will be done in the
                     system.</P>
-                <P>The include folder need to have the rights to write and read. Also check in the wiki that you have
+                <P>The data folder need to have the rights to write and read. Also check in the wiki that you have
                     installed everything that is required for the system to work.</P>
                 <form class="form form-horizontal" id="install_form">
                     <div class="form-body">
