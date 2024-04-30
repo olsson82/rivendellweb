@@ -30,7 +30,7 @@ require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 $fileId = $_POST['dzuuid'];
 $chunkTotal = $_POST['dztotalchunkcount'];
 $username = $_COOKIE['username'];
-$password = $function->loadPass($username);
+$password = $functions->loadPass($username);
 $fullname = $_COOKIE['fullname'];
 $_RDWEB_API = $_COOKIE['rdWebAPI'];
 $audiochannels = $_POST['audiochannels'];
