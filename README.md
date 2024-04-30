@@ -1,15 +1,13 @@
 # Rivendell Web Broadcast
+![Skärmbild från 2024-04-30 17-57-25](https://github.com/olsson82/rivendellweb/assets/122672087/c9e12210-5af5-4893-bac2-af8428f7f04d)
+
 Web system for manage Rivendell Radio Automation created by Andreas Olsson to help manage rivendell remote with the most function.
 
 The goal with this is to be able to do the most things from this system.
 
-**This is still in development so there can be things that not works, contain bugs and things can be changed. You use it at your own risk. Do not use it on a live rivendell machine unless you know what you are doing, and that you know it will not brake your system. Before you do anything. Read the WIKI**
+**This is still in development so there can be things that not works, contain bugs and things can be changed. You use it at your own risk. Do not use it on a live rivendell machine unless you know what you are doing, and that you know it will not brake your system. Before you do anything. Read the [**Documentation**](https://olsson82.github.io/rivwebdoc/)**
 
 **Please be advice that this system use BOTH Rivendells API and also do direct changes in the database**
-
-As this is in early development, the file structure is not so fancy, this will be fix in the future.
-
-The system has been updated to more fancy urls with rewrite engine. If you use an older version do update your system.
 
 ## The project
 This project started after i fixed some bugs in an old script by Brian McGlynn for to use with Rivendell Radio Automation. The original script can be found here: https://github.com/bpm1992/rivendell/tree/rdweb/web/rdphp
