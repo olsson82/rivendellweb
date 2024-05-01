@@ -122,6 +122,7 @@ class User
         setcookie('rdWebAPI', '', time() - 3600, '/');
         setcookie('serviceName', '', time() - 3600, '/');
         setcookie('groupsel', '', time() - 3600, '/');
+        setcookie('schedsel', '', time() - 3600, '/');
     }
 
     public function is_logged_in()

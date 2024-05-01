@@ -29,6 +29,8 @@ var dt;
 var groupnow;
 var allgroups = 1;
 var editids_arr = [];
+var schednow;
+var allscheds = 1;
 
 function tr(translate) {
     var result = false;
@@ -91,6 +93,26 @@ $('#selectGroup').change(function () {
     }
 });
 
+$('#selectScheduler').change(function () {
+    if ($("#selectScheduler").val() == "allsched") {
+        allscheds = 1;
+        Cookies.set('shedsel', '1', { expires: 7 });
+        dt.ajax.reload();
+    } else {
+        allscheds = 0;
+        schednow = $("#selectScheduler").val();
+        Cookies.set('shedsel', schednow, { expires: 7 });
+        dt.ajax.reload();
+    }
+});
+
+const schedselbox = document.getElementById('selectScheduler');
+selschedlibrary = new Choices(schedselbox, {
+    noResultsText: TRAN_SELECTNORESULTS,
+    noChoicesText: TRAN_SELECTNOOPTIONS,
+    itemSelectText: TRAN_SELECTPRESSSELECT,
+});
+
 
 const groupselbox = document.getElementById('selectGroup');
 selgrouplibrary = new Choices(groupselbox, {
@@ -113,6 +135,22 @@ if (Cookies.get('groupsel') == 1) {
     allgroups = 0;
     groupnow = Cookies.get('groupsel');
     selgrouplibrary.setChoiceByValue(groupnow);
+}
+
+if (Cookies.get('shedsel') === undefined || Cookies.get('shedsel') === null) {
+    allscheds = 1;
+    Cookies.set('shedsel', '1', { expires: 7 });
+    selschedlibrary.setChoiceByValue("allsched");
+}
+
+
+if (Cookies.get('shedsel') == 1) {
+    allscheds = 1;
+    selschedlibrary.setChoiceByValue("allsched");
+} else if (Cookies.get('shedsel') != 1) {
+    allscheds = 0;
+    schednow = Cookies.get('shedsel');
+    selschedlibrary.setChoiceByValue(schednow);
 }
 
 
@@ -267,7 +305,9 @@ var KTDatatablesServerSide = function () {
                 data: function (d) {
                     d.ausr = USERNAME;
                     d.all = allgroups;
+                    d.alls = allscheds;
                     d.groups = groupnow;
+                    d.scheds = schednow;
                 }
             },
             language: {

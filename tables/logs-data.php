@@ -27,43 +27,147 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-$servicename = $_POST['servicename'];
+$alla = $_POST['all'];
+$groups = $_POST['groups'];
+$allscheds = $_POST['alls'];
+$scheds = $_POST['scheds'];
+$ausr = $_POST['ausr'];
+// Reading value
 $draw = $_POST['draw'];
 $row = $_POST['start'];
-$rowperpage = $_POST['length'];
-$columnIndex = $_POST['order'][0]['column'];
-$columnName = $_POST['columns'][$columnIndex]['data'];
-$columnSortOrder = $_POST['order'][0]['dir'];
-$searchValue = $_POST['search']['value'];
+$rowperpage = $_POST['length']; // Rows display per page
+$columnIndex = $_POST['order'][0]['column']; // Column index
+$columnName = $_POST['columns'][$columnIndex]['data']; // Column name
+$columnSortOrder = $_POST['order'][0]['dir']; // asc or desc
+$searchValue = $_POST['search']['value']; // Search value
 
 $searchArray = array();
+
+// Search
 $searchQuery = " ";
 if ($searchValue != '') {
-    $searchQuery = " AND SERVICE = :service AND (NAME LIKE :name OR 
-           DESCRIPTION LIKE :description ) ";
-    $searchArray = array(
-        'service' => $servicename,
-        'name' => "%$searchValue%",
-        'description' => "%$searchValue%"
-    );
+    if ($alla == 1 && $allscheds == 1) {
+        $searchQuery = " AND usa.USER_NAME = :usernam AND (grid.NUMBER LIKE :number OR 
+           grid.GROUP_NAME LIKE :group_name OR
+           grid.TITLE LIKE :title OR 
+           grid.ARTIST LIKE :artist ) ";
+        $searchArray = array(
+            'usernam' => $ausr,
+            'number' => "%$searchValue%",
+            'group_name' => "%$searchValue%",
+            'title' => "%$searchValue%",
+            'artist' => "%$searchValue%"
+        );
+    } else {
+        if ($alla != 1 && $allscheds == 1) {
+            $searchQuery = " AND grid.GROUP_NAME = :groupa AND (grid.NUMBER LIKE :number OR 
+           grid.GROUP_NAME LIKE :group_name OR
+           grid.TITLE LIKE :title OR 
+           grid.ARTIST LIKE :artist ) ";
+            $searchArray = array(
+                'groupa' => $groups,
+                'number' => "%$searchValue%",
+                'group_name' => "%$searchValue%",
+                'title' => "%$searchValue%",
+                'artist' => "%$searchValue%"
+            );
+        } else if ($allscheds != 1 && $alla == 1) {
+            $searchQuery = " AND sched.SCHED_CODE = :schedd AND (grid.NUMBER LIKE :number OR 
+           grid.GROUP_NAME LIKE :group_name OR
+           grid.TITLE LIKE :title OR 
+           grid.ARTIST LIKE :artist ) ";
+            $searchArray = array(
+                'schedd' => $scheds,
+                'number' => "%$searchValue%",
+                'group_name' => "%$searchValue%",
+                'title' => "%$searchValue%",
+                'artist' => "%$searchValue%"
+            );
+        } else if ($allscheds != 1 && $alla != 1) {
+            $searchQuery = " AND grid.GROUP_NAME = :groupa AND sched.SCHED_CODE = :schedd AND (grid.NUMBER LIKE :number OR 
+           grid.GROUP_NAME LIKE :group_name OR
+           grid.TITLE LIKE :title OR 
+           grid.ARTIST LIKE :artist ) ";
+            $searchArray = array(
+                'groupa' => $groups,
+                'schedd' => $scheds,
+                'number' => "%$searchValue%",
+                'group_name' => "%$searchValue%",
+                'title' => "%$searchValue%",
+                'artist' => "%$searchValue%"
+            );
+        }
+
+    }
 } else {
-    $searchQuery = " AND SERVICE = :service ";
-    $searchArray = array(
-        'service' => $servicename
-    );
+
+    if ($alla == 1 && $allscheds == 1) {
+        $searchQuery = " AND usa.USER_NAME = :usernam ";
+        $searchArray = array(
+            'usernam' => $ausr
+        );
+    } else {
+        if ($alla != 1 && $allscheds == 1) {
+            $searchQuery = " AND grid.GROUP_NAME = :groupa ";
+            $searchArray = array(
+                'groupa' => $groups
+            );
+        } else if ($allscheds != 1 && $alla == 1) {
+            $searchQuery = " AND sched.SCHED_CODE = :schedd ";
+            $searchArray = array(
+                'schedd' => $scheds
+            );
+        } else if ($allscheds != 1 && $alla != 1) {
+            $searchQuery = " AND sched.SCHED_CODE = :schedd AND grid.GROUP_NAME = :groupa ";
+            $searchArray = array(
+                'schedd' => $scheds,
+                'groupa' => $groups
+            );
+        }
+
+    }
+
 }
 
-$stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM LOGS WHERE SERVICE = :service");
-$stmt->execute([':service' => $servicename]);
+// Total number of records without filtering
+if ($alla == 1 && $allscheds == 1) {
+    $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON  grid.GROUP_NAME = usa.GROUP_NAME WHERE usa.USER_NAME = :usernam");
+    $stmt->execute([':usernam' => $ausr]);
+} else {
+    if ($alla != 1 && $allscheds == 1) {
+        $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE grid.GROUP_NAME = :groupname");
+        $stmt->execute([':groupname' => $groups]);
+    } else if ($allscheds != 1 && $alla == 1) {
+        $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE sched.SCHED_CODE = :schedcode");
+        $stmt->execute([':schedcode' => $scheds]);
+    } else if ($alla != 1 && $allscheds != 1) {
+        $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE sched.SCHED_CODE = :schedcode AND grid.GROUP_NAME = :groupname");
+        $stmt->execute([':schedcode' => $scheds,
+        ':groupname' => $groups]);
+    }
+
+}
 $records = $stmt->fetch();
 $totalRecords = $records['allcount'];
 
-$stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM LOGS WHERE 1 " . $searchQuery);
+// Total number of records with filtering
+if ($alla == 1 && $allscheds == 1) {
+    $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON  grid.GROUP_NAME = usa.GROUP_NAME WHERE 1 " . $searchQuery);
+} else {
+    $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE 1 " . $searchQuery);
+}
 $stmt->execute($searchArray);
 $records = $stmt->fetch();
 $totalRecordwithFilter = $records['allcount'];
 
-$stmt = $db->prepare("SELECT * FROM LOGS WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+// Fetch records
+if ($alla == 1 && $allscheds == 1) {
+    $stmt = $db->prepare("SELECT * FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON grid.GROUP_NAME = usa.GROUP_NAME WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+} else {
+    $stmt = $db->prepare("SELECT * FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+}
+
+// Bind values
 foreach ($searchArray as $key => $search) {
     $stmt->bindValue(':' . $key, $search, PDO::PARAM_STR);
 }
@@ -79,6 +183,7 @@ foreach ($empRecords as $row) {
     $data[] = $row;
 }
 
+// Response
 $response = array(
     "draw" => intval($draw),
     "iTotalRecords" => $totalRecords,
@@ -87,3 +192,4 @@ $response = array(
 );
 
 echo json_encode($response);
+

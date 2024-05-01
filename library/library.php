@@ -28,7 +28,7 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 $username = $_COOKIE['username'];
@@ -38,23 +38,23 @@ $schedCodes = $dbfunc->getSchedulerCodes();
 $pagecode = "library";
 $page_vars = 'library';
 $page_title = $ml->tr('LIBRARY');
-$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="' . DIR . '/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="' . DIR . '/assets/compiled/css/table-datatable-jquery.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
-<script src="'.DIR.'/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="'.DIR.'/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
-<script src="'.DIR.'/assets/static/js/pages/datatables.js"></script>';
-$page_js = '<script src="'.DIR.'/assets/static/js/library.js"></script>';
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="' . DIR . '/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script src="' . DIR . '/assets/static/js/pages/datatables.js"></script>';
+$page_js = '<script src="' . DIR . '/assets/static/js/library.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -103,29 +103,50 @@ $page_js = '<script src="'.DIR.'/assets/static/js/library.js"></script>';
                     </button>
                 </div>
                 <div data-kt-library-table-toolbar="base">
-                <?php if ($info->checkusrRights('CREATE_CARTS_PRIV')) { ?>
-                    <button data-bs-toggle="modal" data-bs-target="#import_music" class="btn btn-light-success">
-                        <?= $ml->tr('IMPORTMUSIC'); ?>
-                    </button>
-                    <button data-bs-toggle="modal" data-bs-target="#add_cart" class="btn btn-light-warning">
-                        <?= $ml->tr('ADDCART'); ?>
-                    </button>
+                    <?php if ($info->checkusrRights('CREATE_CARTS_PRIV')) { ?>
+                        <button data-bs-toggle="modal" data-bs-target="#import_music" class="btn btn-light-success">
+                            <?= $ml->tr('IMPORTMUSIC'); ?>
+                        </button>
+                        <button data-bs-toggle="modal" data-bs-target="#add_cart" class="btn btn-light-warning">
+                            <?= $ml->tr('ADDCART'); ?>
+                        </button>
                     <?php } ?>
                 </div>
             </div>
             <div class="card-body">
-                <div class="form-group">
-                    <select id="selectGroup" class="form-select">
-                        <option value="allgroups">
-                            <?= $ml->tr('ALLGROUPS') ?>
-                        </option>
-                        <?php foreach ($usrgroups as $ugrp) { ?>
-                            <option value="<?php echo $ugrp; ?>">
-                                <?php echo $ugrp; ?>
-                            </option>
-                        <?php } ?>
+                <div class="row">
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="selectGroup"><?= $ml->tr('GROUP') ?></label>
+                            <select id="selectGroup" class="form-select">
+                                <option value="allgroups">
+                                    <?= $ml->tr('ALLGROUPS') ?>
+                                </option>
+                                <?php foreach ($usrgroups as $ugrp) { ?>
+                                    <option value="<?php echo $ugrp; ?>">
+                                        <?php echo $ugrp; ?>
+                                    </option>
+                                <?php } ?>
 
-                    </select>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-12">
+                        <div class="form-group">
+                            <label for="selectScheduler"><?= $ml->tr('SCHEDULERCODE') ?></label>
+                            <select id="selectScheduler" class="form-select">
+                                <option value="allsched">
+                                    <?= $ml->tr('ALL') ?>
+                                </option>
+                                <?php foreach ($schedCodes as $scode) { ?>
+                                    <option value="<?php echo $scode['code']; ?>">
+                                        <?php echo $scode['code']; ?>
+                                    </option>
+                                <?php } ?>
+
+                            </select>
+                        </div>
+                    </div>
                 </div>
                 <div class="table-responsive">
                     <table class="table" id="library_table">
