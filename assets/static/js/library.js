@@ -182,7 +182,7 @@ var myDropzone = new Dropzone("div#dropzone_upload", {
                 normalize: $('#normalize').val(),
                 normalizelevel: $('#normalizelevel').val(),
                 musicgroup: $('#musicgroup').val(),
-                schedcodes: $('#schedcodes').val(),
+                schedcodes: $('#schedcodess').val(),
             },
             datatype: 'html',
             success: function (data) {

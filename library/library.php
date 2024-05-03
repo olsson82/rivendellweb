@@ -424,12 +424,12 @@ $page_js = '<script src="' . DIR . '/assets/static/js/library.js"></script>';
                                     </select>
                                 </div>
                                 <div class="col-md-4">
-                                    <label for="schedcodes">
+                                    <label for="schedcodess">
                                         <?= $ml->tr('SCHEDULERCODES') ?>
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <select id="schedcodes" name="schedcodes[]" class="choices form-select" multiple>
+                                    <select id="schedcodess" name="schedcodes[]" class="choices form-select" multiple>
                                         <?php foreach ($schedCodes as $scode) { ?>
                                             <option value="<?php echo $scode['code']; ?>">
                                                 <?php echo $scode['code']; ?>
