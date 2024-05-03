@@ -41,13 +41,13 @@ $normalizelevel = $_POST['normalizelevel'];
 $musicgroup = $_POST['musicgroup'];
 $schedcodes = $_POST['schedcodes'];
 $wehavesched = 0;
-if ($autotrim == 1) {
+if (isset($autotrim)) {
     $dotrim = $trimlevel;
 } else {
     $dotrim = 0;
 }
 
-if ($normalize == 1) {
+if (isset($normalize)) {
     $donormalize = $normalizelevel;
 } else {
     $donormalize = 0;
@@ -134,4 +134,3 @@ if (file_exists($realfile)) {
         $returnResponse(null, null, "success");
     }
 }
-

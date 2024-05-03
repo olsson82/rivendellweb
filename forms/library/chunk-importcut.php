@@ -41,13 +41,13 @@ $normalizelevel = $_POST['normalizelevel'];
 $cartid = $_POST['cartid'];
 $cutid = $_POST['cutid'];
 $cutid = substr($cutid, strpos($cutid, "_") + 1);
-if ($autotrim == 1) {
+if (isset($autotrim)) {
     $dotrim = $trimlevel;
 } else {
     $dotrim = 0;
 }
 
-if ($normalize == 1) {
+if (isset($normalize)) {
     $donormalize = $normalizelevel;
 } else {
     $donormalize = 0;
