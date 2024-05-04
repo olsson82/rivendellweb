@@ -60,16 +60,19 @@ if (isset($_POST['airdaypartactive'])) {
 if ($airenable == 1) {
     $adstart = $_POST['adstart'];
     $adstart = strtotime($adstart);
-    $adstart = date(DATE_RFC2822, $adstart);
+    $adstart = date('Y-m-d\TH:i:s', $adstart);
     $adend = $_POST['adend'];
     $adend = strtotime($adend);
-    $adend = date(DATE_RFC2822, $adend);
+    $adend = date('Y-m-d\TH:i:s', $adend);
 } else {
     $adstart = "";
     $adend = "";
 }
-$adaystart = $_POST['adaystart'];
-$adayend = $_POST['adayend'];
+if ($airdaypartactive == 1) {
+    $adaystart = $_POST['adaystart'];
+    $adayend = $_POST['adayend'];
+}
+
 if (isset($_POST['daymon'])) {
     $daymon = 1;
 } else {
