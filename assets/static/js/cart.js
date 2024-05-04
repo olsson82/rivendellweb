@@ -1331,7 +1331,6 @@ $('#cut_form').validate({
                 var mydata = $.parseJSON(data);
                 var fel = mydata.error;
                 if (fel == "false") {
-                    console.log('Is updated');
                     $('#cut_info').modal('hide');
                     dt.ajax.reload();
                 } else {
