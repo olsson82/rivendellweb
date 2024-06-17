@@ -2588,4 +2588,53 @@ class DBFunc
             return false;
         }
     }
+
+    public function getRDPanels()
+    {
+        $rdpanel = array();
+        $sql = 'SELECT * FROM `RDPANEL` ORDER BY `ID` ASC';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            $rdpanel[] = $row;
+        }
+        return $rdpanel;
+    }
+
+    public function getRDPanelData($station)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM RDPANEL WHERE STATION = :id');
+        $stmt->execute([':id' => $station]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+
+    }
+
+    public function updateRDPanel($station, $hostpanels, $userpanels, $defaultservice, $labletemp, $flash, $butpaus, $clear)
+    {
+
+        try {
+
+            $sql = "UPDATE RDPANEL SET STATION_PANELS = :statpan, USER_PANELS = :usrpan, CLEAR_FILTER = :clrfilt, FLASH_PANEL = :flashpan, 
+            PANEL_PAUSE_ENABLED = :panpause, BUTTON_LABEL_TEMPLATE = :butttemp, DEFAULT_SERVICE = :defserv WHERE STATION = :station";
+
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':statpan' => $hostpanels,
+                ':usrpan' => $userpanels,
+                ':clrfilt' => $clear,
+                ':flashpan' => $flash,
+                ':panpause' => $butpaus,
+                ':butttemp' => $labletemp,
+                ':defserv' => $defaultservice,
+                ':station' => $station,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
