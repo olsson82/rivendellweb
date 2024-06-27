@@ -67,6 +67,9 @@ function format_timezone_name($name)
 }
 
 $tzlist = timezone_list();
+session_start();
+$install = $_GET['install'];
+$errors = 0;
 ?>
 
 <!DOCTYPE html>
@@ -94,7 +97,9 @@ $tzlist = timezone_list();
         </div>
     </nav>
 
+    <?php if ($install == 1) {
 
+    ?>
     <div class="container">
         <div class="card mt-5">
             <div class="card-header">
@@ -104,7 +109,7 @@ $tzlist = timezone_list();
                 <P>Before you begin you need to install the system on your server. This will install a json settings
                     file in the data folder. You don't need to modify any files. All settings will be done in the
                     system.</P>
-                <P>The data folder need to have the rights to write and read. Also check in the wiki that you have
+                <P>The data folder need to have the rights to write and read. Also check in the documentation that you have
                     installed everything that is required for the system to work.</P>
                 <form class="form form-horizontal" id="install_form">
                     <div class="form-body">
@@ -258,6 +263,112 @@ $tzlist = timezone_list();
             </div>
         </div>
     </div>
+    <?php } else { ?>
+        <div class="container">
+        <div class="card mt-5">
+            <div class="card-header">
+                <h4 class="card-title">Pre Check</h4>
+            </div>
+            <div class="card-body">
+                <P>Welcome to the installation of Rivendell Web Broadcast. Before we start, you need to meet the requirements that are for this script to run.</P>
+                <P>The data folder need to have the rights to write and read. Also check in the documentation that you have
+                    installed everything that is required for the system to work. If there are an error, please fix it on your server and reload this page.</P>
+                <form class="form form-horizontal" id="install_check">
+                    <div class="form-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <label for="phpvers">PHP Version</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <?php $php_version=phpversion(); 
+                                if($php_version<7)
+                                { $errors = 1; ?>
+                                    <a href="javascript:;" class="btn icon btn-danger"><i class="bi bi-x"></i></a>
+                               <?php } else { ?>
+                                    <a href="javascript:;" class="btn icon btn-success"><i class="bi bi-check"></i></a>
+                              <?php } ?>
+                                <p><small class="text-muted">Must be version 7 or better.</small></p>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="writeable">Writeable</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <?php 
+                                $is_writable = file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/dummy.txt', "hello");
+                                $php_version=phpversion(); 
+                                if($is_writable > 0)
+                                { unlink($_SERVER['DOCUMENT_ROOT'] . '/data/dummy.txt'); ?>
+                                    <a href="javascript:;" class="btn icon btn-success"><i class="bi bi-check"></i></a>
+                               <?php } else { $errors = 1;?>
+                                <a href="javascript:;" class="btn icon btn-danger"><i class="bi bi-x"></i></a>                                
+                              <?php } ?>
+                                <p><small class="text-muted">The data folder needs to be writeable.</small></p>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="session">Cookies and Session</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <?php
+                                $_SESSION['rivwebbroad_sessions_work']=1;
+                                $expire = time() + (3600 * 1);
+                                setcookie('installtest', 'true', $expire, '/');
+                                if(empty($_SESSION['rivwebbroad_sessions_work']) || empty($_COOKIE['installtest']))
+                                    {
+                                        $errors = 1;
+                                ?>
+                                <a href="javascript:;" class="btn icon btn-danger"><i class="bi bi-x"></i></a>
+                               <?php } else { ?>
+                                    <a href="javascript:;" class="btn icon btn-success"><i class="bi bi-check"></i></a>
+                              <?php } ?>
+                                <p><small class="text-muted">Cookies and Session needs to work on your server.</small></p>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="safemode">Safe Mode</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <?php 
+                                if( ini_get("safe_mode") )
+                                {
+                                    $errors = 1;
+                                    
+                                ?>
+                                <a href="javascript:;" class="btn icon btn-danger"><i class="bi bi-x"></i></a>
+                               <?php } else { ?>
+                                    <a href="javascript:;" class="btn icon btn-success"><i class="bi bi-check"></i></a>
+                              <?php } ?>
+                                <p><small class="text-muted">Safe Mode needs to be disabled.</small></p>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="rewrite">Apache Mod Rewrite</label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                            <?php
+                                if (function_exists('apache_get_modules')) {
+                                    $modules = apache_get_modules();
+                                    if (in_array('mod_rewrite', $modules)) { ?>
+                                    <a href="javascript:;" class="btn icon btn-success"><i class="bi bi-check"></i></a>
+                                   <?php } else { $errors = 1; ?>
+                                    <a href="javascript:;" class="btn icon btn-danger"><i class="bi bi-x"></i></a>
+                                  <?php }
+                                } else { $errors = 1; ?>
+                                    <a href="javascript:;" class="btn icon btn-danger"><i class="bi bi-x"></i></a>
+                               <?php } ?>
+                                <p><small class="text-muted">Apache needs to have mod_rewrite enable.</small></p>
+                            </div>                          
+                            
+                            
+                            <div class="col-sm-12 d-flex justify-content-end">
+                                <?php if ($errors == 0) { ?>
+                                    <a href="installer.php?install=1" class="btn btn-success">Next ></a>
+                               <?php } ?>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+    <?php } ?>
 
 
     
