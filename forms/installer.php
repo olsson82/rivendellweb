@@ -42,6 +42,7 @@ function fileCreateWrite()
                 'groups' => '1',
                 'sched' => '1',
                 'services' => '1',
+                'hosts' => '1',
             )
         ),
         'timezone' => $_POST["time_zone"],
