@@ -388,10 +388,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/voicetrack.js"></script>';
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-secondary" data-kt-upload-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                     </div>
                 </form>

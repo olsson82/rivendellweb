@@ -190,10 +190,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/logs.js"></script>';
                         <input type="hidden" name="servicename" id="servicename"
                             value="<?php echo $_COOKIE['serviceName']; ?>">
                         <button type="button" class="btn btn-light-secondary" data-kt-addlog-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('ADDLOG') ?>">
                     </div>

@@ -824,10 +824,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/event.js"></script>';
                         <input type="hidden" name="edid" id="edid" value="">
                         <input type="hidden" name="edit" id="vtedit" value="0">
                         <button type="button" class="btn btn-light-secondary" data-kt-vtnote-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" id="subbut_chain" class="btn btn-primary ms-1"
                             value="<?= $ml->tr('SAVE') ?>">

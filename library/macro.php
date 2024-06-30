@@ -468,10 +468,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/macro.js"></script>';
                         <input type="hidden" name="lineid" id="lineid" value="">
                         <input type="hidden" name="isedit" id="isedit" value="0">
                         <button type="button" class="btn btn-light-secondary" data-kt-addmacro-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-info ms-1" value="<?= $ml->tr('ADDCOMMAND') ?>">
                     </div>

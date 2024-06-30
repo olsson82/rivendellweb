@@ -179,10 +179,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/clocks.js"></script>';
                     <div class="modal-footer">
                         <input type="hidden" name="oldname" id="reoldname" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-clockrename-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('RENAMECLOCK') ?>">
                     </div>
@@ -246,10 +243,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/clocks.js"></script>';
                         <input type="hidden" name="service" value="<?php echo $_COOKIE['serviceName'] ?>">
                         <input type="hidden" name="artiststep" value="15">
                         <button type="button" class="btn btn-light-secondary" data-kt-clockadd-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('ADDCLOCK') ?>">
                     </div>

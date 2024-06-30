@@ -568,10 +568,7 @@ if (!$info->checkMacroNormal($id, 1)) {
                             value="<?php echo $info->getCartInfo($_GET["id"], "NUMBER"); ?>" id="cartid">
                         <input type="hidden" name="cutid" value="" id="cutid_imp">
                         <button type="button" class="btn btn-light-secondary" data-kt-import-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                     </div>
                 </form>
@@ -702,10 +699,7 @@ if (!$info->checkMacroNormal($id, 1)) {
                         <input type="hidden" name="idet" value="<?php echo $id; ?>">
                         <input type="hidden" name="cutid" id="for_cutcart" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-export-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('EXPORT') ?>">
                     </div>
@@ -955,10 +949,7 @@ if (!$info->checkMacroNormal($id, 1)) {
                         <input type="hidden" name="idet" value="<?php echo $id; ?>">
                         <input type="hidden" name="cutid" id="cutid" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-cutinfo-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-primary ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
@@ -1043,10 +1034,7 @@ if (!$info->checkMacroNormal($id, 1)) {
                         <input type="hidden" name="hookend" id="hookend" value="-1">
                         <input type="hidden" name="cutname" id="thecutname" value="-1">
                         <button type="button" class="btn btn-light-secondary" data-kt-editmarker-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <button type="button" class="btn btn-info ms-1" data-kt-editmarker-modal-action="submit">
                             <i class="bx bx-x d-block d-sm-none"></i>

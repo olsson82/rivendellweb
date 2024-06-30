@@ -180,10 +180,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/events.js"></script>';
                     <div class="modal-footer">
                         <input type="hidden" name="service" value="<?php echo $_COOKIE['serviceName'] ?>">
                         <button type="button" class="btn btn-light-secondary" data-kt-addevent-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-info ms-1" value="<?= $ml->tr('ADDEVENT') ?>">
                     </div>
@@ -221,10 +218,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/events.js"></script>';
                     <div class="modal-footer">
                         <input type="hidden" name="oldname" id="oldname" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-renameevent-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('RENAMEEVENT') ?>">
                     </div>

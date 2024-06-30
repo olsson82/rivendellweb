@@ -379,10 +379,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdairplay.js"></script>';
                     <div class="modal-footer">
                         <input type="hidden" id="rdairhost" name="rdairhost" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-rdairhost-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" id="subbut_chain" class="btn btn-primary ms-1"
                             value="<?= $ml->tr('SAVE') ?>">
@@ -421,10 +418,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdairplay.js"></script>';
                     <div class="modal-footer">
                         <input type="hidden" id="idet" name="idet" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-message-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" id="subbut_chain" class="btn btn-primary ms-1"
                             value="<?= $ml->tr('SAVE') ?>">

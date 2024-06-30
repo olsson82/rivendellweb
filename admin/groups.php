@@ -171,10 +171,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/groups.js"></script>';
                     <div class="modal-footer">
                         <input type="hidden" id="re_groupid" name="groupid" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-rename-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
@@ -377,10 +374,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/groups.js"></script>';
                     <div class="modal-footer">
                         <input type="hidden" id="groupid" name="groupid" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-edit-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
@@ -595,10 +589,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/groups.js"></script>';
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-secondary" data-kt-add-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>

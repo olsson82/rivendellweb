@@ -221,10 +221,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdpanel.js"></script>';
                     <div class="modal-footer">
                         <input type="hidden" id="rdpanelhost" name="rdpanelhost" value="">
                         <button type="button" class="btn btn-light-secondary" data-kt-rdpanelhost-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" id="subbut_chain" class="btn btn-primary ms-1"
                             value="<?= $ml->tr('SAVE') ?>">

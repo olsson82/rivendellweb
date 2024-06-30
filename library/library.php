@@ -369,10 +369,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/library.js"></script>';
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-secondary" data-kt-multiedit-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <button type="button" id="multieditSave" class="btn btn-primary ms-1">
                             <?= $ml->tr('SAVE') ?>
@@ -495,10 +492,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/library.js"></script>';
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-secondary" data-kt-import-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                     </div>
                 </form>
@@ -558,10 +552,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/library.js"></script>';
                     </div>
                     <div class="modal-footer">
                         <button type="button" class="btn btn-light-secondary" data-kt-add-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-danger ms-1" value="<?= $ml->tr('ADDCART') ?>">
                     </div>

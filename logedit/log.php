@@ -664,10 +664,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/log.js"></script>';
                         <input type="hidden" name="isvoicetrack" id="isvoicetrack_voice" value="1">
                         <button type="button" class="btn btn-light-secondary"
                             data-kt-addvoicetrack-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
@@ -810,10 +807,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/log.js"></script>';
                         <input type="hidden" name="iseditmode" id="iseditmode_marker" value="0">
                         <input type="hidden" name="isvoicetrack" id="isvoicetrack_marker" value="0">
                         <button type="button" class="btn btn-light-secondary" data-kt-addmarker-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" class="btn btn-success ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
@@ -984,10 +978,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/log.js"></script>';
                         <input type="hidden" name="therowidno" id="therowidno_imp" value="">
                         <input type="hidden" name="iseditmode" id="iseditmode_imp" value="0">
                         <button type="button" class="btn btn-light-secondary" data-kt-addcart-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" id="subbut_cart" class="btn btn-info ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
@@ -1211,10 +1202,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/log.js"></script>';
                         <input type="hidden" name="therowidno" id="therowidno_chain" value="">
                         <input type="hidden" name="iseditmode" id="iseditmode_chain" value="0">
                         <button type="button" class="btn btn-light-secondary" data-kt-logchain-modal-action="close">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
-                                <?= $ml->tr('CLOSE') ?>
-                            </span>
+                            <?= $ml->tr('CLOSE') ?>
                         </button>
                         <input type="submit" id="subbut_chain" class="btn btn-primary ms-1"
                             value="<?= $ml->tr('SAVE') ?>">
