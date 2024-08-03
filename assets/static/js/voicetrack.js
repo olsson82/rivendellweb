@@ -56,7 +56,7 @@ const createWaveSurfer = () => {
             progressColor: 'rgb(100, 50, 0)',
             url: recordedUrl,
         })
-
+        let xrid = Math.floor((Math.random() * 100) + 1);
         const button = container.appendChild(document.createElement('button'))
         button.textContent = TRAN_PLAY
         button.className = "btn btn-success"
@@ -66,7 +66,8 @@ const createWaveSurfer = () => {
         const buttonsave = container.appendChild(document.createElement('button'))
         buttonsave.textContent = TRAN_SAVEREQ
         buttonsave.className = "btn btn-warning"
-        buttonsave.onclick = () => convertBlobToAudioBuffer(blob, lineid, vtgroup)
+        buttonsave.id = xrid
+        buttonsave.onclick = () => convertBlobToAudioBuffer(blob, lineid, vtgroup, xrid)
         const link = container.appendChild(document.createElement('a'))
         Object.assign(link, {
             href: recordedUrl,
@@ -386,9 +387,10 @@ function convertAudioBufferToBlob(audioBuffer) {
     return wav;
 }
 
-function convertBlobToAudioBuffer(myBlob, rdline, rdgroup) {
+function convertBlobToAudioBuffer(myBlob, rdline, rdgroup, idnomb) {
     const audioContext = new AudioContext();
     const fileReader = new FileReader();
+    $("#"+idnomb).prop("disabled",true);
 
     fileReader.onloadend = () => {
 
@@ -397,13 +399,13 @@ function convertBlobToAudioBuffer(myBlob, rdline, rdgroup) {
         audioContext.decodeAudioData(myArrayBuffer, (audioBuffer) => {
 
             let blob = convertAudioBufferToBlob(audioBuffer);
-            importToCart(blob, rdline, rdgroup)
+            importToCart(blob, rdline, rdgroup, idnomb)
         });
     };
     fileReader.readAsArrayBuffer(myBlob);
 }
 
-function importToCart(thefile, rdline, rdgroup) {
+function importToCart(thefile, rdline, rdgroup, idnomb) {
     var fd = new FormData();
     fd.append("audio_data", thefile, rdline);
     fd.append("line", rdline);
@@ -424,6 +426,7 @@ function importToCart(thefile, rdline, rdgroup) {
         async: false,
         success: function () {
             $("#record_voice").modal("hide");
+            $("#"+idnomb).prop("disabled",false);
             $("#recordings").empty();
             $.ajax({
                 type: "POST",
