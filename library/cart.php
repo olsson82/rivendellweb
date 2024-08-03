@@ -58,6 +58,7 @@ $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js
 <script src="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.js"></script>
 <script src="'.DIR.'/assets/extensions/jquery-loading/jquery.loading.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
+<script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/record.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/timeline.min.js"></script>
 <script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
@@ -481,6 +482,100 @@ if (!$info->checkMacroNormal($id, 1)) {
             </div>
         </div>
     </section>
+
+    <div class="modal fade text-left" id="record_voice" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="recordLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-danger">
+                    <h4 class="modal-title white" id="recordLabel">
+                        <?= $ml->tr('RECORD') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-record-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-body">
+                        <div class="row">
+
+                            <div class="col-md-4">
+                                <label for="audiochannels_rec">
+                                    <?= $ml->tr('AUDIOCHANNELS') ?>
+                                </label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <select id="audiochannels_rec" name="audiochannels" class="choices form-select">
+                                    <option value="1">1</option>
+                                    <option value="2" selected>2</option>
+
+                                </select>
+                            </div>
+                            <div class="col-12 col-md-8 offset-md-4 form-group">
+                                <div class='form-check'>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="autotrim_rec" name="autotrim"
+                                            class='form-check-input' checked>
+                                        <label for="autotrim_rec">
+                                            <?= $ml->tr('AUTOTRIM') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="trimlevel_rec">
+                                    <?= $ml->tr('AUTOTRIMLEVEL') ?>
+                                </label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <input type="number" id="trimlevel_rec" min="-99" max="0" class="form-control"
+                                    name="trimlevel" value="-35">
+                            </div>
+                            <div class="col-12 col-md-8 offset-md-4 form-group">
+                                <div class='form-check'>
+                                    <div class="checkbox">
+                                        <input type="checkbox" id="normalize_rec" name="normalize"
+                                            class='form-check-input' checked>
+                                        <label for="normalize_rec">
+                                            <?= $ml->tr('NORMALIZE') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="normalizelevel_rec">
+                                    <?= $ml->tr('NORMALIZELEVEL') ?>
+                                </label>
+                            </div>
+                            <div class="col-md-8 form-group">
+                                <input type="number" id="normalizelevel_rec" min="-30" max="0" class="form-control"
+                                    name="normalizelevel" value="-13">
+                            </div>
+                        </div>
+                        <button class="btn btn-danger" id="recordrec">
+                            <?= $ml->tr('RECORD') ?>
+                        </button>
+                        <button id="pauserec" class="btn btn-warning" style="display: none;">
+                            <?= $ml->tr('PAUSE') ?>
+                        </button>
+                        <p id="progress">00:00</p>
+
+                        <div id="mic" style="border: 1px solid #ddd; border-radius: 4px; margin-top: 1rem"></div>
+
+                        <div id="recordings" style="margin: 1rem 0"></div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-kt-record-modal-action="close">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">
+                            <?= $ml->tr('CLOSE') ?>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade text-left" id="import_cut" data-bs-backdrop="static" role="dialog" aria-labelledby="cutLabel"
         aria-hidden="true">

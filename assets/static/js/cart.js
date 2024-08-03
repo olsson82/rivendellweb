@@ -26,6 +26,8 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 var dt;
+let wavesurfer, record
+let scrollingWaveform = false
 var wavesurferfile;
 var wavesurferfileedit;
 var regionsplugin;
@@ -45,6 +47,8 @@ var sampleTwo = ["16000", "22050", "32000", "44100", "48000"];
 var bitOne = ["32", "48", "56", "64", "80", "96", "112", "128", "160", "192", "224", "256", "320", "384"];
 var bitTwo = ["32", "40", "48", "56", "64", "80", "96", "112", "128", "160", "192", "224", "256", "320", "VBR"];
 var ordtype = CUT_ORDER;
+var cartid;
+var cutname;
 
 function tr(translate) {
     var result = false;
@@ -64,6 +68,264 @@ function tr(translate) {
     return result;
 }
 
+const createWaveSurfer = () => {
+    if (wavesurfer) {
+        wavesurfer.destroy()
+    }
+    wavesurfer = WaveSurfer.create({
+        container: '#mic',
+        waveColor: 'rgb(200, 0, 200)',
+        progressColor: 'rgb(100, 0, 100)',
+    })
+
+    record = wavesurfer.registerPlugin(WaveSurfer.Record.create({ scrollingWaveform, renderRecordedAudio: false }))
+
+    record.on('record-end', (blob) => {
+        const container = document.querySelector('#recordings')
+        const recordedUrl = URL.createObjectURL(blob)
+
+        const wavesurfer = WaveSurfer.create({
+            container,
+            waveColor: 'rgb(200, 100, 0)',
+            progressColor: 'rgb(100, 50, 0)',
+            url: recordedUrl,
+        })
+        let xrid = Math.floor((Math.random() * 100) + 1);
+        const button = container.appendChild(document.createElement('button'))
+        button.textContent = TRAN_PLAY
+        button.className = "btn btn-success"
+        button.onclick = () => wavesurfer.playPause()
+        wavesurfer.on('pause', () => (button.textContent = TRAN_PLAY))
+        wavesurfer.on('play', () => (button.textContent = TRAN_PAUSE))
+        const buttonsave = container.appendChild(document.createElement('button'))
+        buttonsave.textContent = TRAN_SAVEREQ
+        buttonsave.className = "btn btn-warning"
+        buttonsave.id = xrid
+        buttonsave.onclick = () => convertBlobToAudioBuffer(blob, xrid)
+        const link = container.appendChild(document.createElement('a'))
+        Object.assign(link, {
+            href: recordedUrl,
+            className: "btn btn-primary",
+            download: 'recording.' + blob.type.split(';')[0].split('/')[1] || 'webm',
+            textContent: TRAN_DOWN_REQ,
+        })
+    })
+    pauseButtonRec.style.display = 'none'
+    recButtonRec.textContent = TRAN_RECORD
+
+    record.on('record-progress', (time) => {
+        updateProgress(time)
+    })
+
+}
+
+const progressRec = document.querySelector('#progress')
+const updateProgress = (time) => {
+    const formattedTime = [
+        Math.floor((time % 3600000) / 60000),
+        Math.floor((time % 60000) / 1000),
+    ]
+        .map((v) => (v < 10 ? '0' + v : v))
+        .join(':')
+        progressRec.textContent = formattedTime
+}
+
+const pauseButtonRec = document.querySelector('#pauserec')
+pauseButtonRec.onclick = () => {
+    if (record.isPaused()) {
+        record.resumeRecording()
+        pauseButtonRec.textContent = TRAN_PAUSE
+        return
+    }
+
+    record.pauseRecording()
+    pauseButtonRec.textContent = TRAN_RESUME
+}
+
+
+const recButtonRec = document.querySelector('#recordrec')
+
+recButtonRec.onclick = () => {
+    if (record.isRecording() || record.isPaused()) {
+        record.stopRecording()
+        recButtonRec.textContent = TRAN_RECORD
+        pauseButtonRec.style.display = 'none'
+        return
+    }
+
+    recButtonRec.disabled = true
+    record.startRecording(record.startMic()).then(() => {
+        recButtonRec.textContent = TRAN_STOP
+        recButtonRec.disabled = false
+        pauseButtonRec.style.display = 'inline'
+    })
+}
+
+
+
+function getWavBytes(buffer, options) {
+    const type = options.isFloat ? Float32Array : Uint16Array
+    const numFrames = buffer.byteLength / type.BYTES_PER_ELEMENT
+
+    const headerBytes = getWavHeader(Object.assign({}, options, { numFrames }))
+    const wavBytes = new Uint8Array(headerBytes.length + buffer.byteLength);
+
+    // prepend header, then add pcmBytes
+    wavBytes.set(headerBytes, 0)
+    wavBytes.set(new Uint8Array(buffer), headerBytes.length)
+
+    return wavBytes
+}
+
+function getWavHeader(options) {
+    const numFrames = options.numFrames
+    const numChannels = options.numChannels || 2
+    const sampleRate = options.sampleRate || 44100
+    const bytesPerSample = options.isFloat ? 4 : 2
+    const format = options.isFloat ? 3 : 1
+
+    const blockAlign = numChannels * bytesPerSample
+    const byteRate = sampleRate * blockAlign
+    const dataSize = numFrames * blockAlign
+
+    const buffer = new ArrayBuffer(44)
+    const dv = new DataView(buffer)
+
+    let p = 0
+
+    function writeString(s) {
+        for (let i = 0; i < s.length; i++) {
+            dv.setUint8(p + i, s.charCodeAt(i))
+        }
+        p += s.length
+    }
+
+    function writeUint32(d) {
+        dv.setUint32(p, d, true)
+        p += 4
+    }
+
+    function writeUint16(d) {
+        dv.setUint16(p, d, true)
+        p += 2
+    }
+
+    writeString('RIFF')
+    writeUint32(dataSize + 36)
+    writeString('WAVE')
+    writeString('fmt ')
+    writeUint32(16)
+    writeUint16(format)
+    writeUint16(numChannels)
+    writeUint32(sampleRate)
+    writeUint32(byteRate)
+    writeUint16(blockAlign)
+    writeUint16(bytesPerSample * 8)
+    writeString('data')
+    writeUint32(dataSize)
+
+    return new Uint8Array(buffer)
+}
+
+function convertAudioBufferToBlob(audioBuffer) {
+    var channelData = [],
+        totalLength = 0,
+        channelLength = 0;
+
+    for (var i = 0; i < audioBuffer.numberOfChannels; i++) {
+        channelData.push(audioBuffer.getChannelData(i));
+        totalLength += channelData[i].length;
+        if (i == 0) channelLength = channelData[i].length;
+    }
+
+    const interleaved = new Float32Array(totalLength);
+
+    for (
+        let src = 0, dst = 0;
+        src < channelLength;
+        src++, dst += audioBuffer.numberOfChannels
+    ) {
+        for (var j = 0; j < audioBuffer.numberOfChannels; j++) {
+            interleaved[dst + j] = channelData[j][src];
+        }
+    }
+
+    const wavBytes = getWavBytes(interleaved.buffer, {
+        isFloat: true,
+        numChannels: audioBuffer.numberOfChannels,
+        sampleRate: 48000,
+    });
+    const wav = new Blob([wavBytes], { type: "audio/wav" });
+    return wav;
+}
+
+function convertBlobToAudioBuffer(myBlob, idnomb) {
+    const audioContext = new AudioContext();
+    const fileReader = new FileReader();
+    $("#"+idnomb).prop("disabled",true);
+
+    fileReader.onloadend = () => {
+
+        let myArrayBuffer = fileReader.result;
+
+        audioContext.decodeAudioData(myArrayBuffer, (audioBuffer) => {
+
+            let blob = convertAudioBufferToBlob(audioBuffer);
+            recordToCart(blob, idnomb)
+        });
+    };
+    fileReader.readAsArrayBuffer(myBlob);
+}
+
+function recordToCart(thefile, idnomb) {
+    var fd = new FormData();
+    fd.append("audio_data", thefile, cutname);
+    fd.append("cut", cutname);
+    fd.append("cart", cartid);
+    fd.append("audiochannels", $("#audiochannels_rec").val());
+    fd.append("autotrim", $("#autotrim_rec").val());
+    fd.append("trimlevel", $("#trimlevel_rec").val());
+    fd.append("normalize", $("#normalize_rec").val());
+    fd.append("normalizelevel", $("#normalizelevel_rec").val());
+    jQuery.ajax({
+        type: "POST",
+        url: HOST_URL + "/forms/library/importrec.php",
+        data: fd,
+        async: false,
+        success: function () {
+            $('body').loading('stop');
+            $("#record_voice").modal("hide");
+            $("#"+idnomb).prop("disabled",false);
+            dt.ajax.reload();
+        },
+        cache: false,
+        contentType: false,
+        processData: false
+    });
+}
+
+function recordcut(cart, cut) {
+
+    if (ALLOW_MOD == 1) {
+
+        cartid = cart;
+        cutname = cut;
+        createWaveSurfer()
+        $("#record_voice").modal("show");
+        
+    } else {
+        Swal.fire({
+            text: TRAN_NORIGHTS,
+            icon: "error",
+            buttonsStyling: false,
+            confirmButtonText: TRAN_OK,
+            customClass: {
+                confirmButton: "btn fw-bold btn-primary"
+            }
+        });
+    }
+
+}
 const playButton = document.querySelector('#play')
 const forwardButton = document.querySelector('#forward')
 const backButton = document.querySelector('#backward')
@@ -937,6 +1199,8 @@ dt = $("#cuts_table").DataTable({
                 title="`+ TRAN_CUTINFOEDIT + `"><i class="bi bi-pencil"></i></a>
                 <a href="javascript:;" onclick="editcutaudio('`+ row.cutname + `')" class="btn icon btn-info" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="`+ TRAN_EDITAUDIOMARKERS + `"><i class="bi bi-soundwave"></i></a>
+                <a href="javascript:;" onclick="recordcut('`+ row.cartnumber + `','` + row.cutname + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="`+ TRAN_RECORD + `"><i class="bi bi-mic"></i></a>
                 <a href="javascript:;" onclick="importcut('`+ row.cutname + `')" class="btn icon btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="`+ TRAN_IMPORTAUDIO + `"><i class="bi bi-file-music"></i></a>
                 <a href="javascript:;" onclick="exportcut('`+ row.cutname + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
@@ -1225,6 +1489,57 @@ var initEditMarkerModalButtons = function () {
                         }
                     }
                 });
+
+            }
+        });
+    });
+}
+
+const element5 = document.getElementById('record_voice');
+const modal5 = new bootstrap.Modal(element5);
+
+var initRecordVoiceButtons = function () {
+    const cancelButton2 = element5.querySelector('[data-kt-record-modal-action="cancel"]');
+    cancelButton2.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal5.hide();
+                wavesurfer.destroy();
+            }
+        });
+    });
+    const closeButton2 = element5.querySelector('[data-kt-record-modal-action="close"]');
+    closeButton2.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal5.hide();
+                wavesurfer.destroy();
 
             }
         });
@@ -1801,3 +2116,4 @@ initImportModalButtons();
 initExportModalButtons();
 initCutInfoModalButtons();
 initEditMarkerModalButtons();
+initRecordVoiceButtons();
