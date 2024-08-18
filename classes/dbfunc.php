@@ -2637,4 +2637,82 @@ class DBFunc
             return false;
         }
     }
+
+    public function getRDCatchs()
+    {
+        $rdcatch = array();
+        $sql = 'SELECT * FROM `RECORDINGS` WHERE TYPE = 1  ORDER BY `ID` ASC';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            $rdcatch[] = $row;
+        }
+        return $rdcatch;
+    }
+
+    public function getHosts()
+    {
+
+        $hosts = array();
+
+        $sql = 'SELECT `NAME` FROM `STATIONS`
+                ORDER BY `NAME` ASC';
+
+        $results = $this->_db->prepare($sql);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+        $results->execute();
+        while ($row = $results->fetch()) {
+
+            foreach ($row as $field)
+                $hosts[] = $field;
+
+        }
+
+        $results = NULL;
+
+        return $hosts;
+
+    }
+
+    public function getRDCatchData($id)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM RECORDINGS WHERE ID = :id');
+        $stmt->execute([':id' => $id]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+
+    }
+
+    public function updateCatchMacro($isactive, $station, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $macro, $one, $id)
+    {
+
+        $sql = 'UPDATE `RECORDINGS` SET `IS_ACTIVE` = :isactive, `STATION_NAME` = :stationname, `SUN` = :sun, `MON` = :mon,
+        `TUE` = :tue, `WED` = :wed, `THU` = :thu, `FRI` = :fri, `SAT` = :sat, `DESCRIPTION` = :descript,
+        `START_TIME` = :starttime, `MACRO_CART` = :macrocart, `ONE_SHOT` = :oneshot WHERE `ID` = :idno';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':macrocart', $macro);
+        $stmt->bindParam(':oneshot', $one);
+        $stmt->bindParam(':idno', $id);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
 }
