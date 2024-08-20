@@ -27,9 +27,25 @@
  *********************************************************************************************************/
 var dt;
 var dt2;
+var dt3;
 var allgroups = 1;
 var groupnow;
 var editmodal;
+var cartdata;
+var librarytype = 2;
+
+$('#url_down').keyup(function () {
+    let url = $("#url_down").val();
+    const okUrl = url.startsWith('http:') || url.startsWith('ftp:') || url.startsWith('sftp:') || url.startsWith('file:')
+
+    if (okUrl == true) {
+        $("#usrn_down").removeAttr('disabled');
+        $("#pass_down").removeAttr('disabled');
+    } else {
+        $("#usrn_down").prop("disabled", true);
+        $("#pass_down").prop("disabled", true);
+    }
+});
 
 var elements = Array.prototype.slice.call(document.querySelectorAll("[data-bs-stacked-modal]"));
 if (elements && elements.length > 0) {
@@ -52,7 +68,6 @@ if (elements && elements.length > 0) {
         });
     });
 }
-
 $('#selectGroup').on('change', function (e) {
 
     if ($('#selectGroup').val() == 'allgroups') {
@@ -66,9 +81,34 @@ $('#selectGroup').on('change', function (e) {
 });
 
 function addcart(cart, title) {
-    $("#cart_macro").val(cart);
-    $("#desc_macro").val(title);
+    if (librarytype == 2) {
+        editmodal.hide();
+        $("#cart_macro").val(cart);
+        $("#desc_macro").val(title);
+    } else {
+        editmodal.hide();
+        cartdata = cart;
+        dt3.ajax.reload();
+
+        $.ajax({
+            url: HOST_URL + '/forms/rdcatch/getcut.php',
+            data: "id=" + cartdata,
+            dataType: 'json',
+            success: function (data) {
+                $('#dest_down').val(data['CUT_NAME']);
+            }
+        });
+
+        $("#selcutbutt").show();
+        $("#selcartbutt").hide();
+    }
+}
+
+function addcut(cutname) {
     editmodal.hide();
+    $("#dest_down").val(cutname);
+    $("#selcutbutt").hide();
+    $("#selcartbutt").show();
 }
 
 function getTimeFromMillis(millis) {
@@ -105,6 +145,8 @@ function edit(type, id) {
         dataType: 'json',
         success: function (data) {
             if (type == 1) {
+                librarytype = 2;
+                dt2.ajax.reload();
                 $('#macid').val(id);
                 if (data['IS_ACTIVE'] == 'Y') {
                     $("#eventactive_macro").prop('checked', true);
@@ -157,20 +199,197 @@ function edit(type, id) {
                     $("#sat_mac").prop('checked', false);
                 }
                 $('#macro_edit').modal('show');
+            } else if (type == 4) {
+                librarytype = 1;
+                dt2.ajax.reload();
+                $("#selcutbutt").hide();
+                $("#selcartbutt").show();
+                $('#dowid').val(id);
+                if (data['IS_ACTIVE'] == 'Y') {
+                    $("#eventactive_down").prop('checked', true);
+                } else {
+                    $("#eventactive_down").prop('checked', false);
+                }
+                $('#location_down').val(data['STATION_NAME']);
+                $('#start_down').val(data['START_TIME']);
+                $('#desc_down').val(data['DESCRIPTION']);
+                $('#url_down').val(data['URL']);
+                $('#usrn_down').val(data['URL_USERNAME']);
+                $('#pass_down').val(data['URL_PASSWORD']);
+                $('#filpa_down').val(data['URL_PASSWORD']);
+                $('#dest_down').val(data['CUT_NAME']);
+                $('#channels_down').val(data['CHANNELS']);
+                if (data['TRIM_THRESHOLD'] == '0') {
+                    $("#autotrim_down").prop('checked', false);
+                    $('#trimlevel_down').val('-35');
+                    $('#trimlevel_down').prop("disabled", true);
+                } else {
+                    $("#autotrim_down").prop('checked', true);
+                    $("#trimlevel_down").removeAttr('disabled');
+                    //Find better solution to convert to correct value
+                    var autotrimval = data['TRIM_THRESHOLD'] - (data['TRIM_THRESHOLD'] * 2);
+                    autotrimval = autotrimval / 100;
+                    $('#trimlevel_down').val(autotrimval);
+                }
+                if (data['NORMALIZE_LEVEL'] == '0') {
+                    $("#normalize_down").prop('checked', false);
+                    $('#normlevel_down').val('-35');
+                    $('#normlevel_down').prop("disabled", true);
+                } else {
+                    $("#normalize_down").prop('checked', true);
+                    $("#normlevel_down").removeAttr('disabled');
+                    var normalizlevel = data['NORMALIZE_LEVEL'] / 100;
+                    $('#normlevel_down').val(normalizlevel);
+                }
+                if (data['ENABLE_METADATA'] == 'Y') {
+                    $("#updlib_down").prop('checked', true);
+                } else {
+                    $("#updlib_down").prop('checked', false);
+                }
+                if (data['ONE_SHOT'] == 'Y') {
+                    $("#oneshot_down").prop('checked', true);
+                } else {
+                    $("#oneshot_down").prop('checked', false);
+                }
+                $('#dayoffset_down').val(data['EVENTDATE_OFFSET']);
+                if (data['SUN'] == 'Y') {
+                    $("#sun_dow").prop('checked', true);
+                } else {
+                    $("#sun_dow").prop('checked', false);
+                }
+                if (data['MON'] == 'Y') {
+                    $("#mon_dow").prop('checked', true);
+                } else {
+                    $("#mon_dow").prop('checked', false);
+                }
+                if (data['TUE'] == 'Y') {
+                    $("#tue_dow").prop('checked', true);
+                } else {
+                    $("#tue_dow").prop('checked', false);
+                }
+                if (data['WED'] == 'Y') {
+                    $("#wed_dow").prop('checked', true);
+                } else {
+                    $("#wed_dow").prop('checked', false);
+                }
+                if (data['THU'] == 'Y') {
+                    $("#thu_dow").prop('checked', true);
+                } else {
+                    $("#thu_dow").prop('checked', false);
+                }
+                if (data['FRI'] == 'Y') {
+                    $("#fri_dow").prop('checked', true);
+                } else {
+                    $("#fri_dow").prop('checked', false);
+                }
+                if (data['SAT'] == 'Y') {
+                    $("#sat_dow").prop('checked', true);
+                } else {
+                    $("#sat_dow").prop('checked', false);
+                }
+
+                let url = $("#url_down").val();
+                const okUrl = url.startsWith('http:') || url.startsWith('ftp:') || url.startsWith('sftp:') || url.startsWith('file:')
+
+                if (okUrl == true) {
+                    $("#usrn_down").removeAttr('disabled');
+                    $("#pass_down").removeAttr('disabled');
+                } else {
+                    $("#usrn_down").prop("disabled", true);
+                    $("#pass_down").prop("disabled", true);
+                }
+                $('#download_edit').modal('show');
+
             }
         }
     });
 }
+
+$('#download_form').validate({
+    rules: {
+        location: {
+            required: true,
+        },
+        start: {
+            required: true,
+        },
+        desc: {
+            required: true,
+        },
+        url: {
+            required: true,
+        },
+        dest: {
+            required: true,
+        },
+    },
+    messages: {
+        location: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        start: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        desc: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        url: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        dest: {
+            required: TRAN_NOTBEEMPTY,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#download_form').serialize();
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/rdcatch/downedit.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                if (fel == "false") {
+                    $('#download_edit').modal('hide');
+                    dt.ajax.reload();
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+
+
+                }
+            }
+        });
+    }
+});
 
 $('#macro_form').validate({
     rules: {
         location: {
             required: true,
         },
-        start_macro: {
+        start: {
             required: true,
         },
-        desc_macro: {
+        desc: {
             required: true,
         },
         cart_macro: {
@@ -181,13 +400,13 @@ $('#macro_form').validate({
         location: {
             required: TRAN_NOTBEEMPTY,
         },
-        start_macro: {
+        start: {
             required: TRAN_NOTBEEMPTY,
         },
-        desc_macro: {
+        desc: {
             required: TRAN_NOTBEEMPTY,
         },
-        cart_macro: {
+        cart: {
             required: TRAN_NOTBEEMPTY,
         },
     },
@@ -321,6 +540,31 @@ var KTDatatablesServerSide = function () {
             ],
             columnDefs: [
                 {
+                    targets: 0,
+                    render: function (data, type, row) {
+                        if (row.TYPE == 4) {
+                            return `
+                            <div class="avatar me-3">
+                            <img alt="Logo" src="`+ HOST_URL + `/assets/static/images/event/down.png" /></div> ` + data;
+                        } else {
+                            return `
+                            <div class="avatar me-3">
+                            <img alt="Logo" src="`+ HOST_URL + `/assets/static/images/event/settings.png" /></div> ` + data;
+                        }
+                    }
+                },
+                {
+                    targets: 5,
+                    render: function (data, type, row) {
+                        if (row.TYPE == 4) {
+                            return row.URL
+                        } else {
+                            return row.MACRO_CART
+                        }
+                    }
+                },
+
+                {
                     targets: -1,
                     data: null,
                     orderable: false,
@@ -328,7 +572,7 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         return `
                         <div class="btn-group mb-3" role="group">
-                                    <a href="javascript:;" onclick="edit('`+ row.TYPE + `', '`+ row.ID + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    <a href="javascript:;" onclick="edit('`+ row.TYPE + `', '` + row.ID + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDIT + `"><i class="bi bi-pencil"></i></a>
                                 </div>
                         `;
@@ -388,10 +632,60 @@ var KTDatatablesServerSide = function () {
         });
     }
 
+    const element2 = document.getElementById('download_edit');
+    const modal2 = new bootstrap.Modal(element2);
+
+    var initDownEditModalButtons = function () {
+        const cancelButton1 = element2.querySelector('[data-kt-rddown-modal-action="cancel"]');
+        cancelButton1.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal2.hide();
+                }
+            });
+        });
+        const closeButton2 = element2.querySelector('[data-kt-rddown-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal2.hide();
+
+                }
+            });
+        });
+    }
+
     return {
         init: function () {
             initDatatable();
             initMacroEditModalButtons();
+            initDownEditModalButtons();
         }
     }
 }();
@@ -415,7 +709,7 @@ var KTDatatablesServerSideLibrary = function () {
                     d.ausr = USERNAME;
                     d.all = allgroups;
                     d.groups = groupnow;
-                    d.thetype = 2;
+                    d.thetype = librarytype;
                 }
             },
             language: {
@@ -490,8 +784,12 @@ var KTDatatablesServerSideLibrary = function () {
                     orderable: false,
                     className: 'text-end',
                     render: function (data, type, row) {
-                        return `
-                        <a href="javascript:;" onclick="addcart('`+ row.NUMBER + `', '` + row.TITLE + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
+                        if (librarytype == 2) {
+                            return `<a href="javascript:;" onclick="addcart('` + row.NUMBER + `', '` + row.TITLE + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
+                        } else {
+                            return `<a href="javascript:;" onclick="addcart('` + row.NUMBER + `', '` + row.TITLE + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
+                        }
+
                     }
                 },
             ],
@@ -556,9 +854,145 @@ var KTDatatablesServerSideLibrary = function () {
     }
 }();
 
+var KTDatatablesServerSideCuts = function () {
+    var initDatatableCutsLibrary = function () {
+        dt3 = $("#cutssel_table").DataTable({
+            searchDelay: 500,
+            processing: true,
+            serverSide: true,
+            ordering: true,
+            autoWidth: false,
+            order: [
+                [1, 'desc']
+            ],
+            stateSave: true,
+            serverMethod: 'post',
+            ajax: {
+                url: HOST_URL + "/tables/rdcatch-cuts-table.php",
+                data: function (d) {
+                    d.cart = cartdata;
+                }
+            },
+            language: {
+                "emptyTable": TRAN_TABLENODATA,
+                "info": TRAN_TABLESHOWS + " _START_ " + TRAN_TABLETO + " _END_ " + TRAN_TABLETOTAL + " _TOTAL_ " + TRAN_TABLEROWS,
+                "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
+                "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
+                "infoThousands": " ",
+                "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
+                "loadingRecords": TRAN_TABLELOADING,
+                "processing": TRAN_TABLEWORKING,
+                "search": TRAN_TABLESEARCH,
+                "zeroRecords": TRAN_TABLENORESULTS,
+                "thousands": " ",
+                "paginate": {
+                    "first": TRAN_TABLEFIRST,
+                    "last": TRAN_TABLELAST,
+                    "next": TRAN_TABLENEXT,
+                    "previous": TRAN_TABLEPREV
+                },
+                "select": {
+                    "rows": {
+                        "1": "1 " + TRAN_TABLESELECTED,
+                        "_": "%d " + TRAN_TABLESELECTED
+                    }
+                },
+                "aria": {
+                    "sortAscending": ": " + TRAN_TABLENSORTRISE,
+                    "sortDescending": ": " + TRAN_TABLENSORTFALL
+                }
+            },
+            columns: [
+                {
+                    data: 'CART_NUMBER'
+                },
+                {
+                    data: 'DESCRIPTION'
+                },
+                {
+                    data: null
+                },
+            ],
+            columnDefs: [
+
+                {
+                    targets: -1,
+                    data: null,
+                    orderable: false,
+                    className: 'text-end',
+                    render: function (data, type, row) {
+
+                        return `<a href="javascript:;" onclick="addcut('` + row.CUT_NAME + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
+
+
+                    }
+                },
+            ],
+        });
+
+    }
+
+    const element5 = document.getElementById('cut_select');
+    const modal5 = new bootstrap.Modal(element5);
+
+    var initSelCutModalButtons = function () {
+        const cancelButton2 = element5.querySelector('[data-kt-cutsel-modal-action="cancel"]');
+        cancelButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    editmodal.hide();
+                }
+            });
+        });
+        const closeButton2 = element5.querySelector('[data-kt-cutsel-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    editmodal.hide();
+
+                }
+            });
+        });
+    }
+
+    return {
+        init: function () {
+            initDatatableCutsLibrary();
+            initSelCutModalButtons();
+        }
+    }
+}();
+
 $(document).ready(function () {
-KTDatatablesServerSide.init();
-KTDatatablesServerSideLibrary.init();
+    KTDatatablesServerSide.init();
+    KTDatatablesServerSideLibrary.init();
+    KTDatatablesServerSideCuts.init();
 });
 
 $("#start_macro").flatpickr({
@@ -567,4 +1001,27 @@ $("#start_macro").flatpickr({
     dateFormat: "H:i:S",
     enableSeconds: true,
     time_24hr: true
+});
+
+$("#start_down").flatpickr({
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i:S",
+    enableSeconds: true,
+    time_24hr: true
+});
+
+$('#autotrim_down').click(function () {
+    if ($("#autotrim_down").is(":checked")) {
+        $("#trimlevel_down").removeAttr('disabled');
+    } else {
+        $('#trimlevel_down').prop("disabled", true);
+    }
+});
+$('#normalize_down').click(function () {
+    if ($("#normalize_down").is(":checked")) {
+        $("#normlevel_down").removeAttr('disabled');
+    } else {
+        $('#normlevel_down').prop("disabled", true);
+    }
 });

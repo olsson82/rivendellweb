@@ -2641,7 +2641,7 @@ class DBFunc
     public function getRDCatchs()
     {
         $rdcatch = array();
-        $sql = 'SELECT * FROM `RECORDINGS` WHERE TYPE = 1  ORDER BY `ID` ASC';
+        $sql = 'SELECT * FROM `RECORDINGS` WHERE TYPE = 1 OR TYPE = 4  ORDER BY `ID` ASC';
         $stmt = $this->_db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
@@ -2683,8 +2683,8 @@ class DBFunc
         $array = $stmt->fetch(PDO::FETCH_ASSOC);
 
         return $array;
-
     }
+    
 
     public function updateCatchMacro($isactive, $station, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $macro, $one, $id)
     {
@@ -2706,6 +2706,55 @@ class DBFunc
         $stmt->bindParam(':starttime', $start);
         $stmt->bindParam(':macrocart', $macro);
         $stmt->bindParam(':oneshot', $one);
+        $stmt->bindParam(':idno', $id);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function getRDCatchCutData($id)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM CUTS WHERE CART_NUMBER = :id LIMIT 1');
+        $stmt->execute([':id' => $id]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+    }
+
+    public function updateCatchDownload($isactive, $station, $cutname, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $treshold, $normlev, $evoff, $channels, $one, $url, $usrn, $urlpass, $metadata, $id)
+    {
+
+        $sql = 'UPDATE `RECORDINGS` SET `IS_ACTIVE` = :isactive, `STATION_NAME` = :stationname, `CUT_NAME` = :cutname, `SUN` = :sun, `MON` = :mon,
+        `TUE` = :tue, `WED` = :wed, `THU` = :thu, `FRI` = :fri, `SAT` = :sat, `DESCRIPTION` = :descript,
+        `START_TIME` = :starttime, `TRIM_THRESHOLD` = :treshold, `NORMALIZE_LEVEL` = :normlev, `EVENTDATE_OFFSET` = :evdateoff, 
+        `CHANNELS` = :channels, `ONE_SHOT` = :oneshot, `URL` = :urls, `URL_USERNAME` = :urusr, `URL_PASSWORD` = :urlpass, `ENABLE_METADATA` = :enmeta WHERE `ID` = :idno';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':cutname', $cutname);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':treshold', $treshold);
+        $stmt->bindParam(':normlev', $normlev);
+        $stmt->bindParam(':evdateoff', $evoff);
+        $stmt->bindParam(':channels', $channels);
+        $stmt->bindParam(':oneshot', $one);
+        $stmt->bindParam(':urls', $url);
+        $stmt->bindParam(':urusr', $usrn);
+        $stmt->bindParam(':urlpass', $urlpass);
+        $stmt->bindParam(':enmeta', $metadata);
         $stmt->bindParam(':idno', $id);
 
         if ($stmt->execute() === FALSE) {

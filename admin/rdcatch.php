@@ -161,6 +161,289 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
         </div>
 
     </section>
+    
+    <div class="modal fade text-left" id="download_edit" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="DownloadLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="DownloadLabel">
+                        <?= $ml->tr('CATCHEDITDOWNLOAD') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-rddown-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="download_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('GENERALSETTINGS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="eventactive_down" name="eventactive"
+                                                class='form-check-input'>
+                                            <label for="eventactive_down">
+                                                <?= $ml->tr('CEVENTACTIVE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="location_down">
+                                        <?= $ml->tr('LOCATION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="location_down" name="location" class="form-select">
+                                        <?php foreach ($hosts as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>                                
+                                <div class="col-md-4">
+                                    <label for="start_down">
+                                        <?= $ml->tr('STARTTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="start_down" class="form-control" name="start" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="desc_down">
+                                        <?= $ml->tr('DESCRIPTION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="desc_down" class="form-control" name="desc" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="url_down">
+                                        <?= $ml->tr('URL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="url_down" class="form-control" name="url" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="usrn_down">
+                                        <?= $ml->tr('USERNAME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="usrn_down" class="form-control" name="username" value="" disable>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="pass_down">
+                                        <?= $ml->tr('PASSWORD') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="password" id="pass_down" class="form-control" name="password" value="" disable>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <a href="javascript:;" id="selcartbutt" data-bs-stacked-modal="#macro_select" class="btn btn-info">
+                                        <?= $ml->tr('SELECTCART') ?>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <a href="javascript:;" id="selcutbutt" data-bs-stacked-modal="#cut_select" style="display: none;" class="btn btn-warning">
+                                        <?= $ml->tr('SELECTCUT') ?>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dest_down">
+                                        <?= $ml->tr('DESTINATION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="dest_down" class="form-control" name="dest" value="" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="channels_down">
+                                        <?= $ml->tr('AUDIOCHANNELS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="channels_down" name="channels" class="form-select">
+                                        <option value="1">1</option>
+                                        <option value="2">2</option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="autotrim_down" name="autotrim"
+                                                class='form-check-input'>
+                                            <label for="autotrim_down">
+                                                <?= $ml->tr('AUTOTRIM') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="trimlevel_down">
+                                        <?= $ml->tr('AUTOTRIMLEVEL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="trimlevel_down" class="form-control" min="-99" max="-1" name="trimlevel" value="">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="normalize_down" name="normalize"
+                                                class='form-check-input'>
+                                            <label for="normalize_down">
+                                                <?= $ml->tr('NORMALIZE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="normlevel_down">
+                                        <?= $ml->tr('NORMALIZELEVEL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="normlevel_down" class="form-control" min="-99" max="-1" name="normlevel" value="">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="updlib_down" name="updatelib"
+                                                class='form-check-input'>
+                                            <label for="updlib_down">
+                                                <?= $ml->tr('UPDATELIBRARYMETADATA') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="oneshot_down" name="oneshot"
+                                                class='form-check-input'>
+                                            <label for="oneshot_down">
+                                                <?= $ml->tr('ONESHOT') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dayoffset_down">
+                                        <?= $ml->tr('EVENTOFFSETDAYS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="dayoffset_down" class="form-control" min="-30" max="30" name="dayoffset" value="">
+                                </div>                                
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('ACTIVEDAYS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="mon_dow" name="monday"
+                                                class='form-check-input'>
+                                            <label for="mon_mac">
+                                                <?= $ml->tr('MONDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="tue_dow" name="tuesday"
+                                                class='form-check-input'>
+                                            <label for="tue_mac">
+                                                <?= $ml->tr('TUESDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="wed_dow" name="wednesday"
+                                                class='form-check-input'>
+                                            <label for="wed_mac">
+                                                <?= $ml->tr('WEDNESDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="thu_dow" name="thursday"
+                                                class='form-check-input'>
+                                            <label for="thu_mac">
+                                                <?= $ml->tr('THURSDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="fri_dow" name="friday"
+                                                class='form-check-input'>
+                                            <label for="fri_mac">
+                                                <?= $ml->tr('FRIDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="sat_dow" name="saturday"
+                                                class='form-check-input'>
+                                            <label for="sat_mac">
+                                                <?= $ml->tr('SATURDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="sun_dow" name="sunday"
+                                                class='form-check-input'>
+                                            <label for="sun_mac">
+                                                <?= $ml->tr('SUNDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="dowid" name="catchid" value="">
+                        <input type="hidden" id="filpa_down" name="filpa" value="">
+                        <button type="button" class="btn btn-light-secondary" data-kt-rddown-modal-action="close">
+                            <?= $ml->tr('CLOSE') ?>
+                        </button>
+                        <input type="submit" class="btn btn-primary ms-1"
+                            value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade text-left" id="macro_edit" data-bs-backdrop="static" role="dialog"
         aria-labelledby="MacroLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -408,6 +691,53 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                     <input type="hidden" name="vttype" id="vttype1" value="">
                     <input type="hidden" name="imptype" id="imptype1" value="">
                     <button type="button" class="btn btn-light-secondary" data-kt-macsel-modal-action="close">
+                        <i class="bx bx-x d-block d-sm-none"></i>
+                        <span class="d-none d-sm-block">
+                            <?= $ml->tr('CLOSE') ?>
+                        </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade text-left" id="cut_select" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="selCartLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-primary">
+                    <h4 class="modal-title white" id="selCartLabel">
+                        <?= $ml->tr('SELECTCUT') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-cutsel-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">                    
+                    <div class="table-responsive">
+                        <table class="table" id="cutssel_table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <?= $ml->tr('CART') ?>
+                                    </th>
+                                    <th>
+                                        <?= $ml->tr('DESCRIPTION') ?>
+                                    </th>
+                                    <th>
+                                        <?= $ml->tr('ACTION') ?>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-kt-cutsel-modal-action="close">
                         <i class="bx bx-x d-block d-sm-none"></i>
                         <span class="d-none d-sm-block">
                             <?= $ml->tr('CLOSE') ?>
