@@ -881,3 +881,6 @@ $en_US['SELECTCUT'] = 'Select Cut';
 $en_US['CATCHEEDITUPLOAD'] = 'Edit Upload';
 $en_US['RSSFEED'] = 'RSS Feed';
 $en_US['EXPORTLIBRARYMETADATA'] = 'Export Library Metadata';
+$en_US['MACROCART'] = 'Macro Cart';
+$en_US['DOWNLOAD'] = 'Download';
+$en_US['REMOVECATCHWARN '] = 'You are about to remove RDCatch event {{1}}. Do you want to do it ?';

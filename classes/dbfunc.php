@@ -2828,4 +2828,139 @@ class DBFunc
         }
 
     }
+
+    public function AddCatcUpload($isactive, $station, $cutname, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $normlev, $format, $sample, $channels, $bitrate, $quality, $evoff, $one, $url, $usrn, $urlpass, $metadata, $feed)
+    {
+
+        $channel = 0;
+        $type = 5;
+        $sql = 'INSERT INTO `RECORDINGS` (`IS_ACTIVE`, `STATION_NAME`, `TYPE`, `CHANNEL`, `CUT_NAME`, `SUN`, `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `DESCRIPTION`,
+        `START_TIME`, `NORMALIZE_LEVEL`, `FORMAT`, `SAMPRATE`, `CHANNELS`, `BITRATE`, `QUALITY`, `EVENTDATE_OFFSET`, `ONE_SHOT`, `URL`, `URL_USERNAME`, `URL_PASSWORD`, `ENABLE_METADATA`, `FEED_ID`)
+                VALUES (:isactive, :stationname, :type, :channel, :cutname, :sun, :mon, :tue, :wed, :thu, :fri, :sat, :descript, :starttime, :normlev, :format, :samprate, :channels,
+                :bitrate, :quality, :evdateoff, :oneshot, :urls, :urusr, :urlpass, :enmeta, :feedid)';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':channel', $channel);
+        $stmt->bindParam(':cutname', $cutname);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':normlev', $normlev);
+        $stmt->bindParam(':format', $format);
+        $stmt->bindParam(':samprate', $sample);
+        $stmt->bindParam(':channels', $channels);
+        $stmt->bindParam(':bitrate', $bitrate);
+        $stmt->bindParam(':quality', $quality);
+        $stmt->bindParam(':evdateoff', $evoff);
+        $stmt->bindParam(':oneshot', $one);
+        $stmt->bindParam(':urls', $url);
+        $stmt->bindParam(':urusr', $usrn);
+        $stmt->bindParam(':urlpass', $urlpass);
+        $stmt->bindParam(':enmeta', $metadata);
+        $stmt->bindParam(':feedid', $feed);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function AddCatchDownload($isactive, $station, $cutname, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $treshold, $normlev, $evoff, $channels, $one, $url, $usrn, $urlpass, $metadata)
+    {
+
+        $channel = 0;
+        $type = 4;
+        $sql = 'INSERT INTO `RECORDINGS` (`IS_ACTIVE`, `STATION_NAME`, `TYPE`, `CHANNEL`, `CUT_NAME`, `SUN`, `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `DESCRIPTION`,
+        `START_TIME`, `TRIM_THRESHOLD`, `NORMALIZE_LEVEL`, `EVENTDATE_OFFSET`, `CHANNELS`, `ONE_SHOT`, `URL`, `URL_USERNAME`, `URL_PASSWORD`, `ENABLE_METADATA`)
+                VALUES (:isactive, :stationname, :type, :channel, :cutname, :sun, :mon, :tue, :wed, :thu, :fri, :sat, :descript, :starttime, :treshold, :normlev, 
+                :evdateoff, :channels, :oneshot, :urls, :urusr, :urlpass, :enmeta)';        
+        
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':channel', $channel);
+        $stmt->bindParam(':cutname', $cutname);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':treshold', $treshold);
+        $stmt->bindParam(':normlev', $normlev);
+        $stmt->bindParam(':evdateoff', $evoff);
+        $stmt->bindParam(':channels', $channels);
+        $stmt->bindParam(':oneshot', $one);
+        $stmt->bindParam(':urls', $url);
+        $stmt->bindParam(':urusr', $usrn);
+        $stmt->bindParam(':urlpass', $urlpass);
+        $stmt->bindParam(':enmeta', $metadata);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function AddCatchMacro($isactive, $station, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $macro, $one)
+    {
+
+        $channel = 0;
+        $type = 1;
+        $cut_name = "";
+        $sql = 'INSERT INTO `RECORDINGS` (`IS_ACTIVE`, `STATION_NAME`, `TYPE`, `CHANNEL`, `CUT_NAME`, `SUN`, `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `DESCRIPTION`,
+        `START_TIME`, `MACRO_CART`, `ONE_SHOT`)
+                VALUES (:isactive, :stationname, :type, :channel, :cutname, :sun, :mon, :tue, :wed, :thu, :fri, :sat, :descript, :starttime, 
+                :macrocart, :oneshot)';   
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':channel', $channel);
+        $stmt->bindParam(':cutname', $cut_name);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':macrocart', $macro);
+        $stmt->bindParam(':oneshot', $one);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function removeRDCatch($id)
+    {
+        $stmt1 = $this->_db->prepare('DELETE FROM RECORDINGS WHERE ID = :id');
+        $stmt1->execute([
+            ':id' => $id,
+        ]);
+
+        return true;
+    }
 }

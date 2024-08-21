@@ -28,11 +28,11 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 if (!$json_sett["admin"][$_COOKIE['username']]["hosts"] == 1) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 $services = $dbfunc->getServices();
@@ -44,25 +44,25 @@ $groupinfo = $dbfunc->getUserGroup($username);
 $pagecode = "rdcatch";
 $page_vars = 'rdcatch';
 $page_title = $ml->tr('RDCATCH');
-$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="' . DIR . '/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/flatpickr/flatpickr.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="' . DIR . '/assets/compiled/css/table-datatable-jquery.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
-<script src="'.DIR.'/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="'.DIR.'/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.js"></script>
-<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
-<script src="'.DIR.'/assets/static/js/pages/datatables.js"></script>';
-$page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="' . DIR . '/assets/extensions/flatpickr/flatpickr.min.js"></script>
+<script src="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="' . DIR . '/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>
+<script src="' . DIR . '/assets/static/js/pages/datatables.js"></script>';
+$page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -99,6 +99,19 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                 <h5 class="card-title">
                     <?= $ml->tr('AVRDCATCHEVENTS'); ?>
                 </h5>
+                <div class="btn-group mb-1">
+                    <div class="dropdown">
+                        <button class="btn btn-primary dropdown-toggle me-1" type="button" id="dropdownMenuButton"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <?= $ml->tr('ADD'); ?>
+                        </button>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                            <a class="dropdown-item" href="javascript:;" onclick="add(1)"><?= $ml->tr('MACROCART'); ?></a>
+                            <a class="dropdown-item" href="javascript:;" onclick="add(5)"><?= $ml->tr('UPLOAD'); ?></a>
+                            <a class="dropdown-item" href="javascript:;" onclick="add(4)"><?= $ml->tr('DOWNLOAD'); ?></a>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="card-body">
                 <div class="table-responsive">
@@ -208,7 +221,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                             </option>
                                         <?php } ?>
                                     </select>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4">
                                     <label for="start_upload">
                                         <?= $ml->tr('STARTTIME') ?>
@@ -254,7 +267,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="usrn_upload" class="form-control" name="username" value="" disable>
+                                    <input type="text" id="usrn_upload" class="form-control" name="username" value=""
+                                        disable>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="pass_upload">
@@ -262,15 +276,18 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="password" id="pass_upload" class="form-control" name="password" value="" disable>
+                                    <input type="password" id="pass_upload" class="form-control" name="password"
+                                        value="" disable>
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
-                                    <a href="javascript:;" id="selcartbutt_up" data-bs-stacked-modal="#macro_select" class="btn btn-info">
+                                    <a href="javascript:;" id="selcartbutt_up" data-bs-stacked-modal="#macro_select"
+                                        class="btn btn-info">
                                         <?= $ml->tr('SELECTCART') ?>
                                     </a>
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
-                                    <a href="javascript:;" id="selcutbutt_up" data-bs-stacked-modal="#cut_select" style="display: none;" class="btn btn-warning">
+                                    <a href="javascript:;" id="selcutbutt_up" data-bs-stacked-modal="#cut_select"
+                                        style="display: none;" class="btn btn-warning">
                                         <?= $ml->tr('SELECTCUT') ?>
                                     </a>
                                 </div>
@@ -280,7 +297,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="source_upload" class="form-control" name="source" value="" readonly>
+                                    <input type="text" id="source_upload" class="form-control" name="source" value=""
+                                        readonly>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="for_format">
@@ -349,8 +367,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="number" min="0" max="9" id="for_quality" class="form-control" name="audioquality"
-                                        value="0" DISABLED>
+                                    <input type="number" min="0" max="9" id="for_quality" class="form-control"
+                                        name="audioquality" value="0" DISABLED>
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
@@ -369,7 +387,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="number" id="normlevel_upload" class="form-control" min="-99" max="-1" name="normlevel" value="">
+                                    <input type="number" id="normlevel_upload" class="form-control" min="-99" max="-1"
+                                        name="normlevel" value="">
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
@@ -399,8 +418,9 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="number" id="dayoffset_upload" class="form-control" min="-30" max="30" name="dayoffset" value="">
-                                </div>                                
+                                    <input type="number" id="dayoffset_upload" class="form-control" min="-30" max="30"
+                                        name="dayoffset" value="">
+                                </div>
                                 <div class="divider">
                                     <div class="divider-text">
                                         <?= $ml->tr('ACTIVEDAYS') ?>
@@ -409,8 +429,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="mon_up" name="monday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="mon_up" name="monday" class='form-check-input'>
                                             <label for="mon_up">
                                                 <?= $ml->tr('MONDAY') ?>
                                             </label>
@@ -420,8 +439,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="tue_up" name="tuesday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="tue_up" name="tuesday" class='form-check-input'>
                                             <label for="tue_up">
                                                 <?= $ml->tr('TUESDAY') ?>
                                             </label>
@@ -442,8 +460,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="thu_up" name="thursday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="thu_up" name="thursday" class='form-check-input'>
                                             <label for="thu_up">
                                                 <?= $ml->tr('THURSDAY') ?>
                                             </label>
@@ -453,8 +470,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="fri_up" name="friday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="fri_up" name="friday" class='form-check-input'>
                                             <label for="fri_up">
                                                 <?= $ml->tr('FRIDAY') ?>
                                             </label>
@@ -464,8 +480,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="sat_up" name="saturday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="sat_up" name="saturday" class='form-check-input'>
                                             <label for="sat_up">
                                                 <?= $ml->tr('SATURDAY') ?>
                                             </label>
@@ -475,14 +490,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="sun_up" name="sunday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="sun_up" name="sunday" class='form-check-input'>
                                             <label for="sun_up">
                                                 <?= $ml->tr('SUNDAY') ?>
                                             </label>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -492,14 +506,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                         <button type="button" class="btn btn-light-secondary" data-kt-rdup-modal-action="close">
                             <?= $ml->tr('CLOSE') ?>
                         </button>
-                        <input type="submit" class="btn btn-primary ms-1"
-                            value="<?= $ml->tr('SAVE') ?>">
+                        <input type="submit" class="btn btn-primary ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
                 </form>
             </div>
         </div>
     </div>
-    
+
     <div class="modal fade text-left" id="download_edit" data-bs-backdrop="static" role="dialog"
         aria-labelledby="DownloadLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -545,7 +558,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                             </option>
                                         <?php } ?>
                                     </select>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4">
                                     <label for="start_down">
                                         <?= $ml->tr('STARTTIME') ?>
@@ -576,7 +589,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="usrn_down" class="form-control" name="username" value="" disable>
+                                    <input type="text" id="usrn_down" class="form-control" name="username" value=""
+                                        disable>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="pass_down">
@@ -584,15 +598,18 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="password" id="pass_down" class="form-control" name="password" value="" disable>
+                                    <input type="password" id="pass_down" class="form-control" name="password" value=""
+                                        disable>
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
-                                    <a href="javascript:;" id="selcartbutt" data-bs-stacked-modal="#macro_select" class="btn btn-info">
+                                    <a href="javascript:;" id="selcartbutt" data-bs-stacked-modal="#macro_select"
+                                        class="btn btn-info">
                                         <?= $ml->tr('SELECTCART') ?>
                                     </a>
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
-                                    <a href="javascript:;" id="selcutbutt" data-bs-stacked-modal="#cut_select" style="display: none;" class="btn btn-warning">
+                                    <a href="javascript:;" id="selcutbutt" data-bs-stacked-modal="#cut_select"
+                                        style="display: none;" class="btn btn-warning">
                                         <?= $ml->tr('SELECTCUT') ?>
                                     </a>
                                 </div>
@@ -602,7 +619,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="dest_down" class="form-control" name="dest" value="" readonly>
+                                    <input type="text" id="dest_down" class="form-control" name="dest" value=""
+                                        readonly>
                                 </div>
                                 <div class="col-md-4">
                                     <label for="channels_down">
@@ -632,7 +650,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="number" id="trimlevel_down" class="form-control" min="-99" max="-1" name="trimlevel" value="">
+                                    <input type="number" id="trimlevel_down" class="form-control" min="-99" max="-1"
+                                        name="trimlevel" value="">
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
@@ -651,7 +670,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="number" id="normlevel_down" class="form-control" min="-99" max="-1" name="normlevel" value="">
+                                    <input type="number" id="normlevel_down" class="form-control" min="-99" max="-1"
+                                        name="normlevel" value="">
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
@@ -681,8 +701,9 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="number" id="dayoffset_down" class="form-control" min="-30" max="30" name="dayoffset" value="">
-                                </div>                                
+                                    <input type="number" id="dayoffset_down" class="form-control" min="-30" max="30"
+                                        name="dayoffset" value="">
+                                </div>
                                 <div class="divider">
                                     <div class="divider-text">
                                         <?= $ml->tr('ACTIVEDAYS') ?>
@@ -691,8 +712,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="mon_dow" name="monday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="mon_dow" name="monday" class='form-check-input'>
                                             <label for="mon_dow">
                                                 <?= $ml->tr('MONDAY') ?>
                                             </label>
@@ -702,8 +722,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="tue_dow" name="tuesday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="tue_dow" name="tuesday" class='form-check-input'>
                                             <label for="tue_dow">
                                                 <?= $ml->tr('TUESDAY') ?>
                                             </label>
@@ -735,8 +754,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="fri_dow" name="friday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="fri_dow" name="friday" class='form-check-input'>
                                             <label for="fri_dow">
                                                 <?= $ml->tr('FRIDAY') ?>
                                             </label>
@@ -757,14 +775,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="sun_dow" name="sunday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="sun_dow" name="sunday" class='form-check-input'>
                                             <label for="sun_dow">
                                                 <?= $ml->tr('SUNDAY') ?>
                                             </label>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -774,8 +791,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                         <button type="button" class="btn btn-light-secondary" data-kt-rddown-modal-action="close">
                             <?= $ml->tr('CLOSE') ?>
                         </button>
-                        <input type="submit" class="btn btn-primary ms-1"
-                            value="<?= $ml->tr('SAVE') ?>">
+                        <input type="submit" class="btn btn-primary ms-1" value="<?= $ml->tr('SAVE') ?>">
                     </div>
                 </form>
             </div>
@@ -794,7 +810,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                         <i data-feather="x"></i>
                     </button>
                 </div>
-                <form class="form form-horizontal" id="macro_form" action="#">
+                <form class="form form-horizontal" autocomplete="off" id="macro_form" action="#">
                     <div class="modal-body">
                         <div class="form-body">
                             <div class="row">
@@ -827,7 +843,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                             </option>
                                         <?php } ?>
                                     </select>
-                                </div>                                
+                                </div>
                                 <div class="col-md-4">
                                     <label for="start_macro">
                                         <?= $ml->tr('STARTTIME') ?>
@@ -855,7 +871,8 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="cart_macro" class="form-control" name="cart" value="" readonly>
+                                    <input type="text" id="cart_macro" class="form-control" name="cart" value=""
+                                        readonly>
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
@@ -869,7 +886,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                     </div>
                                 </div>
 
-                                
+
                                 <div class="divider">
                                     <div class="divider-text">
                                         <?= $ml->tr('ACTIVEDAYS') ?>
@@ -878,8 +895,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="mon_mac" name="monday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="mon_mac" name="monday" class='form-check-input'>
                                             <label for="mon_mac">
                                                 <?= $ml->tr('MONDAY') ?>
                                             </label>
@@ -889,8 +905,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="tue_mac" name="tuesday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="tue_mac" name="tuesday" class='form-check-input'>
                                             <label for="tue_mac">
                                                 <?= $ml->tr('TUESDAY') ?>
                                             </label>
@@ -922,8 +937,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="fri_mac" name="friday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="fri_mac" name="friday" class='form-check-input'>
                                             <label for="fri_mac">
                                                 <?= $ml->tr('FRIDAY') ?>
                                             </label>
@@ -944,14 +958,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="sun_mac" name="sunday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="sun_mac" name="sunday" class='form-check-input'>
                                             <label for="sun_mac">
                                                 <?= $ml->tr('SUNDAY') ?>
                                             </label>
                                         </div>
                                     </div>
-                                </div>                                
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -1051,7 +1064,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                         <i data-feather="x"></i>
                     </button>
                 </div>
-                <div class="modal-body">                    
+                <div class="modal-body">
                     <div class="table-responsive">
                         <table class="table" id="cutssel_table">
                             <thead>
@@ -1085,7 +1098,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
             </div>
         </div>
     </div>
-    
+
 
 </div>
 

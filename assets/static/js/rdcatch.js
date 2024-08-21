@@ -28,6 +28,7 @@
 var dt;
 var dt2;
 var dt3;
+var isedit = 0;
 var allgroups = 1;
 var groupnow;
 var editmodal;
@@ -38,6 +39,24 @@ var sampleOne = ["32000", "44100", "48000"];
 var sampleTwo = ["16000", "22050", "32000", "44100", "48000"];
 var bitOne = ["32", "48", "56", "64", "80", "96", "112", "128", "160", "192", "224", "256", "320", "384"];
 var bitTwo = ["32", "40", "48", "56", "64", "80", "96", "112", "128", "160", "192", "224", "256", "320", "VBR"];
+
+function tr(translate) {
+    var result = false;
+    jQuery.ajax({
+        type: "POST",
+        url: HOST_URL + '/forms/jstrans.php',
+        async: false,
+        data: {
+            translate: translate
+        },
+        datatype: 'html',
+        success: function (data) {
+            var mydata = $.parseJSON(data);
+            result  = mydata.translated;
+        }
+    });
+    return result;
+}
 
 $('#for_format').change(function () {
     var selectedCategory = $('#for_format').val();
@@ -224,8 +243,88 @@ function getTimeFromMillis(millis) {
 
 }
 
+function remove(id, desc) {
+    var trans = tr('REMOVECATCHWARN {{' + desc + '}}');
+    
+        Swal.fire({
+            text: trans,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn fw-bold btn-danger",
+                cancelButton: "btn fw-bold btn-active-light-primary"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                jQuery.ajax({
+                    type: "POST",
+                    url: HOST_URL + '/forms/rdcatch/remove.php',
+                    data: {
+                        catchid: id
+                    },
+                    datatype: 'html',
+                    success: function (data) {
+                        var mydata = $.parseJSON(data);
+                        var fel = mydata.error;
+                        var kod = mydata.errorcode;
+                        if (fel == "false") {
+                            dt.ajax.reload();
+                        } else {
+                            Swal.fire({
+                                text: TRAN_BUG,
+                                icon: "error",
+                                buttonsStyling: false,
+                                confirmButtonText: TRAN_OK,
+                                customClass: {
+                                    confirmButton: "btn btn-primary"
+                                }
+                            });
+                        }
+                    }
+                });
+
+
+            }
+        });
+
+}
+
+function add(type) {
+    catchtype = type;
+    isedit = 0;
+    if (type == 1) {
+        librarytype = 2;
+        dt2.ajax.reload();
+        $("#macro_form").trigger("reset");
+        $('#macro_edit').modal('show');
+    } else if (type == 4) {
+        librarytype = 1;
+        dt2.ajax.reload();
+        $("#download_form").trigger("reset");
+        $("#selcutbutt").hide();
+        $("#selcartbutt").show();
+        $("#trimlevel_down").val("-35");
+        $("#normlevel_down").val("-13");
+        $("#dayoffset_down").val("0");
+        $('#download_edit').modal('show');
+    } else if (type == 5) {
+        librarytype = 1;
+        dt2.ajax.reload();
+        $("#upload_form").trigger("reset");
+        $("#selcutbutt_up").hide();
+        $("#selcartbutt_up").show();
+        $("#normlevel_upload").val("-13");
+        $("#dayoffset_upload").val("0");
+        $('#upload_edit').modal('show');
+    }
+}
+
 function edit(type, id) {
     catchtype = type;
+    isedit = 1;
     $.ajax({
         url: HOST_URL + '/forms/rdcatch/getdata.php',
         data: "id=" + id,
@@ -414,10 +513,10 @@ function edit(type, id) {
                 $('#for_channels').val(data['CHANNELS']);
                 $('#for_samplerate').val(data['SAMPRATE']);
                 if (data['FORMAT'] == 3) {
-                    
+
                     if (data['BITRATE'] == 0) {
-                    $('#for_bitrate').val('VBR');
-                    $('#for_quality').removeAttr('disabled');
+                        $('#for_bitrate').val('VBR');
+                        $('#for_quality').removeAttr('disabled');
                     } else {
                         $('#for_bitrate').val(data['BITRATE'] / 1000);
                         $('#for_quality').attr('disabled', 'disabled');
@@ -426,7 +525,7 @@ function edit(type, id) {
                     $('#for_bitrate').val(data['BITRATE'] / 1000);
                 }
                 $('#for_quality').val(data['QUALITY']);
-                
+
 
                 if (data['NORMALIZE_LEVEL'] == '0') {
                     $("#normalize_upload").prop('checked', false);
@@ -567,31 +666,60 @@ $('#upload_form').validate({
     },
     submitHandler: function () {
         var dataString = $('#upload_form').serialize();
-        jQuery.ajax({
-            type: "POST",
-            url: HOST_URL + '/forms/rdcatch/upedit.php',
-            data: dataString,
-            success: function (data) {
-                var mydata = $.parseJSON(data);
-                var fel = mydata.error;
-                if (fel == "false") {
-                    $('#upload_edit').modal('hide');
-                    dt.ajax.reload();
-                } else {
-                    Swal.fire({
-                        text: TRAN_BUG,
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: TRAN_OK,
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
+        if (isedit == 1) {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/upedit.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#upload_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
 
 
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/upadd.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#upload_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+
+
+                    }
+                }
+            });
+        }
+
     }
 });
 
@@ -643,31 +771,59 @@ $('#download_form').validate({
     },
     submitHandler: function () {
         var dataString = $('#download_form').serialize();
-        jQuery.ajax({
-            type: "POST",
-            url: HOST_URL + '/forms/rdcatch/downedit.php',
-            data: dataString,
-            success: function (data) {
-                var mydata = $.parseJSON(data);
-                var fel = mydata.error;
-                if (fel == "false") {
-                    $('#download_edit').modal('hide');
-                    dt.ajax.reload();
-                } else {
-                    Swal.fire({
-                        text: TRAN_BUG,
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: TRAN_OK,
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
+        if (isedit == 1) {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/downedit.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#download_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
 
 
+                    }
                 }
-            }
-        });
+            });
+        } else {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/downadd.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#download_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+
+
+                    }
+                }
+            });
+        }
     }
 });
 
@@ -713,6 +869,7 @@ $('#macro_form').validate({
     },
     submitHandler: function () {
         var dataString = $('#macro_form').serialize();
+        if (isedit == 1) {
         jQuery.ajax({
             type: "POST",
             url: HOST_URL + '/forms/rdcatch/macroedit.php',
@@ -738,6 +895,31 @@ $('#macro_form').validate({
                 }
             }
         });
+    } else {
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/rdcatch/macroadd.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                if (fel == "false") {
+                    $('#macro_edit').modal('hide');
+                    dt.ajax.reload();
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+                }
+            }
+        });
+    }
     }
 });
 
@@ -868,6 +1050,8 @@ var KTDatatablesServerSide = function () {
                         <div class="btn-group mb-3" role="group">
                                     <a href="javascript:;" onclick="edit('`+ row.TYPE + `', '` + row.ID + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDIT + `"><i class="bi bi-pencil"></i></a>
+                                    <a href="javascript:;" onclick="remove('` + row.ID + `' ,'` + row.DESCRIPTION + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="`+ TRAN_REMOVE + `"><i class="bi bi-x-square"></i></a>
                                 </div>
                         `;
                     }
