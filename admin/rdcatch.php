@@ -37,6 +37,7 @@ if (!$json_sett["admin"][$_COOKIE['username']]["hosts"] == 1) {
 }
 $services = $dbfunc->getServices();
 $hosts = $dbfunc->getHosts();
+$feeds = $dbfunc->getFeeds();
 $username = $_COOKIE['username'];
 $fullname = $_COOKIE['fullname'];
 $groupinfo = $dbfunc->getUserGroup($username);
@@ -161,6 +162,343 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
         </div>
 
     </section>
+
+    <div class="modal fade text-left" id="upload_edit" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="UploadLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="UploadLabel">
+                        <?= $ml->tr('CATCHEEDITUPLOAD') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-rdup-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="upload_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('GENERALSETTINGS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="eventactive_upload" name="eventactive"
+                                                class='form-check-input'>
+                                            <label for="eventactive_upload">
+                                                <?= $ml->tr('CEVENTACTIVE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="location_upload">
+                                        <?= $ml->tr('LOCATION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="location_upload" name="location" class="form-select">
+                                        <?php foreach ($hosts as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>                                
+                                <div class="col-md-4">
+                                    <label for="start_upload">
+                                        <?= $ml->tr('STARTTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="start_upload" class="form-control" name="start" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="desc_upload">
+                                        <?= $ml->tr('DESCRIPTION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="desc_upload" class="form-control" name="desc" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="feed_upload">
+                                        <?= $ml->tr('RSSFEED') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="feed_upload" name="feed" class="form-select">
+                                        <?php foreach ($feeds as $name) { ?>
+                                            <option value="-1"><?= $ml->tr('NONE') ?></option>
+                                            <option value="<?php echo $name['ID']; ?>">
+                                                <?php echo $name['KEY_NAME']; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="url_upload">
+                                        <?= $ml->tr('URL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="url_upload" class="form-control" name="url" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="usrn_upload">
+                                        <?= $ml->tr('USERNAME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="usrn_upload" class="form-control" name="username" value="" disable>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="pass_upload">
+                                        <?= $ml->tr('PASSWORD') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="password" id="pass_upload" class="form-control" name="password" value="" disable>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <a href="javascript:;" id="selcartbutt_up" data-bs-stacked-modal="#macro_select" class="btn btn-info">
+                                        <?= $ml->tr('SELECTCART') ?>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <a href="javascript:;" id="selcutbutt_up" data-bs-stacked-modal="#cut_select" style="display: none;" class="btn btn-warning">
+                                        <?= $ml->tr('SELECTCUT') ?>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="source_upload">
+                                        <?= $ml->tr('SOURCE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="source_upload" class="form-control" name="source" value="" readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="for_format">
+                                        <?= $ml->tr('EXPORTAUDIOFORMAT') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="for_format" name="audioformat" class="form-select">
+                                        <option value="0">
+                                            <?= $ml->tr('PCM16WAV') ?>
+                                        </option>
+                                        <option value="7">
+                                            <?= $ml->tr('PCM24WAV') ?>
+                                        </option>
+                                        <option value="2">
+                                            <?= $ml->tr('MPEGL2') ?>
+                                        </option>
+                                        <option value="3">
+                                            <?= $ml->tr('MPEGL3') ?>
+                                        </option>
+                                        <option value="4">
+                                            <?= $ml->tr('FLAC') ?>
+                                        </option>
+                                        <option value="5">
+                                            <?= $ml->tr('OGGVORBIS') ?>
+                                        </option>
+
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="for_channels">
+                                        <?= $ml->tr('AUDIOCHANNELS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="for_channels" name="audiochannels" class="form-select">
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>
+
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="for_samplerate">
+                                        <?= $ml->tr('SAMPERATE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="for_samplerate" name="samplerate" class="form-select">
+                                        <option value="32000">32000</option>
+                                        <option value="44100">44100</option>
+                                        <option value="48000">48000</option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="for_bitrate">
+                                        <?= $ml->tr('BITRATE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="for_bitrate" name="audiobitrate" class="form-select" DISABLED>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="for_quality">
+                                        <?= $ml->tr('QUALITY') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" min="0" max="9" id="for_quality" class="form-control" name="audioquality"
+                                        value="0" DISABLED>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="normalize_upload" name="normalize"
+                                                class='form-check-input'>
+                                            <label for="normalize_upload">
+                                                <?= $ml->tr('NORMALIZE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="normlevel_upload">
+                                        <?= $ml->tr('NORMALIZELEVEL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="normlevel_upload" class="form-control" min="-99" max="-1" name="normlevel" value="">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="exportme_upload" name="exportmeta"
+                                                class='form-check-input'>
+                                            <label for="exportme_upload">
+                                                <?= $ml->tr('EXPORTLIBRARYMETADATA') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="oneshot_upload" name="oneshot"
+                                                class='form-check-input'>
+                                            <label for="oneshot_upload">
+                                                <?= $ml->tr('ONESHOT') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dayoffset_upload">
+                                        <?= $ml->tr('EVENTOFFSETDAYS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="dayoffset_upload" class="form-control" min="-30" max="30" name="dayoffset" value="">
+                                </div>                                
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('ACTIVEDAYS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="mon_up" name="monday"
+                                                class='form-check-input'>
+                                            <label for="mon_up">
+                                                <?= $ml->tr('MONDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="tue_up" name="tuesday"
+                                                class='form-check-input'>
+                                            <label for="tue_up">
+                                                <?= $ml->tr('TUESDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="wed_up" name="wednesday"
+                                                class='form-check-input'>
+                                            <label for="wed_up">
+                                                <?= $ml->tr('WEDNESDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="thu_up" name="thursday"
+                                                class='form-check-input'>
+                                            <label for="thu_up">
+                                                <?= $ml->tr('THURSDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="fri_up" name="friday"
+                                                class='form-check-input'>
+                                            <label for="fri_up">
+                                                <?= $ml->tr('FRIDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="sat_up" name="saturday"
+                                                class='form-check-input'>
+                                            <label for="sat_up">
+                                                <?= $ml->tr('SATURDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="sun_up" name="sunday"
+                                                class='form-check-input'>
+                                            <label for="sun_up">
+                                                <?= $ml->tr('SUNDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>                                
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="upid" name="catchid" value="">
+                        <input type="hidden" id="filpa_up" name="filpa" value="">
+                        <button type="button" class="btn btn-light-secondary" data-kt-rdup-modal-action="close">
+                            <?= $ml->tr('CLOSE') ?>
+                        </button>
+                        <input type="submit" class="btn btn-primary ms-1"
+                            value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
     
     <div class="modal fade text-left" id="download_edit" data-bs-backdrop="static" role="dialog"
         aria-labelledby="DownloadLabel" aria-hidden="true">
@@ -355,7 +693,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                         <div class="checkbox">
                                             <input type="checkbox" id="mon_dow" name="monday"
                                                 class='form-check-input'>
-                                            <label for="mon_mac">
+                                            <label for="mon_dow">
                                                 <?= $ml->tr('MONDAY') ?>
                                             </label>
                                         </div>
@@ -366,7 +704,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                         <div class="checkbox">
                                             <input type="checkbox" id="tue_dow" name="tuesday"
                                                 class='form-check-input'>
-                                            <label for="tue_mac">
+                                            <label for="tue_dow">
                                                 <?= $ml->tr('TUESDAY') ?>
                                             </label>
                                         </div>
@@ -377,7 +715,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                         <div class="checkbox">
                                             <input type="checkbox" id="wed_dow" name="wednesday"
                                                 class='form-check-input'>
-                                            <label for="wed_mac">
+                                            <label for="wed_dow">
                                                 <?= $ml->tr('WEDNESDAY') ?>
                                             </label>
                                         </div>
@@ -388,7 +726,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                         <div class="checkbox">
                                             <input type="checkbox" id="thu_dow" name="thursday"
                                                 class='form-check-input'>
-                                            <label for="thu_mac">
+                                            <label for="thu_dow">
                                                 <?= $ml->tr('THURSDAY') ?>
                                             </label>
                                         </div>
@@ -399,7 +737,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                         <div class="checkbox">
                                             <input type="checkbox" id="fri_dow" name="friday"
                                                 class='form-check-input'>
-                                            <label for="fri_mac">
+                                            <label for="fri_dow">
                                                 <?= $ml->tr('FRIDAY') ?>
                                             </label>
                                         </div>
@@ -410,7 +748,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                         <div class="checkbox">
                                             <input type="checkbox" id="sat_dow" name="saturday"
                                                 class='form-check-input'>
-                                            <label for="sat_mac">
+                                            <label for="sat_dow">
                                                 <?= $ml->tr('SATURDAY') ?>
                                             </label>
                                         </div>
@@ -421,7 +759,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdcatch.js"></script>';
                                         <div class="checkbox">
                                             <input type="checkbox" id="sun_dow" name="sunday"
                                                 class='form-check-input'>
-                                            <label for="sun_mac">
+                                            <label for="sun_dow">
                                                 <?= $ml->tr('SUNDAY') ?>
                                             </label>
                                         </div>

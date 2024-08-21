@@ -878,3 +878,6 @@ $en_US['DESTINATION'] = 'Destination';
 $en_US['UPDATELIBRARYMETADATA'] = 'Update Library Metadata';
 $en_US['EVENTOFFSETDAYS'] = 'Event Offset Days';
 $en_US['SELECTCUT'] = 'Select Cut';
+$en_US['CATCHEEDITUPLOAD'] = 'Edit Upload';
+$en_US['RSSFEED'] = 'RSS Feed';
+$en_US['EXPORTLIBRARYMETADATA'] = 'Export Library Metadata';

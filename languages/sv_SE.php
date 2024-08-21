@@ -878,3 +878,6 @@ $sv_SE['DESTINATION'] = 'Destination';
 $sv_SE['UPDATELIBRARYMETADATA'] = 'Uppdatera Bibliotek Metadata';
 $sv_SE['EVENTOFFSETDAYS'] = 'Händelse Offset Dagar';
 $sv_SE['SELECTCUT'] = 'Välj Cut';
+$sv_SE['CATCHEEDITUPLOAD'] = 'Redigera uppladdning';
+$sv_SE['RSSFEED'] = 'RSS-flöde';
+$sv_SE['EXPORTLIBRARYMETADATA'] = 'Exportera bibliotekets metadata';

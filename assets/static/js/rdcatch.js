@@ -33,6 +33,78 @@ var groupnow;
 var editmodal;
 var cartdata;
 var librarytype = 2;
+var catchtype;
+var sampleOne = ["32000", "44100", "48000"];
+var sampleTwo = ["16000", "22050", "32000", "44100", "48000"];
+var bitOne = ["32", "48", "56", "64", "80", "96", "112", "128", "160", "192", "224", "256", "320", "384"];
+var bitTwo = ["32", "40", "48", "56", "64", "80", "96", "112", "128", "160", "192", "224", "256", "320", "VBR"];
+
+$('#for_format').change(function () {
+    var selectedCategory = $('#for_format').val();
+    if (selectedCategory == '5') {
+        $('#for_quality').removeAttr('disabled');
+        $("#for_quality").attr({
+            "max": 10,
+            "min": -1
+        });
+    } else {
+        $('#for_quality').attr('disabled', 'disabled');
+    }
+    if (selectedCategory != "") {
+
+        $('#for_samplerate').find('option').remove();
+        $('#for_bitrate').find('option').remove();
+
+        var sizeList = [];
+
+        if (selectedCategory == '2') {
+            $('#for_bitrate').removeAttr('disabled');
+            for (var i = 0; i <= sampleTwo.length; i++) {
+                var sampTwo = sampleTwo[i];
+                $('#for_samplerate').append($("<option></option>").attr("value", sampTwo).text(sampTwo));
+            }
+            for (var i = 0; i <= bitOne.length; i++) {
+                var biOne = bitOne[i];
+                $('#for_bitrate').append($("<option></option>").attr("value", biOne).text(biOne));
+            }
+        }
+        else {
+            if (selectedCategory == '3') {
+                $('#for_bitrate').removeAttr('disabled');
+                for (var i = 0; i <= bitTwo.length; i++) {
+                    var biTwo = bitTwo[i];
+                    $('#for_bitrate').append($("<option></option>").attr("value", biTwo).text(biTwo));
+                }
+            } else {
+                $('#for_bitrate').attr('disabled', 'disabled');
+            }
+
+            for (var i = 0; i <= sampleOne.length; i++) {
+                var sampOne = sampleOne[i];
+                $('#for_samplerate').append($("<option></option>").attr("value", sampOne).text(sampOne));
+            }
+        }
+    } else {
+
+        $("#for_bitrate").empty();
+        $('#for_bitrate').append($("<option></option>").attr("value", "").text(TRAN_SELECTBITRATE));
+        $("#for_samplerate").empty();
+        $('#for_samplerate').append($("<option></option>").attr("value", "").text(TRAN_SELECTSAMPLERATE));
+    }
+});
+
+$('#for_bitrate').change(function () {
+    var selectedBitrate = $('#for_bitrate').val();
+    if (selectedBitrate == 'VBR') {
+        $('#for_quality').removeAttr('disabled');
+        $("#for_quality").attr({
+            "max": 9,
+            "min": 0
+        });
+    } else {
+        $('#for_quality').attr('disabled', 'disabled');
+    }
+});
 
 $('#url_down').keyup(function () {
     let url = $("#url_down").val();
@@ -80,7 +152,7 @@ $('#selectGroup').on('change', function (e) {
     }
 });
 
-function addcart(cart, title) {
+function addcart(cart, title, type) {
     if (librarytype == 2) {
         editmodal.hide();
         $("#cart_macro").val(cart);
@@ -95,20 +167,35 @@ function addcart(cart, title) {
             data: "id=" + cartdata,
             dataType: 'json',
             success: function (data) {
-                $('#dest_down').val(data['CUT_NAME']);
+                if (type == 4) {
+                    $('#dest_down').val(data['CUT_NAME']);
+                } else if (type == 5) {
+                    $('#source_upload').val(data['CUT_NAME']);
+                }
             }
         });
+        if (type == 4) {
+            $("#selcutbutt").show();
+            $("#selcartbutt").hide();
+        } else if (type == 5) {
+            $("#selcutbutt_up").show();
+            $("#selcartbutt_up").hide();
+        }
 
-        $("#selcutbutt").show();
-        $("#selcartbutt").hide();
     }
 }
 
-function addcut(cutname) {
+function addcut(cutname, type) {
     editmodal.hide();
-    $("#dest_down").val(cutname);
-    $("#selcutbutt").hide();
-    $("#selcartbutt").show();
+    if (type == 4) {
+        $("#dest_down").val(cutname);
+        $("#selcutbutt").hide();
+        $("#selcartbutt").show();
+    } else if (type == 5) {
+        $("#source_upload").val(cutname);
+        $("#selcutbutt_up").hide();
+        $("#selcartbutt_up").show();
+    }
 }
 
 function getTimeFromMillis(millis) {
@@ -138,7 +225,7 @@ function getTimeFromMillis(millis) {
 }
 
 function edit(type, id) {
-
+    catchtype = type;
     $.ajax({
         url: HOST_URL + '/forms/rdcatch/getdata.php',
         data: "id=" + id,
@@ -300,10 +387,213 @@ function edit(type, id) {
                 }
                 $('#download_edit').modal('show');
 
+            } else if (type == 5) {
+                librarytype = 1;
+                dt2.ajax.reload();
+                $("#selcutbutt_up").hide();
+                $("#selcartbutt_up").show();
+                $('#upid').val(id);
+
+                if (data['IS_ACTIVE'] == 'Y') {
+                    $("#eventactive_upload").prop('checked', true);
+                } else {
+                    $("#eventactive_upload").prop('checked', false);
+                }
+                $('#location_upload').val(data['STATION_NAME']);
+                $('#start_upload').val(data['START_TIME']);
+                $('#desc_upload').val(data['DESCRIPTION']);
+                $('#feed_upload').val(data['FEED_ID']);
+                $('#url_upload').val(data['URL']);
+                $('#usrn_upload').val(data['URL_USERNAME']);
+                $('#pass_upload').val(data['URL_PASSWORD']);
+                $('#filpa_up').val(data['URL_PASSWORD']);
+                $('#source_upload').val(data['CUT_NAME']);
+
+                $('#for_format').val(data['FORMAT']);
+                $('#for_format').trigger('change');
+                $('#for_channels').val(data['CHANNELS']);
+                $('#for_samplerate').val(data['SAMPRATE']);
+                if (data['FORMAT'] == 3) {
+                    
+                    if (data['BITRATE'] == 0) {
+                    $('#for_bitrate').val('VBR');
+                    $('#for_quality').removeAttr('disabled');
+                    } else {
+                        $('#for_bitrate').val(data['BITRATE'] / 1000);
+                        $('#for_quality').attr('disabled', 'disabled');
+                    }
+                } else if (data['FORMAT'] == 2) {
+                    $('#for_bitrate').val(data['BITRATE'] / 1000);
+                }
+                $('#for_quality').val(data['QUALITY']);
+                
+
+                if (data['NORMALIZE_LEVEL'] == '0') {
+                    $("#normalize_upload").prop('checked', false);
+                    $('#normlevel_upload').val('-35');
+                    $('#normalize_upload').prop("disabled", true);
+                } else {
+                    $("#normalize_upload").prop('checked', true);
+                    $("#normalize_upload").removeAttr('disabled');
+                    var normalizlevel = data['NORMALIZE_LEVEL'] / 100;
+                    $('#normlevel_upload').val(normalizlevel);
+                }
+                if (data['ENABLE_METADATA'] == 'Y') {
+                    $("#exportme_upload").prop('checked', true);
+                } else {
+                    $("#exportme_upload").prop('checked', false);
+                }
+
+                if (data['ONE_SHOT'] == 'Y') {
+                    $("#oneshot_upload").prop('checked', true);
+                } else {
+                    $("#oneshot_upload").prop('checked', false);
+                }
+                $('#dayoffset_upload').val(data['EVENTDATE_OFFSET']);
+                if (data['SUN'] == 'Y') {
+                    $("#sun_up").prop('checked', true);
+                } else {
+                    $("#sun_up").prop('checked', false);
+                }
+                if (data['MON'] == 'Y') {
+                    $("#mon_up").prop('checked', true);
+                } else {
+                    $("#mon_up").prop('checked', false);
+                }
+                if (data['TUE'] == 'Y') {
+                    $("#tue_up").prop('checked', true);
+                } else {
+                    $("#tue_up").prop('checked', false);
+                }
+                if (data['WED'] == 'Y') {
+                    $("#wed_up").prop('checked', true);
+                } else {
+                    $("#wed_up").prop('checked', false);
+                }
+                if (data['THU'] == 'Y') {
+                    $("#thu_up").prop('checked', true);
+                } else {
+                    $("#thu_up").prop('checked', false);
+                }
+                if (data['FRI'] == 'Y') {
+                    $("#fri_up").prop('checked', true);
+                } else {
+                    $("#fri_up").prop('checked', false);
+                }
+                if (data['SAT'] == 'Y') {
+                    $("#sat_up").prop('checked', true);
+                } else {
+                    $("#sat_up").prop('checked', false);
+                }
+
+                if ($('#feed_upload').val() == '-1') {
+                    $("#url_upload").removeAttr('disabled');
+                    $("#usrn_upload").removeAttr('disabled');
+                    $("#pass_upload").removeAttr('disabled');
+                    $("#for_format").removeAttr('disabled');
+                    $("#for_channels").removeAttr('disabled');
+                    $("#for_samplerate").removeAttr('disabled');
+                    $("#for_bitrate").removeAttr('disabled');
+                    $("#for_quality").removeAttr('disabled');
+                    $("#normalize_upload").removeAttr('disabled');
+                    $("#normlevel_upload").removeAttr('disabled');
+                    $("#exportme_upload").removeAttr('disabled');
+                } else {
+                    $('#url_upload').prop("disabled", true);
+                    $('#usrn_upload').prop("disabled", true);
+                    $('#pass_upload').prop("disabled", true);
+                    $('#for_format').prop("disabled", true);
+                    $('#for_channels').prop("disabled", true);
+                    $('#for_samplerate').prop("disabled", true);
+                    $('#for_bitrate').prop("disabled", true);
+                    $('#for_quality').prop("disabled", true);
+                    $('#normalize_upload').prop("disabled", true);
+                    $('#normlevel_upload').prop("disabled", true);
+                    $('#exportme_upload').prop("disabled", true);
+                }
+
+
+                $('#upload_edit').modal('show');
             }
         }
     });
 }
+
+$('#upload_form').validate({
+    rules: {
+        location: {
+            required: true,
+        },
+        start: {
+            required: true,
+        },
+        desc: {
+            required: true,
+        },
+        feed: {
+            required: true,
+        },
+        source: {
+            required: true,
+        },
+    },
+    messages: {
+        location: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        start: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        desc: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        feed: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        source: {
+            required: TRAN_NOTBEEMPTY,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#upload_form').serialize();
+        jQuery.ajax({
+            type: "POST",
+            url: HOST_URL + '/forms/rdcatch/upedit.php',
+            data: dataString,
+            success: function (data) {
+                var mydata = $.parseJSON(data);
+                var fel = mydata.error;
+                if (fel == "false") {
+                    $('#upload_edit').modal('hide');
+                    dt.ajax.reload();
+                } else {
+                    Swal.fire({
+                        text: TRAN_BUG,
+                        icon: "error",
+                        buttonsStyling: false,
+                        confirmButtonText: TRAN_OK,
+                        customClass: {
+                            confirmButton: "btn btn-primary"
+                        }
+                    });
+
+
+                }
+            }
+        });
+    }
+});
 
 $('#download_form').validate({
     rules: {
@@ -546,6 +836,10 @@ var KTDatatablesServerSide = function () {
                             return `
                             <div class="avatar me-3">
                             <img alt="Logo" src="`+ HOST_URL + `/assets/static/images/event/down.png" /></div> ` + data;
+                        } else if (row.TYPE == 5) {
+                            return `
+                            <div class="avatar me-3">
+                            <img alt="Logo" src="`+ HOST_URL + `/assets/static/images/event/upload.png" /></div> ` + data;
                         } else {
                             return `
                             <div class="avatar me-3">
@@ -556,7 +850,7 @@ var KTDatatablesServerSide = function () {
                 {
                     targets: 5,
                     render: function (data, type, row) {
-                        if (row.TYPE == 4) {
+                        if (row.TYPE == 4 || row.TYPE == 5) {
                             return row.URL
                         } else {
                             return row.MACRO_CART
@@ -681,11 +975,61 @@ var KTDatatablesServerSide = function () {
         });
     }
 
+    const element6 = document.getElementById('upload_edit');
+    const modal6 = new bootstrap.Modal(element6);
+
+    var initUpEditModalButtons = function () {
+        const cancelButton1 = element6.querySelector('[data-kt-rdup-modal-action="cancel"]');
+        cancelButton1.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal6.hide();
+                }
+            });
+        });
+        const closeButton2 = element6.querySelector('[data-kt-rdup-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal6.hide();
+
+                }
+            });
+        });
+    }
+
     return {
         init: function () {
             initDatatable();
             initMacroEditModalButtons();
             initDownEditModalButtons();
+            initUpEditModalButtons();
         }
     }
 }();
@@ -785,9 +1129,9 @@ var KTDatatablesServerSideLibrary = function () {
                     className: 'text-end',
                     render: function (data, type, row) {
                         if (librarytype == 2) {
-                            return `<a href="javascript:;" onclick="addcart('` + row.NUMBER + `', '` + row.TITLE + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
+                            return `<a href="javascript:;" onclick="addcart('` + row.NUMBER + `', '` + row.TITLE + `', '` + catchtype + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
                         } else {
-                            return `<a href="javascript:;" onclick="addcart('` + row.NUMBER + `', '` + row.TITLE + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
+                            return `<a href="javascript:;" onclick="addcart('` + row.NUMBER + `', '` + row.TITLE + `', '` + catchtype + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
                         }
 
                     }
@@ -922,7 +1266,7 @@ var KTDatatablesServerSideCuts = function () {
                     className: 'text-end',
                     render: function (data, type, row) {
 
-                        return `<a href="javascript:;" onclick="addcut('` + row.CUT_NAME + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
+                        return `<a href="javascript:;" onclick="addcut('` + row.CUT_NAME + `', '` + catchtype + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
 
 
                     }
@@ -1003,12 +1347,48 @@ $("#start_macro").flatpickr({
     time_24hr: true
 });
 
+$("#start_upload").flatpickr({
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i:S",
+    enableSeconds: true,
+    time_24hr: true
+});
+
 $("#start_down").flatpickr({
     enableTime: true,
     noCalendar: true,
     dateFormat: "H:i:S",
     enableSeconds: true,
     time_24hr: true
+});
+
+$('#feed_upload').change(function () {
+    if ($('#feed_upload').val() == '-1') {
+        $("#url_upload").removeAttr('disabled');
+        $("#usrn_upload").removeAttr('disabled');
+        $("#pass_upload").removeAttr('disabled');
+        $("#for_format").removeAttr('disabled');
+        $("#for_channels").removeAttr('disabled');
+        $("#for_samplerate").removeAttr('disabled');
+        $("#for_bitrate").removeAttr('disabled');
+        $("#for_quality").removeAttr('disabled');
+        $("#normalize_upload").removeAttr('disabled');
+        $("#normlevel_upload").removeAttr('disabled');
+        $("#exportme_upload").removeAttr('disabled');
+    } else {
+        $('#url_upload').prop("disabled", true);
+        $('#usrn_upload').prop("disabled", true);
+        $('#pass_upload').prop("disabled", true);
+        $('#for_format').prop("disabled", true);
+        $('#for_channels').prop("disabled", true);
+        $('#for_samplerate').prop("disabled", true);
+        $('#for_bitrate').prop("disabled", true);
+        $('#for_quality').prop("disabled", true);
+        $('#normalize_upload').prop("disabled", true);
+        $('#normlevel_upload').prop("disabled", true);
+        $('#exportme_upload').prop("disabled", true);
+    }
 });
 
 $('#autotrim_down').click(function () {
@@ -1023,5 +1403,12 @@ $('#normalize_down').click(function () {
         $("#normlevel_down").removeAttr('disabled');
     } else {
         $('#normlevel_down').prop("disabled", true);
+    }
+});
+$('#normalize_upload').click(function () {
+    if ($("#normalize_upload").is(":checked")) {
+        $("#normlevel_upload").removeAttr('disabled');
+    } else {
+        $('#normlevel_upload').prop("disabled", true);
     }
 });

@@ -2641,7 +2641,7 @@ class DBFunc
     public function getRDCatchs()
     {
         $rdcatch = array();
-        $sql = 'SELECT * FROM `RECORDINGS` WHERE TYPE = 1 OR TYPE = 4  ORDER BY `ID` ASC';
+        $sql = 'SELECT * FROM `RECORDINGS` WHERE TYPE = 1 OR TYPE = 4 OR TYPE = 5  ORDER BY `ID` ASC';
         $stmt = $this->_db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
@@ -2755,6 +2755,70 @@ class DBFunc
         $stmt->bindParam(':urusr', $usrn);
         $stmt->bindParam(':urlpass', $urlpass);
         $stmt->bindParam(':enmeta', $metadata);
+        $stmt->bindParam(':idno', $id);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }   
+    public function getFeeds()
+    {
+
+        $feeds = array();
+
+        $sql = 'SELECT * FROM `FEEDS`
+                ORDER BY `KEY_NAME` ASC';
+
+        $results = $this->_db->prepare($sql);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+        $results->execute();
+        while ($row = $results->fetch()) {
+
+            $feeds[] = $row;
+
+        }
+
+        return $feeds;
+
+    }
+
+    public function updateCatcUpload($isactive, $station, $cutname, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $normlev, $format, $sample, $channels, $bitrate, $quality, $evoff, $one, $url, $usrn, $urlpass, $metadata, $feed, $id)
+    {
+
+        $sql = 'UPDATE `RECORDINGS` SET `IS_ACTIVE` = :isactive, `STATION_NAME` = :stationname, `CUT_NAME` = :cutname, `SUN` = :sun, `MON` = :mon,
+        `TUE` = :tue, `WED` = :wed, `THU` = :thu, `FRI` = :fri, `SAT` = :sat, `DESCRIPTION` = :descript,
+        `START_TIME` = :starttime, `NORMALIZE_LEVEL` = :normlev, `FORMAT` = :format, `SAMPRATE` = :samprate, `CHANNELS` = :channels, 
+        `BITRATE` = :bitrate, `QUALITY` = :quality, `EVENTDATE_OFFSET` = :evdateoff, 
+        `ONE_SHOT` = :oneshot, `URL` = :urls, `URL_USERNAME` = :urusr, `URL_PASSWORD` = :urlpass, `ENABLE_METADATA` = :enmeta, `FEED_ID` = :feedid WHERE `ID` = :idno';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':cutname', $cutname);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':normlev', $normlev);
+        $stmt->bindParam(':format', $format);
+        $stmt->bindParam(':samprate', $sample);
+        $stmt->bindParam(':channels', $channels);
+        $stmt->bindParam(':bitrate', $bitrate);
+        $stmt->bindParam(':quality', $quality);
+        $stmt->bindParam(':evdateoff', $evoff);
+        $stmt->bindParam(':oneshot', $one);
+        $stmt->bindParam(':urls', $url);
+        $stmt->bindParam(':urusr', $usrn);
+        $stmt->bindParam(':urlpass', $urlpass);
+        $stmt->bindParam(':enmeta', $metadata);
+        $stmt->bindParam(':feedid', $feed);
         $stmt->bindParam(':idno', $id);
 
         if ($stmt->execute() === FALSE) {
