@@ -2,6 +2,10 @@
     var HOST_URL = "<?php echo DIR; ?>";
     var TRAN_EDIT = "<?= $ml->tr('EDIT') ?>";
     var TRAN_REMOVE = "<?= $ml->tr('REMOVE') ?>";
+    var TRAN_SEARCHSWITCH = "<?= $ml->tr('SEARCHFORSWITCH') ?>";
+    var TRAN_SEARCHOUTPUT = "<?= $ml->tr('SEARCHOUTPUT') ?>";
+    var TRAN_SEARCHINPUT = "<?= $ml->tr('SEARCHINPUT') ?>";
+    var TRAN_OFF = "<?= $ml->tr('OFF') ?>";
     var USERNAME = "<?php echo $username; ?>";  
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";

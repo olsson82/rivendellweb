@@ -2641,7 +2641,8 @@ class DBFunc
     public function getRDCatchs()
     {
         $rdcatch = array();
-        $sql = 'SELECT * FROM `RECORDINGS` WHERE TYPE = 1 OR TYPE = 4 OR TYPE = 5  ORDER BY `ID` ASC';
+        $sql = "SELECT * FROM MATRICES swit LEFT JOIN RECORDINGS rec ON rec.STATION_NAME=swit.STATION_NAME AND rec.CHANNEL=swit.MATRIX WHERE rec.TYPE = 1 OR rec.TYPE = 2 OR rec.TYPE = 4 OR rec.TYPE = 5 ORDER BY rec.ID ASC";
+        //$sql = 'SELECT * FROM `RECORDINGS`  WHERE TYPE = 1 OR TYPE = 2 OR TYPE = 4 OR TYPE = 5  ORDER BY `ID` ASC';
         $stmt = $this->_db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
@@ -2962,5 +2963,107 @@ class DBFunc
         ]);
 
         return true;
+    }
+    public function getSwitches($host)
+    {
+
+        $switch = array();
+        $stmt = $this->_db->prepare('SELECT * FROM MATRICES WHERE STATION_NAME = :station AND INPUTS > 0 AND OUTPUTS > 0');
+        $stmt->execute([':station' => $host]);
+        $switch = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $switch;
+
+    }
+    
+    public function getOutputs($matrix, $station)
+    {
+
+        $outputs = array();
+        $stmt = $this->_db->prepare('SELECT * FROM OUTPUTS WHERE STATION_NAME = :station AND MATRIX = :matrix');
+        $stmt->execute([':station' => $station,
+        ':matrix' => $matrix]);
+        $outputs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $outputs;
+
+    }
+
+    public function getInputs($matrix, $station)
+    {
+
+        $inputs = array();
+        $stmt = $this->_db->prepare('SELECT * FROM INPUTS WHERE STATION_NAME = :station AND MATRIX = :matrix');
+        $stmt->execute([':station' => $station,
+        ':matrix' => $matrix]);
+        $inputs = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $inputs;
+
+    }
+
+    public function AddCatchSwitch($isactive, $station, $channel, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $switchin, $switchout, $one)
+    {
+
+        $type = 2;
+        $cutname = "";
+        $sql = 'INSERT INTO `RECORDINGS` (`IS_ACTIVE`, `STATION_NAME`, `TYPE`, `CHANNEL`, `CUT_NAME`, `SUN`, `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `DESCRIPTION`,
+        `START_TIME`, `SWITCH_INPUT`, `SWITCH_OUTPUT`, `ONE_SHOT`)
+                VALUES (:isactive, :stationname, :type, :channel, :cutname, :sun, :mon, :tue, :wed, :thu, :fri, :sat, :descript, :starttime,
+                :switchin, :switchout, :oneshot)';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':channel', $channel);
+        $stmt->bindParam(':cutname', $cutname);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':switchin', $switchin);
+        $stmt->bindParam(':switchout', $switchout);
+        $stmt->bindParam(':oneshot', $one);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function EditCatchSwitch($isactive, $station, $channel, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $switchin, $switchout, $one, $id)
+    {
+
+        $sql = 'UPDATE `RECORDINGS` SET `IS_ACTIVE` = :isactive, `STATION_NAME` = :stationname, `CHANNEL` = :channel, `SUN` = :sun, `MON` = :mon,
+        `TUE` = :tue, `WED` = :wed, `THU` = :thu, `FRI` = :fri, `SAT` = :sat, `DESCRIPTION` = :descript,
+        `START_TIME` = :starttime, `SWITCH_INPUT` = :switchin, `SWITCH_OUTPUT` = :switchout, `ONE_SHOT` = :oneshot WHERE `ID` = :idno';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':channel', $channel);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':switchin', $switchin);
+        $stmt->bindParam(':switchout', $switchout);
+        $stmt->bindParam(':oneshot', $one);
+        $stmt->bindParam(':idno', $id);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
     }
 }

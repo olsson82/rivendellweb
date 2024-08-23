@@ -109,6 +109,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                             <a class="dropdown-item" href="javascript:;" onclick="add(1)"><?= $ml->tr('MACROCART'); ?></a>
                             <a class="dropdown-item" href="javascript:;" onclick="add(5)"><?= $ml->tr('UPLOAD'); ?></a>
                             <a class="dropdown-item" href="javascript:;" onclick="add(4)"><?= $ml->tr('DOWNLOAD'); ?></a>
+                            <a class="dropdown-item" href="javascript:;" onclick="add(2)"><?= $ml->tr('SWITCHEVENT'); ?></a>
                         </div>
                     </div>
                 </div>
@@ -175,6 +176,206 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
         </div>
 
     </section>
+
+    <div class="modal fade text-left" id="switch_edit" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="SwitchLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="SwitchLabel">
+                        <?= $ml->tr('CATCHSWITCHEDIT') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-rdswitch-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" autocomplete="off" id="switch_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('GENERALSETTINGS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="eventactive_switch" name="eventactive"
+                                                class='form-check-input'>
+                                            <label for="eventactive_switch">
+                                                <?= $ml->tr('CEVENTACTIVE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="location_switch">
+                                        <?= $ml->tr('LOCATION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="location_switch" name="location" class="form-select">
+                                        <?php foreach ($hosts as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="start_switch">
+                                        <?= $ml->tr('STARTTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="start_switch" class="form-control" name="start" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="desc_switch">
+                                        <?= $ml->tr('DESCRIPTION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="desc_switch" class="form-control" name="desc" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="matrix_switch">
+                                        <?= $ml->tr('SWITCHMATRIX') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="matrix_switch" name="matrix" class="form-select">
+                                    <option value=""><?= $ml->tr('SELECTASWITCH') ?></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="output_switch">
+                                        <?= $ml->tr('SWITCHOUTPUT') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="output_switch" name="output" class="form-select">
+                                    <option value=""><?= $ml->tr('SELECTOUTPUT') ?></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="input_switch">
+                                        <?= $ml->tr('SWITCHINPUT') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="input_switch" name="input" class="form-select">
+                                    <option value=""><?= $ml->tr('SELECTINPUT') ?></option>
+                                    <option value="0"><?= $ml->tr('OFF') ?></option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="oneshot_switch" name="oneshot"
+                                                class='form-check-input'>
+                                            <label for="oneshot_macro">
+                                                <?= $ml->tr('ONESHOT') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('ACTIVEDAYS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="mon_sw" name="monday" class='form-check-input'>
+                                            <label for="mon_sw">
+                                                <?= $ml->tr('MONDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="tue_sw" name="tuesday" class='form-check-input'>
+                                            <label for="tue_sw">
+                                                <?= $ml->tr('TUESDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="wed_sw" name="wednesday"
+                                                class='form-check-input'>
+                                            <label for="wed_sw">
+                                                <?= $ml->tr('WEDNESDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="thu_sw" name="thursday"
+                                                class='form-check-input'>
+                                            <label for="thu_sw">
+                                                <?= $ml->tr('THURSDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="fri_sw" name="friday" class='form-check-input'>
+                                            <label for="fri_sw">
+                                                <?= $ml->tr('FRIDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="sat_sw" name="saturday"
+                                                class='form-check-input'>
+                                            <label for="sat_sw">
+                                                <?= $ml->tr('SATURDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="sun_sw" name="sunday" class='form-check-input'>
+                                            <label for="sun_sw">
+                                                <?= $ml->tr('SUNDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="switchid" name="catchid" value="">
+                        <button type="button" class="btn btn-light-secondary" data-kt-rdswitch-modal-action="close">
+                            <?= $ml->tr('CLOSE') ?>
+                        </button>
+                        <input type="submit" id="subbut_chain" class="btn btn-primary ms-1"
+                            value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 
     <div class="modal fade text-left" id="upload_edit" data-bs-backdrop="static" role="dialog"
         aria-labelledby="UploadLabel" aria-hidden="true">
