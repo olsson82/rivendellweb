@@ -33,6 +33,11 @@ var allgroups = 1;
 var groupnow;
 var editmodal;
 var cartdata;
+var station;
+var matrix;
+var singleFetch;
+var singleFetchIn;
+var singleFetchOut;
 var librarytype = 2;
 var catchtype;
 var sampleOne = ["32000", "44100", "48000"];
@@ -52,11 +57,115 @@ function tr(translate) {
         datatype: 'html',
         success: function (data) {
             var mydata = $.parseJSON(data);
-            result  = mydata.translated;
+            result = mydata.translated;
         }
     });
     return result;
 }
+station = $("#location_switch").val();
+
+
+const singfets = document.getElementById('matrix_switch');
+singleFetch = new Choices(singfets, {
+    allowHTML: false,
+    searchPlaceholderValue: TRAN_SEARCHSWITCH,
+});
+
+const singfetsoutdrop = document.getElementById('output_switch');
+singleFetchOut = new Choices(singfetsoutdrop, {
+    allowHTML: false,
+    searchPlaceholderValue: TRAN_SEARCHOUTPUT,
+});
+
+const singfetindrop = document.getElementById('input_switch');
+singleFetchIn = new Choices(singfetindrop, {
+    allowHTML: false,
+    searchPlaceholderValue: TRAN_SEARCHINPUT,
+});
+
+
+singleFetch.setChoices(function () {
+    return fetch(
+        HOST_URL + '/forms/rdcatch/switch.php?station=' + station + '&matrix=' + matrix,
+    )
+        .then(function (response) {
+            return response.json();
+        })
+        .then(function (data) {
+            return data.switches.map(function (matrix) {
+                return { label: matrix.NAME, value: matrix.MATRIX };
+            });
+        });
+});
+
+$('#location_switch').change(function () {
+    station = $("#location_switch").val();
+    singleFetch.removeActiveItems();
+    singleFetch.clearInput();
+    singleFetch.clearChoices();
+    singleFetchOut.removeActiveItems();
+    singleFetchIn.removeActiveItems();
+    singleFetchOut.clearInput();
+    singleFetchOut.clearChoices();
+    singleFetchIn.clearInput();
+    singleFetchIn.clearChoices();
+
+    singleFetch.setChoices(function () {
+        return fetch(
+            HOST_URL + '/forms/rdcatch/switch.php?station=' + station + '&matrix=' + matrix,
+        )
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                return data.switches.map(function (matrix) {
+                    return { label: matrix.NAME, value: matrix.MATRIX };
+                });
+            });
+    });
+});
+
+$('#matrix_switch').change(function () {
+    matrix = $("#matrix_switch").val();
+    singleFetchOut.removeActiveItems();
+    singleFetchIn.removeActiveItems();
+    singleFetchOut.clearInput();
+    singleFetchOut.clearChoices();
+    singleFetchIn.clearInput();
+    singleFetchIn.clearChoices();
+    singleFetchOut.setChoices(function () {
+        return fetch(
+            HOST_URL + '/forms/rdcatch/switch.php?station=' + station + '&matrix=' + matrix,
+        )
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                return data.outputs.map(function (output) {
+                    return { label: output.NAME, value: output.NUMBER };
+                });
+            });
+    });
+    singleFetchIn.setChoices(function () {
+        return fetch(
+            HOST_URL + '/forms/rdcatch/switch.php?station=' + station + '&matrix=' + matrix,
+        )
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                return data.inputs.map(function (input) {
+                    return { label: input.NAME, value: input.NUMBER };
+                });
+            });
+    });
+    singleFetchIn.setChoices(function () {
+        return [{ value: '0', label: TRAN_OFF }]
+    });
+});
+
+
+
 
 $('#for_format').change(function () {
     var selectedCategory = $('#for_format').val();
@@ -245,50 +354,50 @@ function getTimeFromMillis(millis) {
 
 function remove(id, desc) {
     var trans = tr('REMOVECATCHWARN {{' + desc + '}}');
-    
-        Swal.fire({
-            text: trans,
-            icon: "warning",
-            showCancelButton: true,
-            buttonsStyling: false,
-            confirmButtonText: TRAN_YES,
-            cancelButtonText: TRAN_NO,
-            customClass: {
-                confirmButton: "btn fw-bold btn-danger",
-                cancelButton: "btn fw-bold btn-active-light-primary"
-            }
-        }).then(function (result) {
-            if (result.value) {
-                jQuery.ajax({
-                    type: "POST",
-                    url: HOST_URL + '/forms/rdcatch/remove.php',
-                    data: {
-                        catchid: id
-                    },
-                    datatype: 'html',
-                    success: function (data) {
-                        var mydata = $.parseJSON(data);
-                        var fel = mydata.error;
-                        var kod = mydata.errorcode;
-                        if (fel == "false") {
-                            dt.ajax.reload();
-                        } else {
-                            Swal.fire({
-                                text: TRAN_BUG,
-                                icon: "error",
-                                buttonsStyling: false,
-                                confirmButtonText: TRAN_OK,
-                                customClass: {
-                                    confirmButton: "btn btn-primary"
-                                }
-                            });
-                        }
+
+    Swal.fire({
+        text: trans,
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: TRAN_YES,
+        cancelButtonText: TRAN_NO,
+        customClass: {
+            confirmButton: "btn fw-bold btn-danger",
+            cancelButton: "btn fw-bold btn-active-light-primary"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/remove.php',
+                data: {
+                    catchid: id
+                },
+                datatype: 'html',
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    var kod = mydata.errorcode;
+                    if (fel == "false") {
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
                     }
-                });
+                }
+            });
 
 
-            }
-        });
+        }
+    });
 
 }
 
@@ -319,6 +428,22 @@ function add(type) {
         $("#normlevel_upload").val("-13");
         $("#dayoffset_upload").val("0");
         $('#upload_edit').modal('show');
+    } else if (type == 2) {
+        $("#switch_form").trigger("reset");
+        singleFetch.setChoices(function () {
+            return fetch(
+                HOST_URL + '/forms/rdcatch/switch.php?station=' + station + '&matrix=' + matrix,
+            )
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    return data.switches.map(function (matrix) {
+                        return { label: matrix.NAME, value: matrix.MATRIX };
+                    });
+                });
+        });
+        $('#switch_edit').modal('show');
     }
 }
 
@@ -613,10 +738,251 @@ function edit(type, id) {
 
 
                 $('#upload_edit').modal('show');
+            } else if (type == 2) {
+
+                $('#switchid').val(id);
+                station = data['STATION_NAME'];
+                matrix = data['CHANNEL'];
+                var forinput = data['SWITCH_INPUT'];
+                var foroutput = data['SWITCH_OUTPUT'];
+                singleFetch.removeActiveItems();
+                singleFetch.clearInput();
+                singleFetch.clearChoices();
+                singleFetchOut.removeActiveItems();
+                singleFetchIn.removeActiveItems();
+                singleFetchOut.clearInput();
+                singleFetchOut.clearChoices();
+                singleFetchIn.clearInput();
+                singleFetchIn.clearChoices();
+
+                singleFetch.setChoices(function () {
+                    return fetch(
+                        HOST_URL + '/forms/rdcatch/switch.php?station=' + station + '&matrix=' + matrix,
+                    )
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            return data.switches.map(function (matrixs) {
+                                if (matrixs.MATRIX == matrix) {
+                                    return { label: matrixs.NAME, value: matrixs.MATRIX, selected: true };
+                                } else {
+                                    return { label: matrixs.NAME, value: matrixs.MATRIX };
+                                }
+                            });
+                        });
+                });
+
+                singleFetchOut.setChoices(function () {
+                    return fetch(
+                        HOST_URL + '/forms/rdcatch/switch.php?station=' + station + '&matrix=' + matrix,
+                    )
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            return data.outputs.map(function (output) {
+                                if (output.NUMBER == foroutput) {
+                                    return { label: output.NAME, value: output.NUMBER, selected: true };
+                                } else {
+                                    return { label: output.NAME, value: output.NUMBER };
+                                }
+                                
+                            });
+                        });
+                });
+                singleFetchIn.setChoices(function () {
+                    return fetch(
+                        HOST_URL + '/forms/rdcatch/switch.php?station=' + station + '&matrix=' + matrix,
+                    )
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            return data.inputs.map(function (input) {
+                                if (input.NUMBER == forinput) {
+                                    return { label: input.NAME, value: input.NUMBER, selected: true };
+                                } else {
+                                    return { label: input.NAME, value: input.NUMBER };
+                                }
+                                
+                            });
+                        });
+                });
+                singleFetchIn.setChoices(function () {
+                    if (forinput == 0) {
+                        return [{ value: '0', label: TRAN_OFF, selected: true }]
+                    } else {
+                        return [{ value: '0', label: TRAN_OFF }]
+                    }
+                    
+                });
+
+                if (data['IS_ACTIVE'] == 'Y') {
+                    $("#eventactive_switch").prop('checked', true);
+                } else {
+                    $("#eventactive_switch").prop('checked', false);
+                }
+                $('#location_switch').val(data['STATION_NAME']);
+                $('#start_switch').val(data['START_TIME']);
+                $('#desc_switch').val(data['DESCRIPTION']);
+                if (data['ONE_SHOT'] == 'Y') {
+                    $("#oneshot_switch").prop('checked', true);
+                } else {
+                    $("#oneshot_switch").prop('checked', false);
+                }
+                if (data['SUN'] == 'Y') {
+                    $("#sun_sw").prop('checked', true);
+                } else {
+                    $("#sun_sw").prop('checked', false);
+                }
+                if (data['MON'] == 'Y') {
+                    $("#mon_sw").prop('checked', true);
+                } else {
+                    $("#mon_sw").prop('checked', false);
+                }
+                if (data['TUE'] == 'Y') {
+                    $("#tue_sw").prop('checked', true);
+                } else {
+                    $("#tue_sw").prop('checked', false);
+                }
+                if (data['WED'] == 'Y') {
+                    $("#wed_sw").prop('checked', true);
+                } else {
+                    $("#wed_sw").prop('checked', false);
+                }
+                if (data['THU'] == 'Y') {
+                    $("#thu_sw").prop('checked', true);
+                } else {
+                    $("#thu_sw").prop('checked', false);
+                }
+                if (data['FRI'] == 'Y') {
+                    $("#fri_sw").prop('checked', true);
+                } else {
+                    $("#fri_sw").prop('checked', false);
+                }
+                if (data['SAT'] == 'Y') {
+                    $("#sat_sw").prop('checked', true);
+                } else {
+                    $("#sat_sw").prop('checked', false);
+                }
+
+                $('#switch_edit').modal('show');
             }
         }
     });
 }
+
+$('#switch_form').validate({
+    rules: {
+        location: {
+            required: true,
+        },
+        start: {
+            required: true,
+        },
+        desc: {
+            required: true,
+        },
+        matrix: {
+            required: true,
+        },
+        output: {
+            required: true,
+        },
+        input: {
+            required: true,
+        },
+    },
+    messages: {
+        location: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        start: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        desc: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        matrix: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        output: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        input: {
+            required: TRAN_NOTBEEMPTY,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#switch_form').serialize();
+        if (isedit == 1) {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/switchedit.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#switch_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+
+
+                    }
+                }
+            });
+        } else {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/switchadd.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#switch_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+
+
+                    }
+                }
+            });
+        }
+
+    }
+});
 
 $('#upload_form').validate({
     rules: {
@@ -870,56 +1236,56 @@ $('#macro_form').validate({
     submitHandler: function () {
         var dataString = $('#macro_form').serialize();
         if (isedit == 1) {
-        jQuery.ajax({
-            type: "POST",
-            url: HOST_URL + '/forms/rdcatch/macroedit.php',
-            data: dataString,
-            success: function (data) {
-                var mydata = $.parseJSON(data);
-                var fel = mydata.error;
-                if (fel == "false") {
-                    $('#macro_edit').modal('hide');
-                    dt.ajax.reload();
-                } else {
-                    Swal.fire({
-                        text: TRAN_BUG,
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: TRAN_OK,
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/macroedit.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#macro_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
 
 
+                    }
                 }
-            }
-        });
-    } else {
-        jQuery.ajax({
-            type: "POST",
-            url: HOST_URL + '/forms/rdcatch/macroadd.php',
-            data: dataString,
-            success: function (data) {
-                var mydata = $.parseJSON(data);
-                var fel = mydata.error;
-                if (fel == "false") {
-                    $('#macro_edit').modal('hide');
-                    dt.ajax.reload();
-                } else {
-                    Swal.fire({
-                        text: TRAN_BUG,
-                        icon: "error",
-                        buttonsStyling: false,
-                        confirmButtonText: TRAN_OK,
-                        customClass: {
-                            confirmButton: "btn btn-primary"
-                        }
-                    });
+            });
+        } else {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/macroadd.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#macro_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
                 }
-            }
-        });
-    }
+            });
+        }
     }
 });
 
@@ -1022,6 +1388,10 @@ var KTDatatablesServerSide = function () {
                             return `
                             <div class="avatar me-3">
                             <img alt="Logo" src="`+ HOST_URL + `/assets/static/images/event/upload.png" /></div> ` + data;
+                        } else if (row.TYPE == 2) {
+                            return `
+                            <div class="avatar me-3">
+                            <img alt="Logo" src="`+ HOST_URL + `/assets/static/images/event/switch.png" /></div> ` + data;
                         } else {
                             return `
                             <div class="avatar me-3">
@@ -1034,6 +1404,8 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         if (row.TYPE == 4 || row.TYPE == 5) {
                             return row.URL
+                        } else if (row.TYPE == 2) {
+                            return row.NAME
                         } else {
                             return row.MACRO_CART
                         }
@@ -1208,12 +1580,62 @@ var KTDatatablesServerSide = function () {
         });
     }
 
+    const element7 = document.getElementById('switch_edit');
+    const modal7 = new bootstrap.Modal(element7);
+
+    var initSwitchEditModalButtons = function () {
+        const cancelButton1 = element7.querySelector('[data-kt-rdswitch-modal-action="cancel"]');
+        cancelButton1.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal7.hide();
+                }
+            });
+        });
+        const closeButton2 = element7.querySelector('[data-kt-rdswitch-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal7.hide();
+
+                }
+            });
+        });
+    }
+
     return {
         init: function () {
             initDatatable();
             initMacroEditModalButtons();
             initDownEditModalButtons();
             initUpEditModalButtons();
+            initSwitchEditModalButtons();
         }
     }
 }();
@@ -1524,6 +1946,14 @@ $(document).ready(function () {
 });
 
 $("#start_macro").flatpickr({
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i:S",
+    enableSeconds: true,
+    time_24hr: true
+});
+
+$("#start_switch").flatpickr({
     enableTime: true,
     noCalendar: true,
     dateFormat: "H:i:S",
