@@ -5,6 +5,7 @@
     var TRAN_SEARCHSWITCH = "<?= $ml->tr('SEARCHFORSWITCH') ?>";
     var TRAN_SEARCHOUTPUT = "<?= $ml->tr('SEARCHOUTPUT') ?>";
     var TRAN_SEARCHINPUT = "<?= $ml->tr('SEARCHINPUT') ?>";
+    var TRAN_SEARCHPORT = "<?= $ml->tr('SEARCHPORT') ?>";
     var TRAN_OFF = "<?= $ml->tr('OFF') ?>";
     var USERNAME = "<?php echo $username; ?>";  
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";

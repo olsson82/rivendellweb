@@ -38,6 +38,7 @@ var matrix;
 var singleFetch;
 var singleFetchIn;
 var singleFetchOut;
+var singleFetchPlay;
 var librarytype = 2;
 var catchtype;
 var sampleOne = ["32000", "44100", "48000"];
@@ -83,6 +84,12 @@ singleFetchIn = new Choices(singfetindrop, {
     searchPlaceholderValue: TRAN_SEARCHINPUT,
 });
 
+const singfetplayrop = document.getElementById('audio_play');
+singleFetchPlay = new Choices(singfetplayrop, {
+    allowHTML: false,
+    searchPlaceholderValue: TRAN_SEARCHPORT,
+});
+
 
 singleFetch.setChoices(function () {
     return fetch(
@@ -96,6 +103,28 @@ singleFetch.setChoices(function () {
                 return { label: matrix.NAME, value: matrix.MATRIX };
             });
         });
+});
+
+$('#location_play').change(function () {
+    station = $("#location_play").val();
+    singleFetchPlay.removeActiveItems();
+    singleFetchPlay.clearInput();
+    singleFetchPlay.clearChoices();
+
+    singleFetchPlay.setChoices(function () {
+        return fetch(
+            HOST_URL + '/forms/rdcatch/playout.php?station=' + station,
+        )
+            .then(function (response) {
+                return response.json();
+            })
+            .then(function (data) {
+                return data.playouts.map(function (play) {
+                    var pnumb = String(play.PORT_NUMBER_VIS);
+                    return { label: pnumb, value: play.CHANNEL };
+                });
+            });
+    });
 });
 
 $('#location_switch').change(function () {
@@ -299,6 +328,8 @@ function addcart(cart, title, type) {
                     $('#dest_down').val(data['CUT_NAME']);
                 } else if (type == 5) {
                     $('#source_upload').val(data['CUT_NAME']);
+                } else if (type == 3) {
+                    $('#dest_play').val(data['CUT_NAME']);
                 }
             }
         });
@@ -308,6 +339,9 @@ function addcart(cart, title, type) {
         } else if (type == 5) {
             $("#selcutbutt_up").show();
             $("#selcartbutt_up").hide();
+        } else if (type == 3) {
+            $("#selcutbuttplay").show();
+            $("#selcartbuttplay").hide();
         }
 
     }
@@ -323,6 +357,10 @@ function addcut(cutname, type) {
         $("#source_upload").val(cutname);
         $("#selcutbutt_up").hide();
         $("#selcartbutt_up").show();
+    } else if (type == 3) {
+        $("#desc_play").val(cutname);
+        $("#selcutbuttplay").hide();
+        $("#selcartbuttplay").show();
     }
 }
 
@@ -444,6 +482,31 @@ function add(type) {
                 });
         });
         $('#switch_edit').modal('show');
+    } else if (type == 3) {
+        librarytype = 1;
+        dt2.ajax.reload();
+        $("#playout_form").trigger("reset");
+        station = $("#location_play").val();
+        singleFetchPlay.removeActiveItems();
+        singleFetchPlay.clearInput();
+        singleFetchPlay.clearChoices();
+
+        singleFetchPlay.setChoices(function () {
+            return fetch(
+                HOST_URL + '/forms/rdcatch/playout.php?station=' + station,
+            )
+                .then(function (response) {
+                    return response.json();
+                })
+                .then(function (data) {
+                    return data.playouts.map(function (play) {
+                        var pnumb = String(play.PORT_NUMBER_VIS);
+                        return { label: pnumb, value: play.CHANNEL };
+                    });
+                });
+        });
+
+        $('#playout_edit').modal('show');
     }
 }
 
@@ -787,7 +850,7 @@ function edit(type, id) {
                                 } else {
                                     return { label: output.NAME, value: output.NUMBER };
                                 }
-                                
+
                             });
                         });
                 });
@@ -805,7 +868,7 @@ function edit(type, id) {
                                 } else {
                                     return { label: input.NAME, value: input.NUMBER };
                                 }
-                                
+
                             });
                         });
                 });
@@ -815,7 +878,7 @@ function edit(type, id) {
                     } else {
                         return [{ value: '0', label: TRAN_OFF }]
                     }
-                    
+
                 });
 
                 if (data['IS_ACTIVE'] == 'Y') {
@@ -868,10 +931,198 @@ function edit(type, id) {
                 }
 
                 $('#switch_edit').modal('show');
+            } else if (type == 3) {
+
+                $('#playid').val(id);
+                station = data['STATION_NAME'];
+                var forplayout = data['CHANNEL'];
+                librarytype = 1;
+                dt2.ajax.reload();
+                singleFetchPlay.removeActiveItems();
+                singleFetchPlay.clearInput();
+                singleFetchPlay.clearChoices();
+
+                singleFetchPlay.setChoices(function () {
+                    return fetch(
+                        HOST_URL + '/forms/rdcatch/playout.php?station=' + station,
+                    )
+                        .then(function (response) {
+                            return response.json();
+                        })
+                        .then(function (data) {
+                            return data.playouts.map(function (play) {
+                                if (play.CHANNEL == forplayout) {
+                                    var pnumb = String(play.PORT_NUMBER_VIS);
+                                    return { label: pnumb, value: play.CHANNEL, selected: true };
+                                } else {
+                                    var pnumb = String(play.PORT_NUMBER_VIS);
+                                    return { label: pnumb, value: play.CHANNEL };
+                                }
+
+                            });
+                        });
+                });
+
+                if (data['IS_ACTIVE'] == 'Y') {
+                    $("#eventactive_play").prop('checked', true);
+                } else {
+                    $("#eventactive_play").prop('checked', false);
+                }
+                $('#location_play').val(data['STATION_NAME']);
+                $('#start_play').val(data['START_TIME']);
+                $('#desc_play').val(data['DESCRIPTION']);
+                $('#dest_play').val(data['CUT_NAME']);
+                if (data['ONE_SHOT'] == 'Y') {
+                    $("#oneshot_play").prop('checked', true);
+                } else {
+                    $("#oneshot_play").prop('checked', false);
+                }
+                if (data['SUN'] == 'Y') {
+                    $("#sun_play").prop('checked', true);
+                } else {
+                    $("#sun_play").prop('checked', false);
+                }
+                if (data['MON'] == 'Y') {
+                    $("#mon_play").prop('checked', true);
+                } else {
+                    $("#mon_play").prop('checked', false);
+                }
+                if (data['TUE'] == 'Y') {
+                    $("#tue_play").prop('checked', true);
+                } else {
+                    $("#tue_play").prop('checked', false);
+                }
+                if (data['WED'] == 'Y') {
+                    $("#wed_play").prop('checked', true);
+                } else {
+                    $("#wed_play").prop('checked', false);
+                }
+                if (data['THU'] == 'Y') {
+                    $("#thu_play").prop('checked', true);
+                } else {
+                    $("#thu_play").prop('checked', false);
+                }
+                if (data['FRI'] == 'Y') {
+                    $("#fri_play").prop('checked', true);
+                } else {
+                    $("#fri_play").prop('checked', false);
+                }
+                if (data['SAT'] == 'Y') {
+                    $("#sat_play").prop('checked', true);
+                } else {
+                    $("#sat_play").prop('checked', false);
+                }
+                $('#playout_edit').modal('show');
+
             }
         }
     });
 }
+
+$('#playout_form').validate({
+    rules: {
+        location: {
+            required: true,
+        },
+        audioport: {
+            required: true,
+        },
+        start: {
+            required: true,
+        },
+        desc: {
+            required: true,
+        },
+        dest: {
+            required: true,
+        },
+    },
+    messages: {
+        location: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        audioport: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        start: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        desc: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        dest: {
+            required: TRAN_NOTBEEMPTY,
+        },
+    },
+    errorElement: 'span',
+    errorPlacement: function (error, element) {
+        error.addClass('parsley-error');
+        element.closest('.form-group').append(error);
+    },
+    highlight: function (element, errorClass, validClass) {
+        $(element).addClass('is-invalid');
+    },
+    unhighlight: function (element, errorClass, validClass) {
+        $(element).removeClass('is-invalid');
+    },
+    submitHandler: function () {
+        var dataString = $('#playout_form').serialize();
+        if (isedit == 1) {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/playoutedit.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#playout_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+
+
+                    }
+                }
+            });
+        } else {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/rdcatch/playoutadd.php',
+                data: dataString,
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    if (fel == "false") {
+                        $('#playout_edit').modal('hide');
+                        dt.ajax.reload();
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+
+
+                    }
+                }
+            });
+        }
+
+    }
+});
 
 $('#switch_form').validate({
     rules: {
@@ -1392,6 +1643,10 @@ var KTDatatablesServerSide = function () {
                             return `
                             <div class="avatar me-3">
                             <img alt="Logo" src="`+ HOST_URL + `/assets/static/images/event/switch.png" /></div> ` + data;
+                        } else if (row.TYPE == 3) {
+                            return `
+                            <div class="avatar me-3">
+                            <img alt="Logo" src="`+ HOST_URL + `/assets/static/images/event/sound.png" /></div> ` + data;
                         } else {
                             return `
                             <div class="avatar me-3">
@@ -1406,6 +1661,8 @@ var KTDatatablesServerSide = function () {
                             return row.URL
                         } else if (row.TYPE == 2) {
                             return row.NAME
+                        } else if (row.TYPE == 3) {
+                            return row.CUT_NAME
                         } else {
                             return row.MACRO_CART
                         }
@@ -1629,6 +1886,55 @@ var KTDatatablesServerSide = function () {
         });
     }
 
+    const element8 = document.getElementById('playout_edit');
+    const modal8 = new bootstrap.Modal(element8);
+
+    var initPlayEditModalButtons = function () {
+        const cancelButton1 = element8.querySelector('[data-kt-rdplay-modal-action="cancel"]');
+        cancelButton1.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal8.hide();
+                }
+            });
+        });
+        const closeButton2 = element8.querySelector('[data-kt-rdplay-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal8.hide();
+
+                }
+            });
+        });
+    }
+
     return {
         init: function () {
             initDatatable();
@@ -1636,6 +1942,7 @@ var KTDatatablesServerSide = function () {
             initDownEditModalButtons();
             initUpEditModalButtons();
             initSwitchEditModalButtons();
+            initPlayEditModalButtons();
         }
     }
 }();
@@ -1954,6 +2261,14 @@ $("#start_macro").flatpickr({
 });
 
 $("#start_switch").flatpickr({
+    enableTime: true,
+    noCalendar: true,
+    dateFormat: "H:i:S",
+    enableSeconds: true,
+    time_24hr: true
+});
+
+$("#start_play").flatpickr({
     enableTime: true,
     noCalendar: true,
     dateFormat: "H:i:S",

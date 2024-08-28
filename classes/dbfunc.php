@@ -776,7 +776,7 @@ class DBFunc
 
         return $logSet;
 
-    }    
+    }
 
     public function getUserGroup($username)
     {
@@ -2641,7 +2641,8 @@ class DBFunc
     public function getRDCatchs()
     {
         $rdcatch = array();
-        $sql = "SELECT * FROM MATRICES swit LEFT JOIN RECORDINGS rec ON rec.STATION_NAME=swit.STATION_NAME AND rec.CHANNEL=swit.MATRIX WHERE rec.TYPE = 1 OR rec.TYPE = 2 OR rec.TYPE = 4 OR rec.TYPE = 5 ORDER BY rec.ID ASC";
+        $sql = "SELECT rec.ID, rec.IS_ACTIVE, rec.STATION_NAME, rec.TYPE, rec.CHANNEL, rec.CUT_NAME, rec.SUN, rec.MON, rec.TUE, rec.WED, rec.THU, rec.FRI, rec.SAT, rec.DESCRIPTION, rec.START_TIME,
+        rec.END_TIME, rec.MACRO_CART, rec.ONE_SHOT, rec.URL, rec.FEED_ID, swit.NAME FROM RECORDINGS rec LEFT JOIN MATRICES swit ON rec.STATION_NAME=swit.STATION_NAME AND rec.CHANNEL=swit.MATRIX WHERE rec.TYPE = 1 OR rec.TYPE = 2 OR rec.TYPE = 3 OR rec.TYPE = 4 OR rec.TYPE = 5 ORDER BY rec.ID ASC";
         //$sql = 'SELECT * FROM `RECORDINGS`  WHERE TYPE = 1 OR TYPE = 2 OR TYPE = 4 OR TYPE = 5  ORDER BY `ID` ASC';
         $stmt = $this->_db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -2685,7 +2686,7 @@ class DBFunc
 
         return $array;
     }
-    
+
 
     public function updateCatchMacro($isactive, $station, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $macro, $one, $id)
     {
@@ -2764,7 +2765,7 @@ class DBFunc
             return true;
         }
 
-    }   
+    }
     public function getFeeds()
     {
 
@@ -2884,8 +2885,8 @@ class DBFunc
         $sql = 'INSERT INTO `RECORDINGS` (`IS_ACTIVE`, `STATION_NAME`, `TYPE`, `CHANNEL`, `CUT_NAME`, `SUN`, `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `DESCRIPTION`,
         `START_TIME`, `TRIM_THRESHOLD`, `NORMALIZE_LEVEL`, `EVENTDATE_OFFSET`, `CHANNELS`, `ONE_SHOT`, `URL`, `URL_USERNAME`, `URL_PASSWORD`, `ENABLE_METADATA`)
                 VALUES (:isactive, :stationname, :type, :channel, :cutname, :sun, :mon, :tue, :wed, :thu, :fri, :sat, :descript, :starttime, :treshold, :normlev, 
-                :evdateoff, :channels, :oneshot, :urls, :urusr, :urlpass, :enmeta)';        
-        
+                :evdateoff, :channels, :oneshot, :urls, :urusr, :urlpass, :enmeta)';
+
         $stmt = $this->_db->prepare($sql);
         $stmt->bindParam(':isactive', $isactive);
         $stmt->bindParam(':stationname', $station);
@@ -2928,7 +2929,7 @@ class DBFunc
         $sql = 'INSERT INTO `RECORDINGS` (`IS_ACTIVE`, `STATION_NAME`, `TYPE`, `CHANNEL`, `CUT_NAME`, `SUN`, `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `DESCRIPTION`,
         `START_TIME`, `MACRO_CART`, `ONE_SHOT`)
                 VALUES (:isactive, :stationname, :type, :channel, :cutname, :sun, :mon, :tue, :wed, :thu, :fri, :sat, :descript, :starttime, 
-                :macrocart, :oneshot)';   
+                :macrocart, :oneshot)';
         $stmt = $this->_db->prepare($sql);
         $stmt->bindParam(':isactive', $isactive);
         $stmt->bindParam(':stationname', $station);
@@ -2974,14 +2975,16 @@ class DBFunc
         return $switch;
 
     }
-    
+
     public function getOutputs($matrix, $station)
     {
 
         $outputs = array();
         $stmt = $this->_db->prepare('SELECT * FROM OUTPUTS WHERE STATION_NAME = :station AND MATRIX = :matrix');
-        $stmt->execute([':station' => $station,
-        ':matrix' => $matrix]);
+        $stmt->execute([
+            ':station' => $station,
+            ':matrix' => $matrix
+        ]);
         $outputs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $outputs;
 
@@ -2992,8 +2995,10 @@ class DBFunc
 
         $inputs = array();
         $stmt = $this->_db->prepare('SELECT * FROM INPUTS WHERE STATION_NAME = :station AND MATRIX = :matrix');
-        $stmt->execute([':station' => $station,
-        ':matrix' => $matrix]);
+        $stmt->execute([
+            ':station' => $station,
+            ':matrix' => $matrix
+        ]);
         $inputs = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $inputs;
 
@@ -3056,6 +3061,105 @@ class DBFunc
         $stmt->bindParam(':starttime', $start);
         $stmt->bindParam(':switchin', $switchin);
         $stmt->bindParam(':switchout', $switchout);
+        $stmt->bindParam(':oneshot', $one);
+        $stmt->bindParam(':idno', $id);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
+    public function getPlayoutPorts($station)
+    {
+
+        $playout = array();
+        $stmt = $this->_db->prepare('SELECT * FROM DECKS WHERE STATION_NAME = :station AND CARD_NUMBER >= 0 AND PORT_NUMBER >= 0 AND CHANNEL > 128 AND CHANNEL <= 137');
+        $stmt->execute([':station' => $station]);
+        $i = 1;
+        while ($row = $stmt->fetch()) {
+
+            $playout[] = array(
+                'ID' => $row['ID'],
+                'STATION_NAME' => $row['STATION_NAME'],
+                'CHANNEL' => $row['CHANNEL'],
+                'CARD_NUMBER' => $row['CARD_NUMBER'],
+                'STREAM_NUMBER' => $row['STREAM_NUMBER'],
+                'PORT_NUMBER' => $row['PORT_NUMBER'],
+                'MON_PORT_NUMBER' => $row['MON_PORT_NUMBER'],
+                'DEFAULT_MONITOR_ON' => $row['DEFAULT_MONITOR_ON'],
+                'PORT_TYPE' => $row['PORT_TYPE'],
+                'DEFAULT_FORMAT' => $row['DEFAULT_FORMAT'],
+                'DEFAULT_CHANNELS' => $row['DEFAULT_CHANNELS'],
+                'DEFAULT_BITRATE' => $row['DEFAULT_BITRATE'],
+                'DEFAULT_THRESHOLD' => $row['DEFAULT_THRESHOLD'],
+                'SWITCH_STATION' => $row['SWITCH_STATION'],
+                'SWITCH_MATRIX' => $row['SWITCH_MATRIX'],
+                'SWITCH_OUTPUT' => $row['SWITCH_OUTPUT'],
+                'SWITCH_DELAY' => $row['SWITCH_DELAY'],
+                'PORT_NUMBER_VIS' => $i,
+            );
+            $i++;
+        }
+
+        return $playout;
+
+    }
+
+    public function AddCatchPlayout($isactive, $station, $channel, $cutname, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $one)
+    {
+
+        $type = 3;
+        $sql = 'INSERT INTO `RECORDINGS` (`IS_ACTIVE`, `STATION_NAME`, `TYPE`, `CHANNEL`, `CUT_NAME`, `SUN`, `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `DESCRIPTION`,
+        `START_TIME`, `ONE_SHOT`)
+                VALUES (:isactive, :stationname, :type, :channel, :cutname, :sun, :mon, :tue, :wed, :thu, :fri, :sat, :descript, :starttime,
+                :oneshot)';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':channel', $channel);
+        $stmt->bindParam(':cutname', $cutname);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
+        $stmt->bindParam(':oneshot', $one);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function EditCatchPlayout($isactive, $station, $channel, $cutname, $sun, $mon, $tue, $wed, $thu, $fri, $sat, $desc, $start, $one, $id)
+    {
+
+        $sql = 'UPDATE `RECORDINGS` SET `IS_ACTIVE` = :isactive, `STATION_NAME` = :stationname, `CHANNEL` = :channel, `CUT_NAME` = :cutname, `SUN` = :sun, `MON` = :mon,
+        `TUE` = :tue, `WED` = :wed, `THU` = :thu, `FRI` = :fri, `SAT` = :sat, `DESCRIPTION` = :descript,
+        `START_TIME` = :starttime, `ONE_SHOT` = :oneshot WHERE `ID` = :idno';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $isactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':channel', $channel);
+        $stmt->bindParam(':cutname', $cutname);
+        $stmt->bindParam(':sun', $sun);
+        $stmt->bindParam(':mon', $mon);
+        $stmt->bindParam(':tue', $tue);
+        $stmt->bindParam(':wed', $wed);
+        $stmt->bindParam(':thu', $thu);
+        $stmt->bindParam(':fri', $fri);
+        $stmt->bindParam(':sat', $sat);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':starttime', $start);
         $stmt->bindParam(':oneshot', $one);
         $stmt->bindParam(':idno', $id);
 
