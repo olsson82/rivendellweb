@@ -84,10 +84,14 @@ $('#install_form').validate({
             required: true,
         },
         smtp_usr: {
-            required: true,
+            required: function(element) {
+                return $("#smtp_login").val() == "1";
+            }
         },
         smtp_pass: {
-            required: true,
+            required: function(element) {
+                return $("#smtp_login").val() == "1";
+            }
         },
         smtp_from: {
             required: true,
