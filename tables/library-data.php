@@ -69,7 +69,7 @@ if ($searchValue != '') {
                 'artist' => "%$searchValue%"
             );
         } else if ($allscheds != 1 && $alla == 1) {
-            $searchQuery = " AND sched.SCHED_CODE = :schedd AND (grid.NUMBER LIKE :number OR 
+            $searchQuery = " AND sched.theschedcode = :schedd AND (grid.NUMBER LIKE :number OR 
            grid.GROUP_NAME LIKE :group_name OR
            grid.TITLE LIKE :title OR 
            grid.ARTIST LIKE :artist ) ";
@@ -81,7 +81,7 @@ if ($searchValue != '') {
                 'artist' => "%$searchValue%"
             );
         } else if ($allscheds != 1 && $alla != 1) {
-            $searchQuery = " AND grid.GROUP_NAME = :groupa AND sched.SCHED_CODE = :schedd AND (grid.NUMBER LIKE :number OR 
+            $searchQuery = " AND grid.GROUP_NAME = :groupa AND sched.theschedcode = :schedd AND (grid.NUMBER LIKE :number OR 
            grid.GROUP_NAME LIKE :group_name OR
            grid.TITLE LIKE :title OR 
            grid.ARTIST LIKE :artist ) ";
@@ -110,12 +110,12 @@ if ($searchValue != '') {
                 'groupa' => $groups
             );
         } else if ($allscheds != 1 && $alla == 1) {
-            $searchQuery = " AND sched.SCHED_CODE = :schedd ";
+            $searchQuery = " AND sched.theschedcode = :schedd ";
             $searchArray = array(
                 'schedd' => $scheds
             );
         } else if ($allscheds != 1 && $alla != 1) {
-            $searchQuery = " AND sched.SCHED_CODE = :schedd AND grid.GROUP_NAME = :groupa ";
+            $searchQuery = " AND sched.theschedcode = :schedd AND grid.GROUP_NAME = :groupa ";
             $searchArray = array(
                 'schedd' => $scheds,
                 'groupa' => $groups
@@ -127,11 +127,11 @@ if ($searchValue != '') {
 }
 
 if ($alla == 1 && $allscheds == 1) {
-    $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON  grid.GROUP_NAME = usa.GROUP_NAME WHERE usa.USER_NAME = :usernam");
+    $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN (SELECT CART_NUMBER, COUNT(*) AS schedcodes FROM CART_SCHED_CODES GROUP BY CART_NUMBER) sched ON grid.NUMBER = sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON  grid.GROUP_NAME = usa.GROUP_NAME WHERE usa.USER_NAME = :usernam");
     $stmt->execute([':usernam' => $ausr]);
 } else {
     if ($alla != 1 && $allscheds == 1) {
-        $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE grid.GROUP_NAME = :groupname");
+        $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN (SELECT SCHED_CODE AS theschedcode, CART_NUMBER, COUNT(*) AS schedcodes FROM CART_SCHED_CODES GROUP BY CART_NUMBER) sched ON grid.NUMBER = sched.CART_NUMBER WHERE grid.GROUP_NAME = :groupname");
         $stmt->execute([':groupname' => $groups]);
     } else if ($allscheds != 1 && $alla == 1) {
         $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE sched.SCHED_CODE = :schedcode");
@@ -147,18 +147,27 @@ $records = $stmt->fetch();
 $totalRecords = $records['allcount'];
 
 if ($alla == 1 && $allscheds == 1) {
-    $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON  grid.GROUP_NAME = usa.GROUP_NAME WHERE 1 " . $searchQuery);
+    $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN (SELECT SCHED_CODE AS theschedcode, CART_NUMBER, COUNT(*) AS schedcodes FROM CART_SCHED_CODES GROUP BY CART_NUMBER) sched ON grid.NUMBER = sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON  grid.GROUP_NAME = usa.GROUP_NAME WHERE 1 " . $searchQuery);
 } else {
-    $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE 1 " . $searchQuery);
+    if ($alla != 1 && $allscheds == 1) {
+        $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN (SELECT SCHED_CODE AS theschedcode, CART_NUMBER, COUNT(*) AS schedcodes FROM CART_SCHED_CODES GROUP BY CART_NUMBER) sched ON grid.NUMBER = sched.CART_NUMBER WHERE 1 " . $searchQuery);    
+    } else {
+        $stmt = $db->prepare("SELECT COUNT(*) AS allcount FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN (SELECT SCHED_CODE AS theschedcode, CART_NUMBER AS schedcodes FROM CART_SCHED_CODES) sched ON grid.NUMBER = sched.schedcodes WHERE 1 " . $searchQuery);
+    }
 }
 $stmt->execute($searchArray);
 $records = $stmt->fetch();
 $totalRecordwithFilter = $records['allcount'];
 
 if ($alla == 1 && $allscheds == 1) {
-    $stmt = $db->prepare("SELECT * FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON grid.GROUP_NAME = usa.GROUP_NAME WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+    $stmt = $db->prepare("SELECT grid.*, clk.*, sched.schedcodes, sched.theschedcode, usa.*  FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN (SELECT SCHED_CODE AS theschedcode, CART_NUMBER, COUNT(*) AS schedcodes FROM CART_SCHED_CODES GROUP BY CART_NUMBER) sched ON grid.NUMBER = sched.CART_NUMBER LEFT JOIN USER_PERMS usa ON grid.GROUP_NAME = usa.GROUP_NAME WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
 } else {
-    $stmt = $db->prepare("SELECT * FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN CART_SCHED_CODES sched ON grid.NUMBER=sched.CART_NUMBER WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+    if ($alla != 1 && $allscheds == 1) {
+        $stmt = $db->prepare("SELECT grid.*, clk.*, sched.schedcodes, sched.theschedcode FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN (SELECT SCHED_CODE AS theschedcode, CART_NUMBER, COUNT(*) AS schedcodes FROM CART_SCHED_CODES GROUP BY CART_NUMBER) sched ON grid.NUMBER = sched.CART_NUMBER WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");    
+    } else {
+        $stmt = $db->prepare("SELECT grid.*, clk.*, sched.schedcodes, sched.theschedcode FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME LEFT JOIN (SELECT SCHED_CODE AS theschedcode, CART_NUMBER AS schedcodes FROM CART_SCHED_CODES) sched ON grid.NUMBER = sched.schedcodes WHERE 1 " . $searchQuery . " ORDER BY " . $columnName . " " . $columnSortOrder . " LIMIT :limit,:offset");
+    }
+    
 }
 
 foreach ($searchArray as $key => $search) {
