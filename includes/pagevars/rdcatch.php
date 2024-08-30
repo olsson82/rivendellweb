@@ -6,6 +6,9 @@
     var TRAN_SEARCHOUTPUT = "<?= $ml->tr('SEARCHOUTPUT') ?>";
     var TRAN_SEARCHINPUT = "<?= $ml->tr('SEARCHINPUT') ?>";
     var TRAN_SEARCHPORT = "<?= $ml->tr('SEARCHPORT') ?>";
+    var TRAN_HARD = "<?= $ml->tr('HARD') ?>";
+    var TRAN_GPI = "<?= $ml->tr('GPI') ?>";
+    var TRAN_LENGTH = "<?= $ml->tr('LENGTH') ?>";
     var TRAN_OFF = "<?= $ml->tr('OFF') ?>";
     var USERNAME = "<?php echo $username; ?>";  
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";

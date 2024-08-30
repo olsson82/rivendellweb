@@ -2641,9 +2641,7 @@ class DBFunc
     public function getRDCatchs()
     {
         $rdcatch = array();
-        $sql = "SELECT rec.ID, rec.IS_ACTIVE, rec.STATION_NAME, rec.TYPE, rec.CHANNEL, rec.CUT_NAME, rec.SUN, rec.MON, rec.TUE, rec.WED, rec.THU, rec.FRI, rec.SAT, rec.DESCRIPTION, rec.START_TIME,
-        rec.END_TIME, rec.MACRO_CART, rec.ONE_SHOT, rec.URL, rec.FEED_ID, swit.NAME FROM RECORDINGS rec LEFT JOIN MATRICES swit ON rec.STATION_NAME=swit.STATION_NAME AND rec.CHANNEL=swit.MATRIX WHERE rec.TYPE = 1 OR rec.TYPE = 2 OR rec.TYPE = 3 OR rec.TYPE = 4 OR rec.TYPE = 5 ORDER BY rec.ID ASC";
-        //$sql = 'SELECT * FROM `RECORDINGS`  WHERE TYPE = 1 OR TYPE = 2 OR TYPE = 4 OR TYPE = 5  ORDER BY `ID` ASC';
+        $sql = "SELECT rec.*, swit.NAME, imp.NAME AS IMPNAME FROM RECORDINGS rec LEFT JOIN MATRICES swit ON rec.STATION_NAME=swit.STATION_NAME AND rec.CHANNEL=swit.MATRIX LEFT JOIN INPUTS imp ON rec.STATION_NAME=imp.STATION_NAME AND swit.MATRIX=imp.MATRIX AND rec.SWITCH_INPUT=imp.NUMBER ORDER BY rec.ID ASC";
         $stmt = $this->_db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
         $stmt->execute();
@@ -3169,5 +3167,158 @@ class DBFunc
             return true;
         }
 
+    }
+
+    public function getRecordPorts($station)
+    {
+
+        $playout = array();
+        $stmt = $this->_db->prepare('SELECT * FROM DECKS WHERE STATION_NAME = :station AND CARD_NUMBER >= 0 AND CHANNEL > 0 AND CHANNEL <= 9');
+        $stmt->execute([':station' => $station]);
+        $i = 1;
+        while ($row = $stmt->fetch()) {
+
+            $playout[] = array(
+                'ID' => $row['ID'],
+                'STATION_NAME' => $row['STATION_NAME'],
+                'CHANNEL' => $row['CHANNEL'],
+                'CARD_NUMBER' => $row['CARD_NUMBER'],
+                'STREAM_NUMBER' => $row['STREAM_NUMBER'],
+                'PORT_NUMBER' => $row['PORT_NUMBER'],
+                'MON_PORT_NUMBER' => $row['MON_PORT_NUMBER'],
+                'DEFAULT_MONITOR_ON' => $row['DEFAULT_MONITOR_ON'],
+                'PORT_TYPE' => $row['PORT_TYPE'],
+                'DEFAULT_FORMAT' => $row['DEFAULT_FORMAT'],
+                'DEFAULT_CHANNELS' => $row['DEFAULT_CHANNELS'],
+                'DEFAULT_BITRATE' => $row['DEFAULT_BITRATE'],
+                'DEFAULT_THRESHOLD' => $row['DEFAULT_THRESHOLD'],
+                'SWITCH_STATION' => $row['SWITCH_STATION'],
+                'SWITCH_MATRIX' => $row['SWITCH_MATRIX'],
+                'SWITCH_OUTPUT' => $row['SWITCH_OUTPUT'],
+                'SWITCH_DELAY' => $row['SWITCH_DELAY'],
+                'PORT_NUMBER_VIS' => $i,
+            );
+            $i++;
+        }
+
+        return $playout;
+
+    }
+
+    public function getDecksData($station, $channel)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM DECKS WHERE STATION_NAME = :station AND CHANNEL = :channel');
+        $stmt->execute([':station' => $station,
+        ':channel' => $channel]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+    }
+
+    public function AddCatchRecording($eventactive, $station, $audioport, $dest, $sunday, $monday, $tuesday, $wednesday, $thursday, $friday, $saturday, $desc, $startopt, $thestart, $gpiend, $gpimatrix, $gpiline, $startdelay, $endopt, $theend, $gpiendend, $recendtimelength, $gpimatrixend, $gpilineend, $maxreclength, $source, $channels, $autotrim, $normalize, $startdateoffset, $enddateoffset, $multiplerecs, $oneshot)
+    {
+
+        $type = 0;
+        $sql = 'INSERT INTO `RECORDINGS` (`IS_ACTIVE`, `STATION_NAME`, `TYPE`, `CHANNEL`, `CUT_NAME`, `SUN`, `MON`, `TUE`, `WED`, `THU`, `FRI`, `SAT`, `DESCRIPTION`,
+        `START_TYPE`, `START_TIME`, `START_LENGTH`, `START_MATRIX`, `START_LINE`, `START_OFFSET`, `END_TYPE`, `END_TIME`, `END_LENGTH`, `LENGTH`, `END_MATRIX`, `END_LINE`,
+        `MAX_GPI_REC_LENGTH`, `SWITCH_INPUT`, `CHANNELS`, `TRIM_THRESHOLD`, `NORMALIZE_LEVEL`, `STARTDATE_OFFSET`, `ENDDATE_OFFSET`, `ALLOW_MULT_RECS`, `ONE_SHOT`)
+                VALUES (:isactive, :stationname, :type, :channel, :cutname, :sun, :mon, :tue, :wed, :thu, :fri, :sat, :descript, :startopt, :starttime,
+                :gpiend, :startmatrix, :startline, :startoffset, :endtype, :endtime, :endlength, :lengths, :endmatrix, :endline, :maxgpirec,
+                :switchinput, :channels, :trimtreshold, :normalize, :startdoffset, :enddoffset, :allowmultiple, :oneshot)';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $eventactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':type', $type);
+        $stmt->bindParam(':channel', $audioport);
+        $stmt->bindParam(':cutname', $dest);
+        $stmt->bindParam(':sun', $sunday);
+        $stmt->bindParam(':mon', $monday);
+        $stmt->bindParam(':tue', $tuesday);
+        $stmt->bindParam(':wed', $wednesday);
+        $stmt->bindParam(':thu', $thursday);
+        $stmt->bindParam(':fri', $friday);
+        $stmt->bindParam(':sat', $saturday);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':startopt', $startopt);
+        $stmt->bindParam(':starttime', $thestart);
+        $stmt->bindParam(':gpiend', $gpiend);
+        $stmt->bindParam(':startmatrix', $gpimatrix);
+        $stmt->bindParam(':startline', $gpiline);
+        $stmt->bindParam(':startoffset', $startdelay);
+        $stmt->bindParam(':endtype', $endopt);
+        $stmt->bindParam(':endtime', $theend);
+        $stmt->bindParam(':endlength', $gpiendend);
+        $stmt->bindParam(':lengths', $recendtimelength);
+        $stmt->bindParam(':endmatrix', $gpimatrixend);
+        $stmt->bindParam(':endline', $gpilineend);
+        $stmt->bindParam(':maxgpirec', $maxreclength);
+        $stmt->bindParam(':switchinput', $source);
+        $stmt->bindParam(':channels', $channels);
+        $stmt->bindParam(':trimtreshold', $autotrim);
+        $stmt->bindParam(':normalize', $normalize);
+        $stmt->bindParam(':startdoffset', $startdateoffset);
+        $stmt->bindParam(':enddoffset', $enddateoffset);
+        $stmt->bindParam(':allowmultiple', $multiplerecs);
+        $stmt->bindParam(':oneshot', $oneshot);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function EditCatchRecording($eventactive, $station, $audioport, $dest, $sunday, $monday, $tuesday, $wednesday, $thursday, $friday, $saturday, $desc, $startopt, $thestart, $gpiend, $gpimatrix, $gpiline, $startdelay, $endopt, $theend, $gpiendend, $recendtimelength, $gpimatrixend, $gpilineend, $maxreclength, $source, $channels, $autotrim, $normalize, $startdateoffset, $enddateoffset, $multiplerecs, $oneshot, $id)
+    {
+
+        $sql = 'UPDATE `RECORDINGS` SET `IS_ACTIVE` = :isactive, `STATION_NAME` = :stationname, `CHANNEL` = :channel, `CUT_NAME` = :cutname, `SUN` = :sun, `MON` = :mon,
+        `TUE` = :tue, `WED` = :wed, `THU` = :thu, `FRI` = :fri, `SAT` = :sat, `DESCRIPTION` = :descript, `START_TYPE` = :startopt, `START_TIME` = :starttime, 
+        `START_LENGTH` = :gpiend, `START_MATRIX` = :startmatrix, `START_LINE` = :startline, `START_OFFSET` = :startoffset, `END_TYPE` = :endtype, 
+        `END_TIME` = :endtime, `END_LENGTH` = :endlength, `LENGTH` = :lengths, `END_MATRIX` = :endmatrix, `END_LINE` = :endline, 
+        `MAX_GPI_REC_LENGTH` = :maxgpirec, `SWITCH_INPUT` = :switchinput, `CHANNELS` = :channels, `TRIM_THRESHOLD` = :trimtreshold, `NORMALIZE_LEVEL` = :normalize, 
+        `STARTDATE_OFFSET` = :startdoffset, `ENDDATE_OFFSET` = :enddoffset, `ALLOW_MULT_RECS` = :allowmultiple, `ONE_SHOT` = :oneshot WHERE `ID` = :idno';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':isactive', $eventactive);
+        $stmt->bindParam(':stationname', $station);
+        $stmt->bindParam(':channel', $audioport);
+        $stmt->bindParam(':cutname', $dest);
+        $stmt->bindParam(':sun', $sunday);
+        $stmt->bindParam(':mon', $monday);
+        $stmt->bindParam(':tue', $tuesday);
+        $stmt->bindParam(':wed', $wednesday);
+        $stmt->bindParam(':thu', $thursday);
+        $stmt->bindParam(':fri', $friday);
+        $stmt->bindParam(':sat', $saturday);
+        $stmt->bindParam(':descript', $desc);
+        $stmt->bindParam(':startopt', $startopt);
+        $stmt->bindParam(':starttime', $thestart);
+        $stmt->bindParam(':gpiend', $gpiend);
+        $stmt->bindParam(':startmatrix', $gpimatrix);
+        $stmt->bindParam(':startline', $gpiline);
+        $stmt->bindParam(':startoffset', $startdelay);
+        $stmt->bindParam(':endtype', $endopt);
+        $stmt->bindParam(':endtime', $theend);
+        $stmt->bindParam(':endlength', $gpiendend);
+        $stmt->bindParam(':lengths', $recendtimelength);
+        $stmt->bindParam(':endmatrix', $gpimatrixend);
+        $stmt->bindParam(':endline', $gpilineend);
+        $stmt->bindParam(':maxgpirec', $maxreclength);
+        $stmt->bindParam(':switchinput', $source);
+        $stmt->bindParam(':channels', $channels);
+        $stmt->bindParam(':trimtreshold', $autotrim);
+        $stmt->bindParam(':normalize', $normalize);
+        $stmt->bindParam(':startdoffset', $startdateoffset);
+        $stmt->bindParam(':enddoffset', $enddateoffset);
+        $stmt->bindParam(':allowmultiple', $multiplerecs);
+        $stmt->bindParam(':oneshot', $oneshot);
+        $stmt->bindParam(':idno', $id);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
     }
 }

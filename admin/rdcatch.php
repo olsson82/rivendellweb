@@ -106,11 +106,15 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                             <?= $ml->tr('ADD'); ?>
                         </button>
                         <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                            <a class="dropdown-item" href="javascript:;" onclick="add(1)"><?= $ml->tr('MACROCART'); ?></a>
+                            <a class="dropdown-item" href="javascript:;"
+                                onclick="add(1)"><?= $ml->tr('MACROCART'); ?></a>
                             <a class="dropdown-item" href="javascript:;" onclick="add(5)"><?= $ml->tr('UPLOAD'); ?></a>
-                            <a class="dropdown-item" href="javascript:;" onclick="add(4)"><?= $ml->tr('DOWNLOAD'); ?></a>
-                            <a class="dropdown-item" href="javascript:;" onclick="add(2)"><?= $ml->tr('SWITCHEVENT'); ?></a>
+                            <a class="dropdown-item" href="javascript:;"
+                                onclick="add(4)"><?= $ml->tr('DOWNLOAD'); ?></a>
+                            <a class="dropdown-item" href="javascript:;"
+                                onclick="add(2)"><?= $ml->tr('SWITCHEVENT'); ?></a>
                             <a class="dropdown-item" href="javascript:;" onclick="add(3)"><?= $ml->tr('PLAYOUT'); ?></a>
+                            <a class="dropdown-item" href="javascript:;" onclick="add(0)"><?= $ml->tr('RECORDING'); ?></a>
                         </div>
                     </div>
                 </div>
@@ -178,6 +182,447 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
 
     </section>
 
+    <div class="modal fade text-left" id="recording_edit" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="RecordingLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="RecordingLabel">
+                        <?= $ml->tr('CATCHRECEDIT') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-rdrec-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="recording_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('GENERALSETTINGS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="eventactive_rec" name="eventactive"
+                                                class='form-check-input'>
+                                            <label for="eventactive_rec">
+                                                <?= $ml->tr('CEVENTACTIVE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="location_rec">
+                                        <?= $ml->tr('LOCATION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="location_rec" name="location" class="form-select">
+                                        <?php foreach ($hosts as $name) { ?>
+                                            <option value="<?php echo $name; ?>">
+                                                <?php echo $name; ?>
+                                            </option>
+                                        <?php } ?>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="audio_rec">
+                                        <?= $ml->tr('RECORDINGPORT') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="audio_rec" name="audioport" class="form-select">
+                                        <option value=""><?= $ml->tr('SELECTAPORT') ?></option>
+                                    </select>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="desc_rec">
+                                        <?= $ml->tr('DESCRIPTION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="desc_rec" class="form-control" name="desc" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="source_rec">
+                                        <?= $ml->tr('SOURCE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="source_rec" name="source" class="form-select">
+                                        <option value=""><?= $ml->tr('SELECTAPORT') ?></option>
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <a href="javascript:;" id="selcartbuttrec" data-bs-stacked-modal="#macro_select"
+                                        class="btn btn-info">
+                                        <?= $ml->tr('SELECTCART') ?>
+                                    </a>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <a href="javascript:;" id="selcutbuttrec" data-bs-stacked-modal="#cut_select"
+                                        style="display: none;" class="btn btn-warning">
+                                        <?= $ml->tr('SELECTCUT') ?>
+                                    </a>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="dest_rec">
+                                        <?= $ml->tr('DESTINATION') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="dest_rec" class="form-control" name="dest" value=""
+                                        readonly>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="channels_rec">
+                                        <?= $ml->tr('AUDIOCHANNELS') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="channels_rec" name="channels" class="form-select">
+                                        <option value="1">1</option>
+                                        <option value="2" selected>2</option>                                       
+                                    </select>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="autotrim_rec" name="autotrim" class='form-check-input'>
+                                            <label for="autotrim_rec">
+                                                <?= $ml->tr('AUTOTRIM') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="trimlevel_rec">
+                                        <?= $ml->tr('AUTOTRIMLEVEL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="trimlevel_rec" class="form-control" min="-99" max="-1"
+                                        name="trimlevel" value="<?php echo $json_sett["autotrim"]; ?>">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="normalize_rec" name="normalize" class='form-check-input'>
+                                            <label for="normalize_rec">
+                                                <?= $ml->tr('NORMALIZE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="normlevel_rec">
+                                        <?= $ml->tr('NORMALIZELEVEL') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="normlevel_rec" class="form-control" min="-99" max="-1"
+                                        name="normlevel" value="<?php echo $json_sett["normalize"]; ?>">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="startdateoffset_rec">
+                                        <?= $ml->tr('STARTDATEOFFSET') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="startdateoffset_rec" class="form-control" min="0"
+                                        name="startdateoffset" value="0">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="enddateoffset_rec">
+                                        <?= $ml->tr('ENDDATEOFFSET') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="enddateoffset_rec" class="form-control" min="0"
+                                        name="enddateoffset" value="0">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="oneshot_rec" name="oneshot"
+                                                class='form-check-input'>
+                                            <label for="oneshot_rec">
+                                                <?= $ml->tr('ONESHOT') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('STARTPARAMETERS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="0" name="startopt"
+                                            id="hardtime_rec" checked>
+                                        <label class="form-check-label" for="hardtime_rec">
+                                        <?= $ml->tr('USEHARDTIME') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="start_rec">
+                                        <?= $ml->tr('RECSTARTTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="start_rec" class="fltpick form-control" name="start" value="">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="1" name="startopt"
+                                            id="gpi_rec">
+                                        <label class="form-check-label" for="gpi_rec">
+                                        <?= $ml->tr('USEGPI') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gpistart_rec">
+                                        <?= $ml->tr('WINDOWSTARTTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="gpistart_rec" class="fltpick form-control" name="gpistart" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gpistartend_rec">
+                                        <?= $ml->tr('WINDOWENDTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="gpistartend_rec" class="fltpick form-control" name="gpiend" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gpimatrix_rec">
+                                        <?= $ml->tr('GPIMATRIX') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" min="0" max="7" id="gpimatrix_rec" class="form-control"
+                                        name="gpimatrix" value="0">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gpiline_rec">
+                                        <?= $ml->tr('GPILINE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" min="1" id="gpiline_rec" class="form-control"
+                                        name="gpiline" value="1">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="startdelay_rec">
+                                        <?= $ml->tr('STARTDELAY') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="startdelay_rec" class="fltpick form-control" name="startdelay" value="">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="multiplerec_rec" name="multiplerec"
+                                                class='form-check-input'>
+                                            <label for="multiplerec_rec">
+                                                <?= $ml->tr('ALLOWMULTIPLEREC') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('ENDPARAMETERS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="0" name="endopt"
+                                            id="hardtimeend_rec" checked>
+                                        <label class="form-check-label" for="hardtimeend_rec">
+                                        <?= $ml->tr('USEHARDTIME') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="recendtime_rec">
+                                        <?= $ml->tr('RECORDENDTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="recendtime_rec" class="fltpick form-control" name="recendtime" value="">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="2" name="endopt"
+                                            id="lengthend_rec">
+                                        <label class="form-check-label" for="lengthend_rec">
+                                        <?= $ml->tr('USELENGTH') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="recendtimelength_rec">
+                                        <?= $ml->tr('RECORDLENGTH') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="recendtimelength_rec" class="fltpick form-control" name="recendtimelength" value="">
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class="form-check">
+                                        <input class="form-check-input" type="radio" value="1" name="endopt"
+                                            id="gpiend_rec">
+                                        <label class="form-check-label" for="gpiend_rec">
+                                        <?= $ml->tr('USEGPI') ?>
+                                        </label>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gpiendstart_rec">
+                                        <?= $ml->tr('WINDOWSTARTTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="gpiendstart_rec" class="fltpick form-control" name="gpiendstart" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gpiend_rec">
+                                        <?= $ml->tr('WINDOWENDTIME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="gpiendend_rec" class="fltpick form-control" name="gpiendend" value="">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gpimatrixend_rec">
+                                        <?= $ml->tr('GPIMATRIX') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" min="0" max="7" id="gpimatrixend_rec" class="form-control"
+                                        name="gpimatrixend" value="0">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="gpilineend_rec">
+                                        <?= $ml->tr('GPILINE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" min="1" id="gpilineend_rec" class="form-control"
+                                        name="gpilineend" value="1">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="maxreclength_rec">
+                                        <?= $ml->tr('MAXRECORDLENGTH') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="maxreclength_rec" class="fltpick form-control" name="maxreclength" value="">
+                                </div>
+                                <div class="divider">
+                                    <div class="divider-text">
+                                        <?= $ml->tr('ACTIVEDAYS') ?>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="mon_rec" name="monday" class='form-check-input'>
+                                            <label for="mon_rec">
+                                                <?= $ml->tr('MONDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="tue_rec" name="tuesday"
+                                                class='form-check-input'>
+                                            <label for="tue_rec">
+                                                <?= $ml->tr('TUESDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="wed_rec" name="wednesday"
+                                                class='form-check-input'>
+                                            <label for="wed_rec">
+                                                <?= $ml->tr('WEDNESDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="thu_rec" name="thursday"
+                                                class='form-check-input'>
+                                            <label for="thu_rec">
+                                                <?= $ml->tr('THURSDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="fri_rec" name="friday" class='form-check-input'>
+                                            <label for="fri_rec">
+                                                <?= $ml->tr('FRIDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="sat_rec" name="saturday"
+                                                class='form-check-input'>
+                                            <label for="sat_rec">
+                                                <?= $ml->tr('SATURDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="sun_rec" name="sunday" class='form-check-input'>
+                                            <label for="sun_rec">
+                                                <?= $ml->tr('SUNDAY') ?>
+                                            </label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" id="recid" name="catchid" value="">
+                        <button type="button" class="btn btn-light-secondary" data-kt-rdrec-modal-action="close">
+                            <?= $ml->tr('CLOSE') ?>
+                        </button>
+                        <input type="submit" class="btn btn-primary ms-1" value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
     <div class="modal fade text-left" id="playout_edit" data-bs-backdrop="static" role="dialog"
         aria-labelledby="PlayoutLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
@@ -231,7 +676,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <select id="audio_play" name="audioport" class="form-select">
-                                    <option value=""><?= $ml->tr('SELECTAPORT') ?></option>                                        
+                                        <option value=""><?= $ml->tr('SELECTAPORT') ?></option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
@@ -240,7 +685,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="start_play" class="form-control" name="start" value="">
+                                    <input type="text" id="start_play" class="fltpick form-control" name="start" value="">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="desc_play">
@@ -300,7 +745,8 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="tue_play" name="tuesday" class='form-check-input'>
+                                            <input type="checkbox" id="tue_play" name="tuesday"
+                                                class='form-check-input'>
                                             <label for="tue_play">
                                                 <?= $ml->tr('TUESDAY') ?>
                                             </label>
@@ -427,7 +873,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="start_switch" class="form-control" name="start" value="">
+                                    <input type="text" id="start_switch" class="fltpick form-control" name="start" value="">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="desc_switch">
@@ -444,7 +890,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <select id="matrix_switch" name="matrix" class="form-select">
-                                    <option value=""><?= $ml->tr('SELECTASWITCH') ?></option>
+                                        <option value=""><?= $ml->tr('SELECTASWITCH') ?></option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
@@ -454,7 +900,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <select id="output_switch" name="output" class="form-select">
-                                    <option value=""><?= $ml->tr('SELECTOUTPUT') ?></option>
+                                        <option value=""><?= $ml->tr('SELECTOUTPUT') ?></option>
                                     </select>
                                 </div>
                                 <div class="col-md-4">
@@ -464,8 +910,8 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <select id="input_switch" name="input" class="form-select">
-                                    <option value=""><?= $ml->tr('SELECTINPUT') ?></option>
-                                    <option value="0"><?= $ml->tr('OFF') ?></option>
+                                        <option value=""><?= $ml->tr('SELECTINPUT') ?></option>
+                                        <option value="0"><?= $ml->tr('OFF') ?></option>
                                     </select>
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
@@ -520,8 +966,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="thu_sw" name="thursday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="thu_sw" name="thursday" class='form-check-input'>
                                             <label for="thu_sw">
                                                 <?= $ml->tr('THURSDAY') ?>
                                             </label>
@@ -541,8 +986,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
                                         <div class="checkbox">
-                                            <input type="checkbox" id="sat_sw" name="saturday"
-                                                class='form-check-input'>
+                                            <input type="checkbox" id="sat_sw" name="saturday" class='form-check-input'>
                                             <label for="sat_sw">
                                                 <?= $ml->tr('SATURDAY') ?>
                                             </label>
@@ -627,7 +1071,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="start_upload" class="form-control" name="start" value="">
+                                    <input type="text" id="start_upload" class="fltpick form-control" name="start" value="">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="desc_upload">
@@ -964,7 +1408,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="start_down" class="form-control" name="start" value="">
+                                    <input type="text" id="start_down" class="fltpick form-control" name="start" value="">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="desc_down">
@@ -1249,7 +1693,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="start_macro" class="form-control" name="start" value="">
+                                    <input type="text" id="start_macro" class="fltpick form-control" name="start" value="">
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <a href="javascript:;" data-bs-stacked-modal="#macro_select" class="btn btn-info">

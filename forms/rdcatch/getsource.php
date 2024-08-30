@@ -27,13 +27,7 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
+$station = $_GET["station"];
+$channel = $_GET["channel"];
 
-$station = $_GET['station'];
-$playout = $dbfunc->getPlayoutPorts($station);
-$record = $dbfunc->getRecordPorts($station);
-$datatable = array();
-$datatable['playouts'] = $playout;
-$datatable['records'] = $record;
-header('Content-Type: application/json; charset=utf-8');
-$jsonData = json_encode($datatable, JSON_PRETTY_PRINT);
-echo $jsonData;
+echo json_encode($dbfunc->getDecksData($station, $channel));
