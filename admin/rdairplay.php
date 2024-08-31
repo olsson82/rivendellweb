@@ -403,6 +403,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdairplay.js"></script>';
                 <form class="form form-horizontal" id="addmessage_form" action="#">
                     <div class="modal-body">
                         <div class="form-body">
+                        <P><?= $ml->tr('RDAIRPLAYMESSINFO') ?></P>
                             <div class="row">
                                 <div class="col-md-4">
                                     <label for="message">
@@ -411,6 +412,17 @@ $page_js = '<script src="'.DIR.'/assets/static/js/rdairplay.js"></script>';
                                 </div>
                                 <div class="col-md-8 form-group">
                                     <textarea class="form-control" id="message" name="message" rows="3"></textarea>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <div class='form-check'>
+                                        <div class="checkbox">
+                                            <input type="checkbox" id="updrdairplay" name="updrdairplay"
+                                                class='form-check-input'>
+                                            <label for="updrdairplay">
+                                                <?= $ml->tr('UPDATERDAIRPLAYMESSAGE') ?>
+                                            </label>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

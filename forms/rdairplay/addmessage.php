@@ -27,12 +27,21 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-
-$json_sett['rdairplay'][$_POST['idet']]['message'] = $_POST['message'];
-
+$station = $_POST['idet'];
+$url = DIR;
+if (isset($_POST['updrdairplay'])) {
+    $updateairplay = 1;
+} else {
+    $updateairplay = 0;
+}
+$json_sett['rdairplay'][$station]['message'] = $_POST['message'];
+$ipnumber = $info->getStationInfo($station, 'IPV4_ADDRESS');
 $jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
 
 if (file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $jsonsettings)) {
+    if ($updateairplay == 1) {
+        exec("rmlsend --to-host=" . $ipnumber . " LM\\ " . $url . "/api/getmessage.php?station=" . $station . "!");
+    }
     $echodata = ['error' => 'false', 'errorcode' => '0'];
     echo json_encode($echodata);
 } else {

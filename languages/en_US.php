@@ -923,3 +923,5 @@ $en_US['RECORDING'] = 'Recording';
 $en_US['ALLOWMULTIPLEREC'] = 'Allow Multiple Recordings within this Window';
 $en_US['HARD'] = 'Hard';
 $en_US['GPI'] = 'Gpi';
+$en_US['RDAIRPLAYMESSINFO'] = 'Write your message here that will be visible in RDAirPlay. You can use HTML Language in your text. Check the update box to update the message directly. To update RDAirPlay with the new message you need to have correct IPV4 address set on the host.';
+$en_US['UPDATERDAIRPLAYMESSAGE'] = 'Update RDAirPlay with the new message';

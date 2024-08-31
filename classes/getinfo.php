@@ -288,4 +288,15 @@ class Getinfo
 
                 return $row['STATION_NAME'];
         }
+
+        public function getStationInfo($stations, $type)
+        {
+                $stmt = $this->_db->prepare('SELECT * FROM STATIONS WHERE NAME = :thename');
+
+                $stmt->execute(['thename' => $stations]);
+
+                $row = $stmt->fetch(PDO::FETCH_ASSOC);
+
+                return $row[$type];
+        }
 }

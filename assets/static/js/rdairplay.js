@@ -42,6 +42,7 @@ function addmess(station) {
             if (fel == "false") {
                 $('#message').val(message);
                 $('#idet').val(station);
+                $("#updrdairplay").prop('checked', false);
                 $('#add_message').modal('show');
             }
         }

@@ -923,3 +923,5 @@ $sv_SE['RECORDING'] = 'Inspelning';
 $sv_SE['ALLOWMULTIPLEREC'] = 'Tillåt flera inspelningar inom detta fönster';
 $sv_SE['HARD'] = 'Hård';
 $sv_SE['GPI'] = 'Gpi';
+$sv_SE['RDAIRPLAYMESSINFO'] = 'Skriv ditt meddelande här som ska synas i RDAirPlay. Du kan använda HTML språket i din text. Kryssa i uppdatera kryssrutan för att uppdatera meddelandet direkt. För att uppdatera RDAirPlay med det nya meddelande behöver du ha ställt in en korrekt IPV4 adress på värden.';
+$sv_SE['UPDATERDAIRPLAYMESSAGE'] = 'Uppdatera RDAirPlay med det nya meddelande';
