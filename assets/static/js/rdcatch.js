@@ -1275,7 +1275,7 @@ function edit(type, id) {
                     $("#oneshot_rec").prop('checked', false);
                 }
                 if (data['START_TYPE'] == 0) {
-                    $("#hardtime_rec").prop("checked", true); 
+                    $("#hardtime_rec").prop("checked", true);
                     $("#start_rec").removeAttr('disabled');
                     $('#start_rec').val(data['START_TIME']);
                     $('#gpistart_rec').prop("disabled", true);
@@ -1285,7 +1285,7 @@ function edit(type, id) {
                     $('#startdelay_rec').prop("disabled", true);
                     $('#multiplerec_rec').prop("disabled", true);
                 } else if (data['START_TYPE'] == 1) {
-                    $("#gpi_rec").prop("checked", true); 
+                    $("#gpi_rec").prop("checked", true);
                     $("#gpistart_rec").removeAttr('disabled');
                     $("#gpistartend_rec").removeAttr('disabled');
                     $("#gpimatrix_rec").removeAttr('disabled');
@@ -1294,7 +1294,7 @@ function edit(type, id) {
                     $("#multiplerec_rec").removeAttr('disabled');
                     $('#start_rec').prop("disabled", true);
                     $('#gpistart_rec').val(data['START_TIME']);
-                    const milliseconds = (h, m, s) => (((h*3600) + (+m*60) + +s)*1000);
+                    const milliseconds = (h, m, s) => (((h * 3600) + (+m * 60) + +s) * 1000);
                     const time = data['START_TIME'];
                     const timeParts = time.split(":");
                     var result = milliseconds(timeParts[0], timeParts[1], timeParts[2]);
@@ -1338,7 +1338,7 @@ function edit(type, id) {
                     $('#gpilineend_rec').removeAttr('disabled');
                     $('#maxreclength_rec').removeAttr('disabled');
                     $('#gpiendstart_rec').val(data['END_TIME']);
-                    const milliseconds = (h, m, s) => (((h*3600) + (+m*60) + +s)*1000);
+                    const milliseconds = (h, m, s) => (((h * 3600) + (+m * 60) + +s) * 1000);
                     const time = data['END_TIME'];
                     const timeParts = time.split(":");
                     var result = milliseconds(timeParts[0], timeParts[1], timeParts[2]);
@@ -1390,6 +1390,43 @@ function edit(type, id) {
     });
 }
 
+$.validator.addMethod("biggerWindowStartGpiEnd", function (value, element, param) {
+
+    var val_a = $('#gpistart_rec').val();
+
+    return this.optional(element) || value >= val_a;
+}, TRAN_GPINOTENDBEFOREBEGINSTART);
+
+$.validator.addMethod("recordNotEndBefore", function (value, element, param) {
+
+    var val_a = $('#start_rec').val();
+
+    return this.optional(element) || value >= val_a;
+}, TRAN_RECNOTENDBEFOREBEGIN);
+
+$.validator.addMethod("recordLengthNotBe", function (value, element, param) {
+
+    return this.optional(element) || value != param;
+}, TRAN_RECLENGTHPARANOTBE);
+
+$.validator.addMethod("biggerWindowEndGpiEnd", function (value, element, param) {
+    if ($("#hardtime_rec").is(":checked")) {
+        var val_a = $('#start_rec').val();
+    } else if ($("#gpi_rec").is(":checked")) {
+        var val_a = $('#gpistart_rec').val();
+    }    
+
+    return this.optional(element)
+        || value >= val_a;
+}, TRAN_GPIENDNOTENDBEFOREBEGINSTART);
+
+$.validator.addMethod("biggerWindowEndTimeGpiEnd", function (value, element, param) {
+
+    var val_a = $('#gpiendstart_rec').val();
+
+    return this.optional(element) || value >= val_a;
+}, TRAN_GPIENDNOTENDBEFOREBEGINSTART);
+
 $('#recording_form').validate({
     rules: {
         location: {
@@ -1401,8 +1438,164 @@ $('#recording_form').validate({
         desc: {
             required: true,
         },
+        source: {
+            required: true,
+        },
         dest: {
             required: true,
+        },
+        start: {
+            required: {
+                depends: function (element) {
+                    return $("#hardtime_rec").is(":checked");
+                }
+            }
+        },
+        gpistart: {
+            required: {
+                depends: function (element) {
+                    return $("#gpi_rec").is(":checked");
+                }
+            }
+        },
+        gpiend: {
+            required: {
+                depends: function (element) {
+                    return $("#gpi_rec").is(":checked");
+                }
+            },
+            biggerWindowStartGpiEnd: true
+        },
+        gpimatrix: {
+            required: {
+                depends: function (element) {
+                    return $("#gpi_rec").is(":checked");
+                }
+            },
+            remote: {
+                url: HOST_URL + '/validation/checkgpimatrix.php',
+                type: "post",
+                data: {
+                    thestation: function () {
+                        return station;
+                    },
+                    thefield: function () {
+                        return 0;
+                    },
+                }
+            }
+        },
+        gpiline: {
+            required: {
+                depends: function (element) {
+                    return $("#gpi_rec").is(":checked");
+                }
+            },
+            remote: {
+                url: HOST_URL + '/validation/checkgpiline.php',
+                type: "post",
+                data: {
+                    thestation: function () {
+                        return station;
+                    },
+                    thematrix: function () {
+                        return $("#gpimatrix_rec").val();
+                    },
+                    thefield: function () {
+                        return 0;
+                    },
+                }
+            }
+        },
+        startdelay: {
+            required: {
+                depends: function (element) {
+                    return $("#gpi_rec").is(":checked");
+                }
+            }
+        },
+        recendtime: {
+            required: {
+                depends: function (element) {
+                    return $("#hardtimeend_rec").is(":checked");
+                }
+            },
+            recordNotEndBefore: true
+        },
+        recendtimelength: {
+            required: {
+                depends: function (element) {
+                    return $("#lengthend_rec").is(":checked");
+                }
+            },
+            recordLengthNotBe: "00:00:00"
+        },
+        gpiendstart: {
+            required: {
+                depends: function (element) {
+                    return $("#gpiend_rec").is(":checked");
+                }
+            },
+            biggerWindowEndGpiEnd: true
+        },
+        gpiendend: {
+            required: {
+                depends: function (element) {
+                    return $("#gpiend_rec").is(":checked");
+                }
+            },
+            biggerWindowEndTimeGpiEnd: true
+        },
+        gpimatrixend: {
+            required: {
+                depends: function (element) {
+                    return $("#gpi_rec").is(":checked");
+                }
+            },
+            remote: {
+                url: HOST_URL + '/validation/checkgpimatrix.php',
+                type: "post",
+                data: {
+                    thestation: function () {
+                        return station;
+                    },
+                    thefield: function () {
+                        return 1;
+                    },
+                }
+            }
+        },
+
+        gpilineend: {
+            required: {
+                depends: function (element) {
+                    return $("#gpi_rec").is(":checked");
+                }
+            },
+            remote: {
+                url: HOST_URL + '/validation/checkgpiline.php',
+                type: "post",
+                data: {
+                    thestation: function () {
+                        return station;
+                    },
+                    thematrix: function () {
+                        return $("#gpimatrixend_rec").val();
+                    },
+                    thefield: function () {
+                        return 1;
+                    },
+                }
+            }
+        },
+
+        maxreclength: {
+            required: {
+                depends: function (element) {
+                    return $("#gpi_rec").is(":checked");
+                }
+            },
+            recordLengthNotBe: "00:00:00"
         },
     },
     messages: {
@@ -1415,7 +1608,43 @@ $('#recording_form').validate({
         desc: {
             required: TRAN_NOTBEEMPTY,
         },
+        source: {
+            required: TRAN_NOTBEEMPTY,
+        },
         dest: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        start: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        gpistart: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        gpiend: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        gpimatrix: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        gpiline: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        startdelay: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        recendtime: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        gpiendstart: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        gpiendend: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        gpimatrixend: {
+            required: TRAN_NOTBEEMPTY,
+        },
+        gpilineend: {
             required: TRAN_NOTBEEMPTY,
         },
     },
@@ -2134,18 +2363,18 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         if (row.TYPE == 0) {
                             if (row.START_TYPE == 0) {
-                                return TRAN_HARD + ' ' +row.START_TIME;
+                                return TRAN_HARD + ' ' + row.START_TIME;
                             } else if (row.START_TYPE == 1) {
-                                const milliseconds = (h, m, s) => (((h*3600) + (+m*60) + +s)*1000);
+                                const milliseconds = (h, m, s) => (((h * 3600) + (+m * 60) + +s) * 1000);
                                 const time = row.START_TIME;
                                 const timeParts = time.split(":");
                                 var result = milliseconds(timeParts[0], timeParts[1], timeParts[2]);
                                 var corrtime = msToTime(result + row.START_LENGTH);
-                                return TRAN_GPI + ' ' +row.START_TIME+','+corrtime+','+msToTime(row.START_OFFSET);
+                                return TRAN_GPI + ' ' + row.START_TIME + ',' + corrtime + ',' + msToTime(row.START_OFFSET);
                             }
                         } else {
                             return data;
-                        }                        
+                        }
                     }
                 },
                 {
@@ -2153,20 +2382,20 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         if (row.TYPE == 0) {
                             if (row.END_TYPE == 0) {
-                                return TRAN_HARD + ' ' +row.END_TIME;
+                                return TRAN_HARD + ' ' + row.END_TIME;
                             } else if (row.END_TYPE == 1) {
-                                const milliseconds = (h, m, s) => (((h*3600) + (+m*60) + +s)*1000);
+                                const milliseconds = (h, m, s) => (((h * 3600) + (+m * 60) + +s) * 1000);
                                 const time = row.END_TIME;
                                 const timeParts = time.split(":");
                                 var result = milliseconds(timeParts[0], timeParts[1], timeParts[2]);
                                 var corrtime = msToTime(result + row.END_LENGTH);
-                                return TRAN_GPI + ' ' +row.END_TIME+','+corrtime+','+msToTime(row.MAX_GPI_REC_LENGTH);
+                                return TRAN_GPI + ' ' + row.END_TIME + ',' + corrtime + ',' + msToTime(row.MAX_GPI_REC_LENGTH);
                             } else if (row.END_TYPE == 2) {
-                                return TRAN_LENGTH + ' ' +msToTime(row.LENGTH);
+                                return TRAN_LENGTH + ' ' + msToTime(row.LENGTH);
                             }
                         } else {
                             return data;
-                        }                        
+                        }
                     }
                 },
                 {

@@ -10,6 +10,10 @@
     var TRAN_GPI = "<?= $ml->tr('GPI') ?>";
     var TRAN_LENGTH = "<?= $ml->tr('LENGTH') ?>";
     var TRAN_OFF = "<?= $ml->tr('OFF') ?>";
+    var TRAN_GPINOTENDBEFOREBEGINSTART = "<?= $ml->tr('GPINOTENDBEFOREBEGINSTART') ?>";
+    var TRAN_RECNOTENDBEFOREBEGIN = "<?= $ml->tr('RECNOTENDBEFOREBEGIN') ?>";
+    var TRAN_RECLENGTHPARANOTBE = "<?= $ml->tr('RECLENGTHPARANOTBE') ?>";
+    var TRAN_GPIENDNOTENDBEFOREBEGINSTART = "<?= $ml->tr('GPIENDNOTENDBEFOREBEGINSTART') ?>";
     var USERNAME = "<?php echo $username; ?>";  
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";

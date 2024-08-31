@@ -375,7 +375,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="start_rec" class="fltpick form-control" name="start" value="">
+                                    <input type="text" id="start_rec" class="fltpick form-control" name="start" value="00:00:00">
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class="form-check">
@@ -392,7 +392,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="gpistart_rec" class="fltpick form-control" name="gpistart" value="">
+                                    <input type="text" id="gpistart_rec" class="fltpick form-control" name="gpistart" value="00:00:00">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="gpistartend_rec">
@@ -400,7 +400,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="gpistartend_rec" class="fltpick form-control" name="gpiend" value="">
+                                    <input type="text" id="gpistartend_rec" class="fltpick form-control" name="gpiend" value="00:00:00">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="gpimatrix_rec">
@@ -426,7 +426,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="startdelay_rec" class="fltpick form-control" name="startdelay" value="">
+                                    <input type="text" id="startdelay_rec" class="fltpick form-control" name="startdelay" value="00:00:00">
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class='form-check'>
@@ -459,7 +459,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="recendtime_rec" class="fltpick form-control" name="recendtime" value="">
+                                    <input type="text" id="recendtime_rec" class="fltpick form-control" name="recendtime" value="00:00:00">
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class="form-check">
@@ -476,7 +476,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="recendtimelength_rec" class="fltpick form-control" name="recendtimelength" value="">
+                                    <input type="text" id="recendtimelength_rec" class="fltpick form-control" name="recendtimelength" value="00:00:00">
                                 </div>
                                 <div class="col-12 col-md-8 offset-md-4 form-group">
                                     <div class="form-check">
@@ -493,7 +493,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="gpiendstart_rec" class="fltpick form-control" name="gpiendstart" value="">
+                                    <input type="text" id="gpiendstart_rec" class="fltpick form-control" name="gpiendstart" value="00:00:00">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="gpiend_rec">
@@ -501,7 +501,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="gpiendend_rec" class="fltpick form-control" name="gpiendend" value="">
+                                    <input type="text" id="gpiendend_rec" class="fltpick form-control" name="gpiendend" value="00:00:00">
                                 </div>
                                 <div class="col-md-4">
                                     <label for="gpimatrixend_rec">
@@ -527,7 +527,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdcatch.js"></script>';
                                     </label>
                                 </div>
                                 <div class="col-md-8 form-group">
-                                    <input type="text" id="maxreclength_rec" class="fltpick form-control" name="maxreclength" value="">
+                                    <input type="text" id="maxreclength_rec" class="fltpick form-control" name="maxreclength" value="00:00:00">
                                 </div>
                                 <div class="divider">
                                     <div class="divider-text">

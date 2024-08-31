@@ -3321,4 +3321,44 @@ class DBFunc
             return true;
         }
     }
+
+    public function getMatrixCheckValidation($station, $matrix)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM GPIS WHERE STATION_NAME = :statname AND MATRIX = :matrix');
+        $stmt->execute([
+            ':statname' => $station,
+            ':matrix' => $matrix
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+        $number_of_rows = $stmt->rowCount();
+
+        if ($number_of_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
+    public function getMatrixLineCheckValidation($station, $matrix, $line)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM GPIS WHERE STATION_NAME = :statname AND MATRIX = :matrix AND NUMBER = :thenumb');
+        $stmt->execute([
+            ':statname' => $station,
+            ':matrix' => $matrix,
+            ':thenumb' => $line
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+        $number_of_rows = $stmt->rowCount();
+
+        if ($number_of_rows > 0) {
+            return true;
+        } else {
+            return false;
+        }
+
+
+    }
 }
