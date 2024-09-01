@@ -34,6 +34,10 @@ $logname = $_POST['logname'];
 $description = $_POST['description'];
 $service = $_POST['service'];
 $lockguid = $logedit_data[$logname]['LOCK_GUID'];
+if (!$functions->updateLock($logname, $lockguid)) {
+    $echodata = ['error' => 'true', 'errorcode' => '1', 'errormess' => 'Not possible to update lock.'];
+    echo json_encode($echodata);
+}
 
 if (isset($_POST['startdateac'])) {
     $startdate = $_POST['logstartdate'];
