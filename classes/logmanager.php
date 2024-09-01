@@ -1345,4 +1345,20 @@ class Log
 
     }
 
+    public function updateSchedTracks($sched, $log)
+    {
+
+        $sql = 'UPDATE `LOGS` SET `SCHEDULED_TRACKS` = :sched WHERE `NAME` = :logs';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':sched', $sched);
+        $stmt->bindParam(':logs', $log);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

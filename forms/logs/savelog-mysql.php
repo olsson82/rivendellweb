@@ -83,6 +83,14 @@ if (!$logfunc->updateLogData($parameters)) {
             if (!$logfunc->saveNewLine($logedit_data[$logname]['LOGLINES'][$lines['ID']])) {
                 $echodata = ['error' => 'true', 'errorcode' => '1', 'errormess' => 'On save new line id ' . $lines['LINE_ID']];
                 echo json_encode($echodata);
+            } else {
+                if ($logedit_data[$logname]['LOGLINES'][$lines['ID']]['TYPE'] == 6) {
+                    $schedtrack = $info->getLogInfo($logname, "SCHEDULED_TRACKS") + 1; 
+                    if (!$logfunc->updateSchedTracks($schedtrack, $logname)) {
+                        $echodata = ['error' => 'true', 'errorcode' => '1', 'errormess' => 'On update scheduled tracks'];
+                        echo json_encode($echodata);
+                    }
+                }
             }
         }
         if (!$logfunc->updateLogLine($logedit_data[$logname]['LOGLINES'][$lines['ID']])) {
