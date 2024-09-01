@@ -53,6 +53,7 @@ if ($lockguid != "") {
             'AUTO_REFRESH' => $info->getLogInfo($id, "AUTO_REFRESH"),
             'START_DATE' => $info->getLogInfo($id, "START_DATE"),
             'END_DATE' => $info->getLogInfo($id, "END_DATE"),
+            'PURGE_DATE' => $info->getLogInfo($id, "PURGE_DATE"),
             'NEXT_ID' => $info->getLogInfo($id, "NEXT_ID"),
             'LOCK_GUID' => $lockguid
         );
@@ -150,6 +151,7 @@ if ($lockguid != "") {
             'AUTO_REFRESH' => $info->getLogInfo($id, "AUTO_REFRESH"),
             'START_DATE' => $info->getLogInfo($id, "START_DATE"),
             'END_DATE' => $info->getLogInfo($id, "END_DATE"),
+            'PURGE_DATE' => $info->getLogInfo($id, "PURGE_DATE"),
             'NEXT_ID' => $info->getLogInfo($id, "NEXT_ID"),
             'LOCK_GUID' => $lockguid
         );

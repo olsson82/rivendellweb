@@ -1206,4 +1206,82 @@ class Log
 
     }
 
+    public function updateLogData($logdata) {
+
+        $sql = 'UPDATE `LOGS` SET `SERVICE` = :service, `DESCRIPTION` = :descr, `AUTO_REFRESH` = :autof, `START_DATE` = :sdate, `END_DATE` = :edate, `PURGE_DATE` = :pdate, `NEXT_ID` = :nid WHERE `NAME` = :logname';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':service', $logdata['SERVICE']);
+        $stmt->bindParam(':descr', $logdata['DESCRIPTION']);
+        $stmt->bindParam(':autof', $logdata['AUTO_REFRESH']);
+        $stmt->bindParam(':sdate', $logdata['START_DATE']);
+        $stmt->bindParam(':edate', $logdata['END_DATE']);
+        $stmt->bindParam(':pdate', $logdata['PURGE_DATE']);
+        $stmt->bindParam(':nid', $logdata['NEXT_ID']);
+        $stmt->bindParam(':logname', $logdata['NAME']);
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    public function updateLogLine($lines)
+    {
+
+        $sql = 'UPDATE `LOG_LINES` SET `LINE_ID` = :lineid, `COUNT` = :count, `TYPE` = :type, `SOURCE` = :source, `START_TIME` = :starttime, `GRACE_TIME` = :grace,
+        `CART_NUMBER` = :cart, `TIME_TYPE` = :timetype, `TRANS_TYPE` = :transtype, `START_POINT` = :startpoint, `END_POINT` = :endpoint, `FADEUP_POINT` = :fadeup,
+        `FADEUP_GAIN` = :fadeupg, `FADEDOWN_POINT` = :fdownpoint, `FADEDOWN_GAIN` = :fdowngain, `SEGUE_START_POINT` = :segstartpoint, `SEGUE_END_POINT` = :segendpoint,
+        `SEGUE_GAIN` = :seggain, `DUCK_UP_GAIN` = :duckupgain, `DUCK_DOWN_GAIN` = :duckdowngain, `COMMENT` = :comment, `LABEL` = :label, `ORIGIN_USER` = :originuser,
+        `ORIGIN_DATETIME` = :origindatetime, `EVENT_LENGTH` = :evlength, `LINK_EVENT_NAME` = :linkevname, `LINK_START_TIME` = :linkstarttime, `LINK_LENGTH` = :linklength,
+        `LINK_START_SLOP` = :linkstartslop, `LINK_END_SLOP` = :linkendslop, `LINK_ID` = :linkid, `LINK_EMBEDDED` = :linkembedded, `EXT_START_TIME` = :extstarttime,
+        `EXT_LENGTH` = :extlength, `EXT_CART_NAME` = :extcartname, `EXT_DATA` = :extdata, `EXT_EVENT_ID` = :extevid, `EXT_ANNC_TYPE` = :extannctype WHERE `ID` = :loglineid';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':lineid', $lines['LINE_ID']);
+        $stmt->bindParam(':count', $lines['COUNT']);
+        $stmt->bindParam(':type', $lines['TYPE']);
+        $stmt->bindParam(':source', $lines['SOURCE']);
+        $stmt->bindParam(':starttime', $lines['START_TIME']);
+        $stmt->bindParam(':grace', $lines['GRACE_TIME']);
+        $stmt->bindParam(':cart', $lines['CART_NUMBER']);
+        $stmt->bindParam(':timetype', $lines['TIME_TYPE']);
+        $stmt->bindParam(':transtype', $lines['TRANS_TYPE']);
+        $stmt->bindParam(':startpoint', $lines['START_POINT']);
+        $stmt->bindParam(':endpoint', $lines['END_POINT']);
+        $stmt->bindParam(':fadeup', $lines['FADEUP_POINT']);
+        $stmt->bindParam(':fadeupg', $lines['FADEUP_GAIN']);
+        $stmt->bindParam(':fdownpoint', $lines['FADEDOWN_POINT']);
+        $stmt->bindParam(':fdowngain', $lines['FADEDOWN_GAIN']);
+        $stmt->bindParam(':segstartpoint', $lines['SEGUE_START_POINT']);
+        $stmt->bindParam(':segendpoint', $lines['SEGUE_END_POINT']);
+        $stmt->bindParam(':seggain', $lines['SEGUE_GAIN']);
+        $stmt->bindParam(':duckupgain', $lines['DUCK_UP_GAIN']);
+        $stmt->bindParam(':duckdowngain', $lines['DUCK_DOWN_GAIN']);
+        $stmt->bindParam(':comment', $lines['COMMENT']);
+        $stmt->bindParam(':label', $lines['LABEL']);
+        $stmt->bindParam(':originuser', $lines['ORIGIN_USER']);
+        $stmt->bindParam(':origindatetime', $lines['ORIGIN_DATETIME']);
+        $stmt->bindParam(':evlength', $lines['EVENT_LENGTH']);
+        $stmt->bindParam(':linkevname', $lines['LINK_EVENT_NAME']);
+        $stmt->bindParam(':linkstarttime', $lines['LINK_START_TIME']);
+        $stmt->bindParam(':linklength', $lines['LINK_LENGTH']);
+        $stmt->bindParam(':linkstartslop', $lines['LINK_START_SLOP']);
+        $stmt->bindParam(':linkendslop', $lines['LINK_END_SLOP']);
+        $stmt->bindParam(':linkid', $lines['LINK_ID']);
+        $stmt->bindParam(':linkembedded', $lines['LINK_EMBEDDED']);
+        $stmt->bindParam(':extstarttime', $lines['EXT_START_TIME']);
+        $stmt->bindParam(':extlength', $lines['EXT_LENGTH']);
+        $stmt->bindParam(':extcartname', $lines['EXT_CART_NAME']);
+        $stmt->bindParam(':extdata', $lines['EXT_DATA']);
+        $stmt->bindParam(':extevid', $lines['EXT_EVENT_ID']);
+        $stmt->bindParam(':extannctype', $lines['EXT_ANNC_TYPE']);
+        $stmt->bindParam(':loglineid', $lines['ID']);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

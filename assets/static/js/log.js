@@ -489,12 +489,13 @@ $('#log_form').validate({
         var dataString = $('#log_form').serialize();
         jQuery.ajax({
             type: "POST",
-            url: HOST_URL + '/forms/logs/savelog.php',
+            url: HOST_URL + '/forms/logs/savelog-mysql.php',
             data: dataString,
             success: function (data) {
                 var mydata = $.parseJSON(data);
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
+                var errormess = mydata.errormess;
                 if (fel == "false") {
                     Swal.fire({
                         text: TRAN_LOGHASSAVED,
@@ -507,6 +508,7 @@ $('#log_form').validate({
                     });
                     dt.ajax.reload();
                 } else {
+                    console.log(errormess);
                     Swal.fire({
                         text: TRAN_NOTPOSSIBLESAVELOG,
                         icon: "error",
