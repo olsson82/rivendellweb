@@ -1284,4 +1284,65 @@ class Log
 
     }
 
+    public function saveNewLine($lines)
+    {
+
+        $sql = 'INSERT INTO `LOG_LINES` (`LOG_NAME`, `LINE_ID`, `COUNT`, `TYPE`, `SOURCE`, `START_TIME`, `GRACE_TIME`, `CART_NUMBER`, `TIME_TYPE`, `TRANS_TYPE`,
+        `START_POINT`, `END_POINT`, `FADEUP_POINT`, `FADEUP_GAIN`, `FADEDOWN_POINT`, `FADEDOWN_GAIN`, `SEGUE_START_POINT`, `SEGUE_END_POINT`, `SEGUE_GAIN`, `DUCK_UP_GAIN`,
+        `DUCK_DOWN_GAIN`, `COMMENT`, `LABEL`, `ORIGIN_USER`, `ORIGIN_DATETIME`, `EVENT_LENGTH`, `LINK_EVENT_NAME`, `LINK_START_TIME`, `LINK_LENGTH`, `LINK_START_SLOP`,
+        `LINK_END_SLOP`, `LINK_ID`, `LINK_EMBEDDED`, `EXT_START_TIME`, `EXT_LENGTH`, `EXT_CART_NAME`, `EXT_DATA`, `EXT_EVENT_ID`, `EXT_ANNC_TYPE`)
+                VALUES (:logname, :lineid, :count, :type, :source, :starttime, :grace, :cart, :timetype, :transtype, :startpoint, :endpoint, :fadeup,
+        :fadeupg, :fdownpoint, :fdowngain, :segstartpoint, :segendpoint, :seggain, :duckupgain, :duckdowngain, :comment, :label, :originuser, :origindatetime, :evlength,
+        :linkevname, :linkstarttime, :linklength, :linkstartslop, :linkendslop, :linkid, :linkembedded, :extstarttime, :extlength, :extcartname, :extdata,
+        :extevid, :extannctype)';        
+        
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':logname', $lines['LOG_NAME']);
+        $stmt->bindParam(':lineid', $lines['LINE_ID']);
+        $stmt->bindParam(':count', $lines['COUNT']);
+        $stmt->bindParam(':type', $lines['TYPE']);
+        $stmt->bindParam(':source', $lines['SOURCE']);
+        $stmt->bindParam(':starttime', $lines['START_TIME']);
+        $stmt->bindParam(':grace', $lines['GRACE_TIME']);
+        $stmt->bindParam(':cart', $lines['CART_NUMBER']);
+        $stmt->bindParam(':timetype', $lines['TIME_TYPE']);
+        $stmt->bindParam(':transtype', $lines['TRANS_TYPE']);
+        $stmt->bindParam(':startpoint', $lines['START_POINT']);
+        $stmt->bindParam(':endpoint', $lines['END_POINT']);
+        $stmt->bindParam(':fadeup', $lines['FADEUP_POINT']);
+        $stmt->bindParam(':fadeupg', $lines['FADEUP_GAIN']);
+        $stmt->bindParam(':fdownpoint', $lines['FADEDOWN_POINT']);
+        $stmt->bindParam(':fdowngain', $lines['FADEDOWN_GAIN']);
+        $stmt->bindParam(':segstartpoint', $lines['SEGUE_START_POINT']);
+        $stmt->bindParam(':segendpoint', $lines['SEGUE_END_POINT']);
+        $stmt->bindParam(':seggain', $lines['SEGUE_GAIN']);
+        $stmt->bindParam(':duckupgain', $lines['DUCK_UP_GAIN']);
+        $stmt->bindParam(':duckdowngain', $lines['DUCK_DOWN_GAIN']);
+        $stmt->bindParam(':comment', $lines['COMMENT']);
+        $stmt->bindParam(':label', $lines['LABEL']);
+        $stmt->bindParam(':originuser', $lines['ORIGIN_USER']);
+        $stmt->bindParam(':origindatetime', $lines['ORIGIN_DATETIME']);
+        $stmt->bindParam(':evlength', $lines['EVENT_LENGTH']);
+        $stmt->bindParam(':linkevname', $lines['LINK_EVENT_NAME']);
+        $stmt->bindParam(':linkstarttime', $lines['LINK_START_TIME']);
+        $stmt->bindParam(':linklength', $lines['LINK_LENGTH']);
+        $stmt->bindParam(':linkstartslop', $lines['LINK_START_SLOP']);
+        $stmt->bindParam(':linkendslop', $lines['LINK_END_SLOP']);
+        $stmt->bindParam(':linkid', $lines['LINK_ID']);
+        $stmt->bindParam(':linkembedded', $lines['LINK_EMBEDDED']);
+        $stmt->bindParam(':extstarttime', $lines['EXT_START_TIME']);
+        $stmt->bindParam(':extlength', $lines['EXT_LENGTH']);
+        $stmt->bindParam(':extcartname', $lines['EXT_CART_NAME']);
+        $stmt->bindParam(':extdata', $lines['EXT_DATA']);
+        $stmt->bindParam(':extevid', $lines['EXT_EVENT_ID']);
+        $stmt->bindParam(':extannctype', $lines['EXT_ANNC_TYPE']);
+
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+
+    }
+
 }

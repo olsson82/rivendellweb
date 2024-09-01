@@ -150,6 +150,7 @@ $logedit_data[$id]['LOGLINES'][$tempid] = array(
     'AVERAGE_LENGTH' => $info->getCartInfo($cart, 'AVERAGE_LENGTH'),
     'COLOR' => $info->getGroupInfo($info->getCartInfo($cart, 'GROUP_NAME'), 'COLOR'),
     'FAKE_TIME' => "",
+    'NEW_LINE' => 'Y',
 );
 
 uasort($logedit_data[$id]['LOGLINES'],function($a,$b){return $a['COUNT']-$b['COUNT'];});

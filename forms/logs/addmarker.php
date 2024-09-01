@@ -158,6 +158,7 @@ if ($iseditmode == 1) {
         'AVERAGE_LENGTH' => "0",
         'COLOR' => "",
         'FAKE_TIME' => "",
+        'NEW_LINE' => 'Y',
     );
 
     uasort($logedit_data[$id]['LOGLINES'], function ($a, $b) {

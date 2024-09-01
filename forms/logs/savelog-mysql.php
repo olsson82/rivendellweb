@@ -79,6 +79,12 @@ if (!$logfunc->updateLogData($parameters)) {
 } else {
     foreach ($logedit_data[$logname]['LOGLINES'] as $lines) {
         //Loop here and save log line thru Mysql
+        if ($logedit_data[$logname]['LOGLINES'][$lines['ID']]['NEW_LINE'] == 'Y') {
+            if (!$logfunc->saveNewLine($logedit_data[$logname]['LOGLINES'][$lines['ID']])) {
+                $echodata = ['error' => 'true', 'errorcode' => '1', 'errormess' => 'On save new line id ' . $lines['LINE_ID']];
+                echo json_encode($echodata);
+            }
+        }
         if (!$logfunc->updateLogLine($logedit_data[$logname]['LOGLINES'][$lines['ID']])) {
             $echodata = ['error' => 'true', 'errorcode' => '1', 'errormess' => 'On save line id ' . $lines['LINE_ID']];
             echo json_encode($echodata);
@@ -189,6 +195,7 @@ if (!$logfunc->updateLogData($parameters)) {
                     'AVERAGE_LENGTH' => $averagelange,
                     'COLOR' => $color,
                     'FAKE_TIME' => $faketime,
+                    'NEW_LINE' => 'N',
                 );
                 $rowcount = $rowcount + 1;
             }

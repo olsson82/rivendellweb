@@ -148,6 +148,7 @@ if ($lockguid != "") {
                 'AVERAGE_LENGTH' => $averagelange,
                 'COLOR' => $color,
                 'FAKE_TIME' => $faketime,
+                'NEW_LINE' => 'N',
             );
         }
 
@@ -261,6 +262,7 @@ if ($lockguid != "") {
                 'AVERAGE_LENGTH' => $averagelange,
                 'COLOR' => $color,
                 'FAKE_TIME' => $faketime,
+                'NEW_LINE' => 'N',
             );
             $rowcount = $rowcount + 1;
         }
