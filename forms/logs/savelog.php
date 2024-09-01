@@ -32,7 +32,7 @@ $rd_password = $functions->loadPass($rd_username);
 $rd_web_api = $_COOKIE["rdWebAPI"];
 $logname = $_POST['logname'];
 $description = $_POST['description'];
-$service = $_POST['service']; 
+$service = $_POST['service'];
 $lockguid = $logedit_data[$logname]['LOCK_GUID'];
 
 if (isset($_POST['startdateac'])) {
@@ -54,8 +54,8 @@ if (isset($_POST['autorefresh'])) {
     $autorefresh = 1;
 } else {
     $autorefresh = 0;
-}  
-$linequantity = count($logedit_data[$logname]['LOGLINES']); 
+}
+$linequantity = count($logedit_data[$logname]['LOGLINES']);
 
 foreach ($logedit_data[$logname]['LOGLINES'] as $lines) {
     $logedit_data[$logname]['LOGLINES'][$lines['ID']]['LINE_ID'] = $logedit_data[$logname]['LOGLINES'][$lines['ID']]['COUNT'];
@@ -85,7 +85,7 @@ foreach ($logedit_data[$logname]['LOGLINES'] as $lines) {
         $parameters['LINE' . $lines['LINE_ID'] . '_CART_NUMBER'] = null;
     } else {
         $parameters['LINE' . $lines['LINE_ID'] . '_CART_NUMBER'] = $lines['CART_NUMBER'];
-    }    
+    }
     $parameters['LINE' . $lines['LINE_ID'] . '_START_TIME'] = $lines['START_TIME'];
     $parameters['LINE' . $lines['LINE_ID'] . '_GRACE_TIME'] = $lines['GRACE_TIME'];
     $parameters['LINE' . $lines['LINE_ID'] . '_TIME_TYPE'] = $lines['TIME_TYPE'];
@@ -148,12 +148,15 @@ if (preg_match('/ResponseCode>200</', $result, $matches)) {
             'AUTO_REFRESH' => $info->getLogInfo($logname, "AUTO_REFRESH"),
             'START_DATE' => $info->getLogInfo($logname, "START_DATE"),
             'END_DATE' => $info->getLogInfo($logname, "END_DATE"),
+            'PURGE_DATE' => $info->getLogInfo($logname, "PURGE_DATE"),
             'NEXT_ID' => $info->getLogInfo($logname, "NEXT_ID"),
             'LOCK_GUID' => $lockguid
         );
 
         $groupSet = array();
-
+        $timebefore = 0;
+        $faketime = 0;
+        $rowcount = 0;
         $sql = "SELECT * FROM LOG_LINES WHERE LOG_NAME = '$logname' ORDER BY COUNT ASC";
         $stmt = $db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -178,6 +181,18 @@ if (preg_match('/ResponseCode>200</', $result, $matches)) {
                 $artist = "";
                 $averagelange = "0";
                 $color = "";
+            }
+
+            if ($row['TYPE'] == 0) {
+                if ($rowcount > 0) {
+                    $timebefore = $timebefore + $averagelange;
+                    $faketime = $timebefore - $averagelange;
+                } else {
+                    $timebefore = $averagelange;
+                    $faketime = 0;
+                }
+            } else {
+                $faketime = $timebefore;
             }
 
             $groupSet[$row['ID']] = array(
@@ -226,21 +241,24 @@ if (preg_match('/ResponseCode>200</', $result, $matches)) {
                 'ARTIST' => $artist,
                 'AVERAGE_LENGTH' => $averagelange,
                 'COLOR' => $color,
+                'FAKE_TIME' => $faketime,
+                'NEW_LINE' => 'N',
             );
+            $rowcount = $rowcount + 1;
         }
 
         $logedit_data[$logname] = $extra;
         $logedit_data[$logname]['LOGLINES'] = $groupSet;
         $jsonData = json_encode($logedit_data, JSON_PRETTY_PRINT);
         if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/logedit.json', $jsonData)) {
-            $echodata = ['error' => 'true', 'errorcode' => '1'];
-    echo json_encode($echodata);
+            $echodata = ['error' => 'true', 'errorcode' => '1', 'errormess' => 'Not possible to save json.'];
+            echo json_encode($echodata);
         }
         $echodata = ['error' => 'false', 'errorcode' => '0'];
-    echo json_encode($echodata);
+        echo json_encode($echodata);
 
     }
-} else {
-    $echodata = ['error' => 'true', 'errorcode' => '1'];
+} else {   
+    $echodata = ['error' => 'true', 'errorcode' => '1', 'errormess' => 'Not possible to save to api.'];
     echo json_encode($echodata);
 }

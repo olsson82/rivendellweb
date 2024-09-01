@@ -489,7 +489,7 @@ $('#log_form').validate({
         var dataString = $('#log_form').serialize();
         jQuery.ajax({
             type: "POST",
-            url: HOST_URL + '/forms/logs/savelog-mysql.php',
+            url: HOST_URL + '/forms/logs/savelog.php',
             data: dataString,
             success: function (data) {
                 var mydata = $.parseJSON(data);
@@ -1075,7 +1075,8 @@ var KTDatatablesServerSide = function () {
                         if (row.TIME_TYPE == 1) {
                             return `<P style="color:#0054c2">S` + msToTime(data) + `</p>`;
                         } else {
-                            return msToTime(row.FAKE_TIME)
+                                return msToTime(row.FAKE_TIME)                            
+                            
                         }
                     }
                 },
