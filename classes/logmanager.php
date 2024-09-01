@@ -1361,4 +1361,17 @@ class Log
 
     }
 
+    public function updateLogModified($date, $log) {
+
+        $sql = 'UPDATE `LOGS` SET `MODIFIED_DATETIME` = :datetim WHERE `NAME` = :logname';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':datetim', $date);
+        $stmt->bindParam(':logname', $log);
+        if ($stmt->execute() === FALSE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
 }
