@@ -43,6 +43,25 @@ uasort($logedit_data[$log]['LOGLINES'], function ($a, $b) {
 foreach ($logedit_data[$log]['LOGLINES'] as $lines) {
     $logedit_data[$log]['LOGLINES'][$lines['ID']]['LINE_ID'] = $logedit_data[$log]['LOGLINES'][$lines['ID']]['COUNT'];
 }
+
+$timebefore = 0;
+$faketime = 0;
+$rowcount = 0;
+foreach ($logedit_data[$log]['LOGLINES'] as $lines) {
+    $averagelange = $logedit_data[$log]['LOGLINES'][$lines['ID']]['AVERAGE_LENGTH'];
+    if ($lines['TYPE'] == 0) {
+        if ($rowcount > 0) {
+            $timebefore = $timebefore + $averagelange;
+            $logedit_data[$log]['LOGLINES'][$lines['ID']]['FAKE_TIME'] = $timebefore - $averagelange;
+        } else {
+            $timebefore = $averagelange;
+            $logedit_data[$log]['LOGLINES'][$lines['ID']]['FAKE_TIME'] = 0;
+        }
+    } else {
+        $logedit_data[$log]['LOGLINES'][$lines['ID']]['FAKE_TIME'] = $timebefore;
+    }
+    $rowcount = $rowcount + 1;
+}
 $jsonData = json_encode($logedit_data, JSON_PRETTY_PRINT);
 if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/logedit.json', $jsonData)) {
     $echodata = ['error' => 'true', 'errorcode' => '1'];

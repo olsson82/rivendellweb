@@ -28,7 +28,7 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 $username = $_COOKIE['username'];
@@ -59,6 +59,9 @@ if ($lockguid != "") {
         );
 
         $groupSet = array();
+        $timebefore = 0;
+        $faketime = 0;
+        $rowcount = 0;
 
         $sql = "SELECT * FROM LOG_LINES WHERE LOG_NAME = '$id' ORDER BY COUNT ASC";
         $stmt = $db->prepare($sql);
@@ -84,6 +87,18 @@ if ($lockguid != "") {
                 $artist = "";
                 $averagelange = "0";
                 $color = "";
+            }
+
+            if ($row['TYPE'] == 0) {
+                if ($rowcount > 0) {
+                    $timebefore = $timebefore + $averagelange;
+                    $faketime = $timebefore - $averagelange;
+                } else {
+                    $timebefore = $averagelange;
+                    $faketime = 0;
+                }
+            } else {
+                $faketime = $timebefore;
             }
 
             $groupSet[$row['ID']] = array(
@@ -132,6 +147,7 @@ if ($lockguid != "") {
                 'ARTIST' => $artist,
                 'AVERAGE_LENGTH' => $averagelange,
                 'COLOR' => $color,
+                'FAKE_TIME' => $faketime,
             );
         }
 
@@ -139,7 +155,7 @@ if ($lockguid != "") {
         $logedit_data[$id]['LOGLINES'] = $groupSet;
         $jsonData = json_encode($logedit_data, JSON_PRETTY_PRINT);
         if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/logedit.json', $jsonData)) {
-            header('Location: '.DIR.'/login');
+            header('Location: ' . DIR . '/login');
             exit();
         }
     } else if (!$logedit_data[$id]) {
@@ -157,7 +173,9 @@ if ($lockguid != "") {
         );
 
         $groupSet = array();
-
+        $timebefore = 0;
+        $faketime = 0;
+        $rowcount = 0;
         $sql = "SELECT * FROM LOG_LINES WHERE LOG_NAME = '$id' ORDER BY COUNT ASC";
         $stmt = $db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -182,6 +200,18 @@ if ($lockguid != "") {
                 $artist = "";
                 $averagelange = "0";
                 $color = "";
+            }
+
+            if ($row['TYPE'] == 0) {
+                if ($rowcount > 0) {
+                    $timebefore = $timebefore + $averagelange;
+                    $faketime = $timebefore - $averagelange;
+                } else {
+                    $timebefore = $averagelange;
+                    $faketime = 0;
+                }
+            } else {
+                $faketime = $timebefore;
             }
 
             $groupSet[$row['ID']] = array(
@@ -230,14 +260,16 @@ if ($lockguid != "") {
                 'ARTIST' => $artist,
                 'AVERAGE_LENGTH' => $averagelange,
                 'COLOR' => $color,
+                'FAKE_TIME' => $faketime,
             );
+            $rowcount = $rowcount + 1;
         }
 
         $logedit_data[$id] = $extra;
         $logedit_data[$id]['LOGLINES'] = $groupSet;
         $jsonData = json_encode($logedit_data, JSON_PRETTY_PRINT);
         if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/logedit.json', $jsonData)) {
-            header('Location: '.DIR.'/login');
+            header('Location: ' . DIR . '/login');
             exit();
         }
 
@@ -245,28 +277,28 @@ if ($lockguid != "") {
 }
 $page_vars = 'log';
 $page_title = $ml->tr('LOG');
-$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="' . DIR . '/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/flatpickr/flatpickr.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="' . DIR . '/assets/compiled/css/table-datatable-jquery.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-<script src="'.DIR.'/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="'.DIR.'/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jquery-loading/jquery.loading.min.js"></script>
-<script src="'.DIR.'/assets/extensions/inputmask/jquery.inputmask.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="' . DIR . '/assets/extensions/flatpickr/flatpickr.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jquery-loading/jquery.loading.min.js"></script>
+<script src="' . DIR . '/assets/extensions/inputmask/jquery.inputmask.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/timeline.min.js"></script>
-<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
-$page_js = '<script src="'.DIR.'/assets/static/js/log.js"></script>';
+<script src="' . DIR . '/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
+$page_js = '<script src="' . DIR . '/assets/static/js/log.js"></script>';
 
 ?>
 

@@ -51,9 +51,9 @@ if (isset($_POST['removedateac'])) {
     $purgedate = null;
 }
 if (isset($_POST['autorefresh'])) {
-    $autorefresh = 1;
+    $autorefresh = 'Y';
 } else {
-    $autorefresh = 0;
+    $autorefresh = 'N';
 }
 $linequantity = count($logedit_data[$logname]['LOGLINES']);
 
@@ -79,7 +79,7 @@ if (!$logfunc->updateLogData($parameters)) {
 } else {
     foreach ($logedit_data[$logname]['LOGLINES'] as $lines) {
         //Loop here and save log line thru Mysql
-        if (!$logfunc->updateLogLine($lines)) {
+        if (!$logfunc->updateLogLine($logedit_data[$logname]['LOGLINES'][$lines['ID']])) {
             $echodata = ['error' => 'true', 'errorcode' => '1', 'errormess' => 'On save line id ' . $lines['LINE_ID']];
             echo json_encode($echodata);
         }
@@ -101,7 +101,9 @@ if (!$logfunc->updateLogData($parameters)) {
             );
 
             $groupSet = array();
-
+            $timebefore = 0;
+            $faketime = 0;
+            $rowcount = 0;
             $sql = "SELECT * FROM LOG_LINES WHERE LOG_NAME = '$logname' ORDER BY COUNT ASC";
             $stmt = $db->prepare($sql);
             $stmt->setFetchMode(PDO::FETCH_ASSOC);
@@ -126,6 +128,18 @@ if (!$logfunc->updateLogData($parameters)) {
                     $artist = "";
                     $averagelange = "0";
                     $color = "";
+                }
+
+                if ($row['TYPE'] == 0) {
+                    if ($rowcount > 0) {
+                        $timebefore = $timebefore + $averagelange;
+                        $faketime = $timebefore - $averagelange;
+                    } else {
+                        $timebefore = $averagelange;
+                        $faketime = 0;
+                    }
+                } else {
+                    $faketime = $timebefore;
                 }
 
                 $groupSet[$row['ID']] = array(
@@ -174,7 +188,9 @@ if (!$logfunc->updateLogData($parameters)) {
                     'ARTIST' => $artist,
                     'AVERAGE_LENGTH' => $averagelange,
                     'COLOR' => $color,
+                    'FAKE_TIME' => $faketime,
                 );
+                $rowcount = $rowcount + 1;
             }
 
             $logedit_data[$logname] = $extra;

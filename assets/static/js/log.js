@@ -1074,10 +1074,8 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         if (row.TIME_TYPE == 1) {
                             return `<P style="color:#0054c2">S` + msToTime(data) + `</p>`;
-                        } else if (data != 0 && row.TIME_TYPE == 0) {
-                            return msToTime(data)
                         } else {
-                            return "00:00:00.0";
+                            return msToTime(row.FAKE_TIME)
                         }
                     }
                 },
