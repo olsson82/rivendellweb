@@ -62,7 +62,7 @@ function tr(translate) {
         datatype: 'html',
         success: function (data) {
             var mydata = $.parseJSON(data);
-            result  = mydata.translated;
+            result = mydata.translated;
         }
     });
     return result;
@@ -127,7 +127,7 @@ const updateProgress = (time) => {
     ]
         .map((v) => (v < 10 ? '0' + v : v))
         .join(':')
-        progressRec.textContent = formattedTime
+    progressRec.textContent = formattedTime
 }
 
 const pauseButtonRec = document.querySelector('#pauserec')
@@ -262,7 +262,7 @@ function convertAudioBufferToBlob(audioBuffer) {
 function convertBlobToAudioBuffer(myBlob, idnomb) {
     const audioContext = new AudioContext();
     const fileReader = new FileReader();
-    $("#"+idnomb).prop("disabled",true);
+    $("#" + idnomb).prop("disabled", true);
 
     fileReader.onloadend = () => {
 
@@ -295,7 +295,7 @@ function recordToCart(thefile, idnomb) {
         success: function () {
             $('body').loading('stop');
             $("#record_voice").modal("hide");
-            $("#"+idnomb).prop("disabled",false);
+            $("#" + idnomb).prop("disabled", false);
             dt.ajax.reload();
         },
         cache: false,
@@ -312,7 +312,7 @@ function recordcut(cart, cut) {
         cutname = cut;
         createWaveSurfer()
         $("#record_voice").modal("show");
-        
+
     } else {
         Swal.fire({
             text: TRAN_NORIGHTS,
@@ -426,14 +426,14 @@ function editcutaudio(i) {
                 $('#talkend').val('-1');
                 $('#hookstart').val('-1');
                 $('#hookend').val('-1');
-                $('body').loading({
-                    message: TRAN_LOADINGAUDIO
+                $('#markerbody').preloader({
+                    text: TRAN_LOADINGAUDIO,
                 });
 
                 wavesurferfileedit = WaveSurfer.create({
                     container: '#editnow',
                     height: '150',
-                    width: '600',
+                    width: '800',
                     normalize: true,
                     splitChannels: true,
                     waveColor: '#ff4e00',
@@ -446,18 +446,16 @@ function editcutaudio(i) {
                 regionsplugin = wavesurferfileedit.registerPlugin(WaveSurfer.Regions.create());
                 timelineplugin = wavesurferfileedit.registerPlugin(WaveSurfer.Timeline.create({
                     height: 10,
-                    timeInterval: 10,
+                    timeInterval: 1,
                     primaryLabelInterval: 30,
                     secondaryLabelInterval: 10,
                     style: {
                         fontSize: '10px',
-                        color: '#ff4e00',
+                        color: '#ad0e0e',
                     }
                 }));
 
                 wavesurferfileedit.once('decode', () => {
-                    $('body').loading('stop');
-                    $("#audio_editor").modal("show");
                     document.querySelector('input[type="range"]').oninput = (e) => {
                         const minPxPerSec = Number(e.target.value)
                         wavesurferfileedit.zoom(minPxPerSec)
@@ -732,11 +730,15 @@ function editcutaudio(i) {
                             $('#hookend').val("-1")
                         }
                     });
+
+                    $('#markerbody').preloader('remove');
                 })
 
-
+                
+                $("#audio_editor").modal("show");
             }
         });
+
     } else {
         Swal.fire({
             text: TRAN_NORIGHTS,
@@ -1109,7 +1111,7 @@ dt = $("#cuts_table").DataTable({
         "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
         "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
         "infoThousands": " ",
-        "lengthMenu": TRAN_TABLESHOW+ " _MENU_ " +TRAN_TABLEROWS,
+        "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
         "loadingRecords": TRAN_TABLELOADING,
         "processing": TRAN_TABLEWORKING,
         "search": TRAN_TABLESEARCH,
@@ -1756,12 +1758,12 @@ function cutinfo(i) {
                 var originlogin = data['ORIGIN_LOGIN_NAME'];
                 var sourcehost = data['SOURCE_HOSTNAME'];
                 if (ordtype == 1) {
-                var weight = data['WEIGHT'];
-                $("#cutwalab").html(TRAN_WEIGHT);
-            } else {
-                var weight = data['PLAY_ORDER'];
-                $("#cutwalab").html(TRAN_ORDER);
-            }
+                    var weight = data['WEIGHT'];
+                    $("#cutwalab").html(TRAN_WEIGHT);
+                } else {
+                    var weight = data['PLAY_ORDER'];
+                    $("#cutwalab").html(TRAN_ORDER);
+                }
                 var lastplaydate = data['LAST_PLAY_DATETIME'];
                 var uploaddate = data['UPLOAD_DATETIME'];
                 var playcounter = data['PLAY_COUNTER'];

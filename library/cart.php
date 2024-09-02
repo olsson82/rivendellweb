@@ -47,6 +47,7 @@ $page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.n
 <link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
 <link rel="stylesheet" href="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.css">
 <link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="'.DIR.'/assets/extensions/jquerypreload/preloader.css">
 <link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script src="'.DIR.'/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
@@ -57,6 +58,7 @@ $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js
 <script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
 <script src="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.js"></script>
 <script src="'.DIR.'/assets/extensions/jquery-loading/jquery.loading.min.js"></script>
+<script src="'.DIR.'/assets/extensions/jquerypreload/jquery.preloader.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/record.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/regions.min.js"></script>
@@ -1065,7 +1067,7 @@ if (!$info->checkMacroNormal($id, 1)) {
                     </button>
                 </div>
                 <form class="form form-vertical" id="edit_audio_form" action="#">
-                    <div class="modal-body">
+                    <div class="modal-body" id="markerbody">
                         <P>
                             <?= $ml->tr('EDITAUDIOHERE') ?>
                         </P>
