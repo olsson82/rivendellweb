@@ -3361,4 +3361,24 @@ class DBFunc
 
 
     }
+
+    public function getLibCuts($cart)
+    {
+
+        $cuts = array();
+        $sql = 'SELECT * FROM `CUTS` WHERE `CART_NUMBER` = :cart ORDER BY `CUT_NAME` ASC';
+
+        $stmt = $this->_db->prepare($sql);
+        $stmt->bindParam(':cart', $cart);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+
+        while ($row = $stmt->fetch()) {
+
+            $cuts[] = $row;
+        }
+
+        return $cuts;
+
+    }
 }

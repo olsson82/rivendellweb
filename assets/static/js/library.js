@@ -26,11 +26,13 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 var dt;
+var dt2;
 var groupnow;
 var allgroups = 1;
 var editids_arr = [];
 var schednow;
 var allscheds = 1;
+var cartno;
 
 function tr(translate) {
     var result = false;
@@ -197,6 +199,13 @@ var myDropzone = new Dropzone("div#dropzone_upload", {
     },
 });
 
+function showCuts(id) {
+    cartno = id;
+    dt2.ajax.reload();
+    $("#cuts_modal").modal("show");
+
+}
+
 function delCart(id) {
     var trans = tr('REMOVECART {{' + id + '}}');
     if (ALLOW_DEL == 0) {
@@ -281,6 +290,159 @@ function delCart(id) {
         });
     }
 }
+
+var KTLibCutsTable = function () {
+    var initCutsDatatable = function () {
+        dt2 = $("#libcuts_table").DataTable({
+            searchDelay: 500,
+            processing: true,
+            responsive: true,
+            autoWidth: false,
+            order: [
+                [0, 'asc']
+            ],
+            stateSave: true,
+            ajax: {
+                url: HOST_URL + "/tables/libcuts-table.php",
+                data: function (d) {
+                    d.cart = cartno;
+                }
+            },
+            language: {
+                "emptyTable": TRAN_TABLENODATA,
+                "info": TRAN_TABLESHOWS + " _START_ " + TRAN_TABLETO + " _END_ " + TRAN_TABLETOTAL + " _TOTAL_ " + TRAN_TABLEROWS,
+                "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
+                "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
+                "infoThousands": " ",
+                "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
+                "loadingRecords": TRAN_TABLELOADING,
+                "processing": TRAN_TABLEWORKING,
+                "search": TRAN_TABLESEARCH,
+                "zeroRecords": TRAN_TABLENORESULTS,
+                "thousands": " ",
+                "paginate": {
+                    "first": TRAN_TABLEFIRST,
+                    "last": TRAN_TABLELAST,
+                    "next": TRAN_TABLENEXT,
+                    "previous": TRAN_TABLEPREV
+                },
+                "select": {
+                    "rows": {
+                        "1": "1 " + TRAN_TABLESELECTED,
+                        "_": "%d " + TRAN_TABLESELECTED
+                    }
+                },
+                "aria": {
+                    "sortAscending": ": " + TRAN_TABLENSORTRISE,
+                    "sortDescending": ": " + TRAN_TABLENSORTFALL
+                }
+            },
+            columns: [
+                {
+                    data: 'CUT_NAME'
+                },
+                {
+                    data: 'LENGTH'
+                },
+                {
+                    data: 'TALK_START_POINT'
+                },
+                {
+                    data: 'DESCRIPTION'
+                },
+            ],
+            columnDefs: [
+                {
+                    targets: 0,
+                    render: function (data, type, row) {
+                        var val = data;
+                        var CutName = val.substr(val.indexOf("_") + 1);
+                        return TRAN_CUT + ' ' +CutName;
+                    }
+                },
+                {
+                    targets: 1,
+                    render: function (data, type, row) {
+                        return msToTime(data);
+                    }
+                },
+
+                {
+                    targets: 2,
+                    render: function (data, type, row) {
+                        var talkstart = row.TALK_START_POINT;
+                        var talkend = row.TALK_END_POINT;
+                        var talklength = talkend - talkstart;
+                        return msToTime(talklength);
+                    }
+                },
+                {
+                    targets: 3,
+                    render: function (data, type, row) {
+                        return data;
+                    }
+                },
+            ],
+        });
+
+    }
+
+    const element01 = document.getElementById('cuts_modal');
+    const modal01 = new bootstrap.Modal(element01);
+
+    var initCutsModalButtons = function () {
+        const cancelButton1 = element01.querySelector('[data-kt-cuts-modal-action="cancel"]');
+        cancelButton1.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal01.hide();
+                }
+            });
+        });
+        const closeButton2 = element01.querySelector('[data-kt-cuts-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
+
+            Swal.fire({
+                text: TRAN_CLOSETHEWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal01.hide();
+
+                }
+            });
+        });
+    }
+
+    return {
+        init: function () {
+            initCutsDatatable();
+            initCutsModalButtons();
+        }
+    }
+}();
 
 var KTDatatablesServerSide = function () {
     var initDatatable = function () {
@@ -463,8 +625,12 @@ var KTDatatablesServerSide = function () {
                         }
                         return `
                         <div class="btn-group mb-3" role="group">
-                                    <a href="`+ URL + `" class="btn icon btn-primary"><i class="bi bi-pencil"></i></a>
-                                    <a href="javascript:;" onclick="delCart(` + row.NUMBER + `)" class="btn icon btn-danger"><i class="bi bi-x-square"></i></a>
+                                    <a href="`+ URL + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_EDIT + `"><i class="bi bi-pencil"></i></a>
+                                    <a href="javascript:;" onclick="showCuts(` + row.NUMBER + `)" class="btn icon btn-success" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_CUTS + `"><i class="bi bi-volume-down"></i></a>
+                                    <a href="javascript:;" onclick="delCart(` + row.NUMBER + `)" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="`+ TRAN_REMOVE + `"><i class="bi bi-x-square"></i></a>
                                 </div>
                         `;
                     }
@@ -869,6 +1035,24 @@ function msConversion(millis) {
     }
 }
 
+function msToTime(s) {
+
+    // Pad to 2 or 3 digits, default is 2
+    function pad(n, z) {
+      z = z || 2;
+      return ('00' + n).slice(-z);
+    }
+  
+    var ms = s % 1000;
+    s = (s - ms) / 1000;
+    var secs = s % 60;
+    s = (s - secs) / 60;
+    var mins = s % 60;
+    var hrs = (s - mins) / 60;
+  
+    return pad(hrs) + ':' + pad(mins) + ':' + pad(secs) + '.' + pad(ms, 3);
+  }
+
 $("#multieditSave").click(function () {
     $.ajax({
         url: HOST_URL + '/forms/library/multieditcart.php',
@@ -982,3 +1166,4 @@ $('#add_cart_form').validate({
 });
 
 KTDatatablesServerSide.init();
+KTLibCutsTable.init();

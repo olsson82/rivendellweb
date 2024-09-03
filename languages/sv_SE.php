@@ -933,3 +933,5 @@ $sv_SE['RECLENGTHPARANOTBE'] = 'Inspelnings längd parametern kan inte vara 00:0
 $sv_SE['GPIENDNOTENDBEFOREBEGINSTART'] = 'Slut GPI fönster kan inte sluta innan det börjar!';
 $sv_SE['GPIENDNOTEXIST'] = 'Den slut GPI matrixen existerar inte!';
 $sv_SE['GPIENDLINENOTEXIST'] = 'Den slut GPI raden existerar inte!';
+$sv_SE['TALK'] = 'Prata';
+$sv_SE['CUT'] = 'Cut';

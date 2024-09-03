@@ -933,3 +933,5 @@ $en_US['RECLENGTHPARANOTBE'] = 'The record length parameter cannot be 00:00:00!'
 $en_US['GPIENDNOTENDBEFOREBEGINSTART'] = 'The end GPI window cannot end before it begins!';
 $en_US['GPIENDNOTEXIST'] = 'That end GPI matrix dont exist!';
 $en_US['GPIENDLINENOTEXIST'] = 'That end GPI line dont exist!';
+$en_US['TALK'] = 'Talk';
+$en_US['CUT'] = 'Cut';

@@ -189,6 +189,57 @@ $page_js = '<script src="' . DIR . '/assets/static/js/library.js"></script>';
         </div>
 
     </section>
+    
+    <div class="modal fade text-left" id="cuts_modal" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="cutsLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-success">
+                    <h4 class="modal-title white" id="cutsLabel">
+                        <?= $ml->tr('CUTS') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-cuts-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <div class="table-responsive">
+                            <table class="table table-lg" id="libcuts_table">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <?= $ml->tr('NAME') ?>
+                                        </th>
+                                        <th>
+                                            <?= $ml->tr('LENGTH') ?>
+                                        </th>
+                                        <th>
+                                            <?= $ml->tr('TALK') ?>
+                                        </th>
+                                        <th>
+                                            <?= $ml->tr('TITLE') ?>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-kt-cuts-modal-action="close">
+                            <?= $ml->tr('CLOSE') ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    
     <div class="modal fade text-left" id="multi_edit" data-bs-backdrop="static" role="dialog"
         aria-labelledby="multiEditLabel" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered modal-xl" role="document">

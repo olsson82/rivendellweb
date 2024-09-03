@@ -4,6 +4,10 @@
         var TRAN_SELECTTOMULTIEDIT = "<?= $ml->tr('SELECTTOMULTIEDIT') ?>";
         var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
         var TRAN_ONLYDIGITS = "<?= $ml->tr('ONLYDIGITS') ?>";
+        var TRAN_CUT = "<?= $ml->tr('CUT') ?>";
+        var TRAN_CUTS = "<?= $ml->tr('CUTS') ?>";
+        var TRAN_EDIT = "<?= $ml->tr('EDIT') ?>";
+        var TRAN_REMOVE = "<?= $ml->tr('REMOVE') ?>";
         var TRAN_NORIGHTS = "<?= $ml->tr('NORIGHTS') ?>";
         var TRAN_YES = "<?= $ml->tr('YES') ?>";
         var TRAN_NO = "<?= $ml->tr('NO') ?>";
