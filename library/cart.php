@@ -1133,11 +1133,8 @@ if (!$info->checkMacroNormal($id, 1)) {
                         <button type="button" class="btn btn-light-secondary" data-kt-editmarker-modal-action="close">
                             <?= $ml->tr('CLOSE') ?>
                         </button>
-                        <button type="button" class="btn btn-info ms-1" data-kt-editmarker-modal-action="submit">
-                            <i class="bx bx-x d-block d-sm-none"></i>
-                            <span class="d-none d-sm-block">
+                        <button type="button" class="btn btn-info ms-1" data-kt-editmarker-modal-action="submit">                            
                                 <?= $ml->tr('SAVEMARKERS') ?>
-                            </span>
                         </button>
                     </div>
                 </form>
