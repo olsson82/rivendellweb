@@ -1,70 +1,34 @@
-import { ACTION_TYPES } from '../constants';
+import { ChoiceFull } from '../interfaces/choice-full';
+import { ActionType } from '../interfaces';
+import { AnyAction } from '../interfaces/store';
 
-export interface AddItemAction {
-  type: typeof ACTION_TYPES.ADD_ITEM;
-  id: number;
-  value: string;
-  label: string;
-  choiceId: number;
-  groupId: number;
-  customProperties: object;
-  placeholder: boolean;
-  keyCode: number;
+export type ItemActions = AddItemAction | RemoveItemAction | HighlightItemAction;
+
+export interface AddItemAction extends AnyAction<typeof ActionType.ADD_ITEM> {
+  item: ChoiceFull;
 }
 
-export interface RemoveItemAction {
-  type: typeof ACTION_TYPES.REMOVE_ITEM;
-  id: number;
-  choiceId: number;
+export interface RemoveItemAction extends AnyAction<typeof ActionType.REMOVE_ITEM> {
+  item: ChoiceFull;
 }
 
-export interface HighlightItemAction {
-  type: typeof ACTION_TYPES.HIGHLIGHT_ITEM;
-  id: number;
+export interface HighlightItemAction extends AnyAction<typeof ActionType.HIGHLIGHT_ITEM> {
+  item: ChoiceFull;
   highlighted: boolean;
 }
 
-export const addItem = ({
-  value,
-  label,
-  id,
-  choiceId,
-  groupId,
-  customProperties,
-  placeholder,
-  keyCode,
-}: {
-  id: number;
-  value: string;
-  label: string;
-  choiceId: number;
-  groupId: number;
-  customProperties: object;
-  placeholder: boolean;
-  keyCode: number;
-}): AddItemAction => ({
-  type: ACTION_TYPES.ADD_ITEM,
-  value,
-  label,
-  id,
-  choiceId,
-  groupId,
-  customProperties,
-  placeholder,
-  keyCode,
+export const addItem = (item: ChoiceFull): AddItemAction => ({
+  type: ActionType.ADD_ITEM,
+  item,
 });
 
-export const removeItem = (id: number, choiceId: number): RemoveItemAction => ({
-  type: ACTION_TYPES.REMOVE_ITEM,
-  id,
-  choiceId,
+export const removeItem = (item: ChoiceFull): RemoveItemAction => ({
+  type: ActionType.REMOVE_ITEM,
+  item,
 });
 
-export const highlightItem = (
-  id: number,
-  highlighted: boolean,
-): HighlightItemAction => ({
-  type: ACTION_TYPES.HIGHLIGHT_ITEM,
-  id,
+export const highlightItem = (item: ChoiceFull, highlighted: boolean): HighlightItemAction => ({
+  type: ActionType.HIGHLIGHT_ITEM,
+  item,
   highlighted,
 });

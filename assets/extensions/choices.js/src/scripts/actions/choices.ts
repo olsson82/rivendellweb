@@ -1,73 +1,59 @@
-import { ACTION_TYPES } from '../constants';
-import { Choice } from '../interfaces/choice';
+import { ChoiceFull } from '../interfaces/choice-full';
+import { ActionType } from '../interfaces';
+import { SearchResult } from '../interfaces/search';
+import { AnyAction } from '../interfaces/store';
 
-export interface AddChoiceAction {
-  type: typeof ACTION_TYPES.ADD_CHOICE;
-  id: number;
-  value: string;
-  label: string;
-  groupId: number;
-  disabled: boolean;
-  elementId: number;
-  customProperties: object;
-  placeholder: boolean;
-  keyCode: number;
+export type ChoiceActions =
+  | AddChoiceAction
+  | RemoveChoiceAction
+  | FilterChoicesAction
+  | ActivateChoicesAction
+  | ClearChoicesAction;
+
+export interface AddChoiceAction extends AnyAction<typeof ActionType.ADD_CHOICE> {
+  choice: ChoiceFull;
 }
 
-export interface Result<T> {
-  item: T;
-  score: number;
+export interface RemoveChoiceAction extends AnyAction<typeof ActionType.REMOVE_CHOICE> {
+  choice: ChoiceFull;
 }
 
-export interface FilterChoicesAction {
-  type: typeof ACTION_TYPES.FILTER_CHOICES;
-  results: Result<Choice>[];
+export interface FilterChoicesAction extends AnyAction<typeof ActionType.FILTER_CHOICES> {
+  results: SearchResult<ChoiceFull>[];
 }
 
-export interface ActivateChoicesAction {
-  type: typeof ACTION_TYPES.ACTIVATE_CHOICES;
+export interface ActivateChoicesAction extends AnyAction<typeof ActionType.ACTIVATE_CHOICES> {
   active: boolean;
 }
 
-export interface ClearChoicesAction {
-  type: typeof ACTION_TYPES.CLEAR_CHOICES;
-}
+/**
+ * @deprecated use clearStore() or clearChoices() instead.
+ */
+export interface ClearChoicesAction extends AnyAction<typeof ActionType.CLEAR_CHOICES> {}
 
-export const addChoice = ({
-  value,
-  label,
-  id,
-  groupId,
-  disabled,
-  elementId,
-  customProperties,
-  placeholder,
-  keyCode,
-}): AddChoiceAction => ({
-  type: ACTION_TYPES.ADD_CHOICE,
-  value,
-  label,
-  id,
-  groupId,
-  disabled,
-  elementId,
-  customProperties,
-  placeholder,
-  keyCode,
+export const addChoice = (choice: ChoiceFull): AddChoiceAction => ({
+  type: ActionType.ADD_CHOICE,
+  choice,
 });
 
-export const filterChoices = (
-  results: Result<Choice>[],
-): FilterChoicesAction => ({
-  type: ACTION_TYPES.FILTER_CHOICES,
+export const removeChoice = (choice: ChoiceFull): RemoveChoiceAction => ({
+  type: ActionType.REMOVE_CHOICE,
+  choice,
+});
+
+export const filterChoices = (results: SearchResult<ChoiceFull>[]): FilterChoicesAction => ({
+  type: ActionType.FILTER_CHOICES,
   results,
 });
 
 export const activateChoices = (active = true): ActivateChoicesAction => ({
-  type: ACTION_TYPES.ACTIVATE_CHOICES,
+  type: ActionType.ACTIVATE_CHOICES,
   active,
 });
 
+/**
+ * @deprecated use clearStore() or clearChoices() instead.
+ */
 export const clearChoices = (): ClearChoicesAction => ({
-  type: ACTION_TYPES.CLEAR_CHOICES,
+  type: ActionType.CLEAR_CHOICES,
 });

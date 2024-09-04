@@ -1,7 +1,5 @@
-import { sanitise } from '../lib/utils';
-import { SELECT_ONE_TYPE } from '../constants';
 import { ClassNames } from '../interfaces/class-names';
-import { PassedElementType } from '../interfaces/passed-element-type';
+import { PassedElementType, PassedElementTypes } from '../interfaces/passed-element-type';
 
 export default class Input {
   element: HTMLInputElement;
@@ -45,44 +43,44 @@ export default class Input {
   }
 
   get value(): string {
-    return sanitise(this.element.value);
+    return this.element.value;
   }
 
   set value(value: string) {
     this.element.value = value;
   }
 
-  get rawValue(): string {
-    return this.element.value;
-  }
-
   addEventListeners(): void {
-    this.element.addEventListener('paste', this._onPaste);
-    this.element.addEventListener('input', this._onInput, {
+    const el = this.element;
+    el.addEventListener('paste', this._onPaste);
+    el.addEventListener('input', this._onInput, {
       passive: true,
     });
-    this.element.addEventListener('focus', this._onFocus, {
+    el.addEventListener('focus', this._onFocus, {
       passive: true,
     });
-    this.element.addEventListener('blur', this._onBlur, {
+    el.addEventListener('blur', this._onBlur, {
       passive: true,
     });
   }
 
   removeEventListeners(): void {
-    this.element.removeEventListener('input', this._onInput);
-    this.element.removeEventListener('paste', this._onPaste);
-    this.element.removeEventListener('focus', this._onFocus);
-    this.element.removeEventListener('blur', this._onBlur);
+    const el = this.element;
+    el.removeEventListener('input', this._onInput);
+    el.removeEventListener('paste', this._onPaste);
+    el.removeEventListener('focus', this._onFocus);
+    el.removeEventListener('blur', this._onBlur);
   }
 
   enable(): void {
-    this.element.removeAttribute('disabled');
+    const el = this.element;
+    el.removeAttribute('disabled');
     this.isDisabled = false;
   }
 
   disable(): void {
-    this.element.setAttribute('disabled', '');
+    const el = this.element;
+    el.setAttribute('disabled', '');
     this.isDisabled = true;
   }
 
@@ -99,10 +97,7 @@ export default class Input {
   }
 
   clear(setWidth = true): this {
-    if (this.element.value) {
-      this.element.value = '';
-    }
-
+    this.element.value = '';
     if (setWidth) {
       this.setWidth();
     }
@@ -116,9 +111,9 @@ export default class Input {
    */
   setWidth(): void {
     // Resize input to contents or placeholder
-    const { style, value, placeholder } = this.element;
-    style.minWidth = `${placeholder.length + 1}ch`;
-    style.width = `${value.length + 1}ch`;
+    const { element } = this;
+    element.style.minWidth = `${element.placeholder.length + 1}ch`;
+    element.style.width = `${element.value.length + 1}ch`;
   }
 
   setActiveDescendant(activeDescendantID: string): void {
@@ -130,7 +125,7 @@ export default class Input {
   }
 
   _onInput(): void {
-    if (this.type !== SELECT_ONE_TYPE) {
+    if (this.type !== PassedElementTypes.SelectOne) {
       this.setWidth();
     }
   }

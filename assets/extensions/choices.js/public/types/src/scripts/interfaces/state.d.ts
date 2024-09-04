@@ -1,10 +1,10 @@
-import { Choice } from './choice';
-import { Group } from './group';
-import { Item } from './item';
+import { ChoiceFull } from './choice-full';
+import { GroupFull } from './group-full';
 export interface State {
-    choices: Choice[];
-    groups: Group[];
-    items: Item[];
-    loading: boolean;
+    choices: ChoiceFull[];
+    groups: GroupFull[];
+    items: ChoiceFull[];
 }
-//# sourceMappingURL=state.d.ts.map
+export type StateChangeSet = {
+    [K in keyof State]: boolean;
+};

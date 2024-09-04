@@ -78,8 +78,7 @@ a:focus {
   border: 1px solid #ddd;
   border-radius: 2.5px;
   font-size: 14px;
-  -webkit-appearance: none;
-          appearance: none;
+  appearance: none;
   margin-bottom: 24px;
 }
 
@@ -137,7 +136,7 @@ label + p {
 .section a,
 .section a:visited,
 .section a:focus {
-  color: #00bcd4;
+  color: #005F75;
 }
 
 .logo {

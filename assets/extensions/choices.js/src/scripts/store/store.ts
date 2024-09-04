@@ -1,144 +1,182 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-import { createStore, Store as IStore, AnyAction } from 'redux';
-import { Choice } from '../interfaces/choice';
-import { Group } from '../interfaces/group';
-import { Item } from '../interfaces/item';
-import { State } from '../interfaces/state';
-import rootReducer from '../reducers/index';
+import { AnyAction, Reducer, Store as IStore, StoreListener } from '../interfaces/store';
+import { StateChangeSet, State } from '../interfaces/state';
+import { ChoiceFull } from '../interfaces/choice-full';
+import { GroupFull } from '../interfaces/group-full';
+import items from '../reducers/items';
+import groups from '../reducers/groups';
+import choices from '../reducers/choices';
 
-export default class Store {
-  _store: IStore;
+type ReducerList = { [K in keyof State]: Reducer<State[K]> };
 
-  constructor() {
-    this._store = createStore(
-      rootReducer,
-      (window as any).__REDUX_DEVTOOLS_EXTENSION__ &&
-        (window as any).__REDUX_DEVTOOLS_EXTENSION__(),
-    );
+const reducers: ReducerList = {
+  groups,
+  items,
+  choices,
+} as const;
+
+export default class Store<T> implements IStore {
+  _state: State = this.defaultState;
+
+  _listeners: StoreListener[] = [];
+
+  _txn: number = 0;
+
+  _changeSet?: StateChangeSet;
+
+  _context: T;
+
+  constructor(context: T) {
+    this._context = context;
   }
 
-  /**
-   * Subscribe store to function call (wrapped Redux method)
-   */
-  subscribe(onChange: () => void): void {
-    this._store.subscribe(onChange);
+  // eslint-disable-next-line class-methods-use-this
+  get defaultState(): State {
+    return {
+      groups: [],
+      items: [],
+      choices: [],
+    };
   }
 
-  /**
-   * Dispatch event to store (wrapped Redux method)
-   */
+  // eslint-disable-next-line class-methods-use-this
+  changeSet(init: boolean): StateChangeSet {
+    return {
+      groups: init,
+      items: init,
+      choices: init,
+    };
+  }
+
+  reset(): void {
+    this._state = this.defaultState;
+    const changes = this.changeSet(true);
+    if (this._txn) {
+      this._changeSet = changes;
+    } else {
+      this._listeners.forEach((l) => l(changes));
+    }
+  }
+
+  subscribe(onChange: StoreListener): void {
+    this._listeners.push(onChange);
+  }
+
   dispatch(action: AnyAction): void {
-    this._store.dispatch(action);
+    const state = this._state;
+    let hasChanges = false;
+    const changes = this._changeSet || this.changeSet(false);
+
+    Object.keys(reducers).forEach((key: string) => {
+      const stateUpdate = (reducers[key] as Reducer<unknown>)(state[key], action, this._context);
+      if (stateUpdate.update) {
+        hasChanges = true;
+        changes[key] = true;
+        state[key] = stateUpdate.state;
+      }
+    });
+
+    if (hasChanges) {
+      if (this._txn) {
+        this._changeSet = changes;
+      } else {
+        this._listeners.forEach((l) => l(changes));
+      }
+    }
+  }
+
+  withTxn(func: () => void): void {
+    this._txn++;
+    try {
+      func();
+    } finally {
+      this._txn = Math.max(0, this._txn - 1);
+
+      if (!this._txn) {
+        const changeSet = this._changeSet;
+        if (changeSet) {
+          this._changeSet = undefined;
+          this._listeners.forEach((l) => l(changeSet));
+        }
+      }
+    }
   }
 
   /**
-   * Get store object (wrapping Redux method)
+   * Get store object
    */
   get state(): State {
-    return this._store.getState();
+    return this._state;
   }
 
   /**
    * Get items from store
    */
-  get items(): Item[] {
+  get items(): ChoiceFull[] {
     return this.state.items;
-  }
-
-  /**
-   * Get active items from store
-   */
-  get activeItems(): Item[] {
-    return this.items.filter((item) => item.active === true);
   }
 
   /**
    * Get highlighted items from store
    */
-  get highlightedActiveItems(): Item[] {
-    return this.items.filter((item) => item.active && item.highlighted);
+  get highlightedActiveItems(): ChoiceFull[] {
+    return this.items.filter((item) => !item.disabled && item.active && item.highlighted);
   }
 
   /**
    * Get choices from store
    */
-  get choices(): Choice[] {
+  get choices(): ChoiceFull[] {
     return this.state.choices;
   }
 
   /**
    * Get active choices from store
    */
-  get activeChoices(): Choice[] {
-    return this.choices.filter((choice) => choice.active === true);
-  }
-
-  /**
-   * Get selectable choices from store
-   */
-  get selectableChoices(): Choice[] {
-    return this.choices.filter((choice) => choice.disabled !== true);
+  get activeChoices(): ChoiceFull[] {
+    return this.choices.filter((choice) => choice.active);
   }
 
   /**
    * Get choices that can be searched (excluding placeholders)
    */
-  get searchableChoices(): Choice[] {
-    return this.selectableChoices.filter(
-      (choice) => choice.placeholder !== true,
-    );
-  }
-
-  /**
-   * Get placeholder choice from store
-   */
-  get placeholderChoice(): Choice | undefined {
-    return [...this.choices]
-      .reverse()
-      .find((choice) => choice.placeholder === true);
+  get searchableChoices(): ChoiceFull[] {
+    return this.choices.filter((choice) => !choice.disabled && !choice.placeholder);
   }
 
   /**
    * Get groups from store
    */
-  get groups(): Group[] {
+  get groups(): GroupFull[] {
     return this.state.groups;
   }
 
   /**
    * Get active groups from store
    */
-  get activeGroups(): Group[] {
-    const { groups, choices } = this;
-
-    return groups.filter((group) => {
-      const isActive = group.active === true && group.disabled === false;
-      const hasActiveOptions = choices.some(
-        (choice) => choice.active === true && choice.disabled === false,
-      );
+  get activeGroups(): GroupFull[] {
+    return this.state.groups.filter((group) => {
+      const isActive = group.active && !group.disabled;
+      const hasActiveOptions = this.state.choices.some((choice) => choice.active && !choice.disabled);
 
       return isActive && hasActiveOptions;
     }, []);
   }
 
-  /**
-   * Get loading state from store
-   */
-  isLoading(): boolean {
-    return this.state.loading;
+  inTxn(): boolean {
+    return this._txn > 0;
   }
 
   /**
    * Get single choice by it's ID
    */
-  getChoiceById(id: string): Choice | undefined {
-    return this.activeChoices.find((choice) => choice.id === parseInt(id, 10));
+  getChoiceById(id: number): ChoiceFull | undefined {
+    return this.activeChoices.find((choice) => choice.id === id);
   }
 
   /**
    * Get group by group id
    */
-  getGroupById(id: number): Group | undefined {
+  getGroupById(id: number): GroupFull | undefined {
     return this.groups.find((group) => group.id === id);
   }
 }

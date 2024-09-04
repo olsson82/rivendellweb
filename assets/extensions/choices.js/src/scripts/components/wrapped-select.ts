@@ -1,25 +1,32 @@
+import { parseCustomProperties } from '../lib/utils';
 import { ClassNames } from '../interfaces/class-names';
-import { Item } from '../interfaces/item';
 import WrappedElement from './wrapped-element';
+import { GroupFull } from '../interfaces/group-full';
+import { ChoiceFull } from '../interfaces/choice-full';
+import { stringToHtmlClass } from '../lib/choice-input';
+import { isHtmlOptgroup, isHtmlOption } from '../lib/html-guard-statements';
 
-export default class WrappedSelect extends WrappedElement {
-  element: HTMLSelectElement;
-
+export default class WrappedSelect extends WrappedElement<HTMLSelectElement> {
   classNames: ClassNames;
 
   template: (data: object) => HTMLOptionElement;
+
+  extractPlaceholder: boolean;
 
   constructor({
     element,
     classNames,
     template,
+    extractPlaceholder,
   }: {
     element: HTMLSelectElement;
     classNames: ClassNames;
     template: (data: object) => HTMLOptionElement;
+    extractPlaceholder: boolean;
   }) {
     super({ element, classNames });
     this.template = template;
+    this.extractPlaceholder = extractPlaceholder;
   }
 
   get placeholderOption(): HTMLOptionElement | null {
@@ -30,31 +37,77 @@ export default class WrappedSelect extends WrappedElement {
     );
   }
 
-  get optionGroups(): Element[] {
-    return Array.from(this.element.getElementsByTagName('OPTGROUP'));
-  }
-
-  get options(): Item[] | HTMLOptionElement[] {
-    return Array.from(this.element.options);
-  }
-
-  set options(options: Item[] | HTMLOptionElement[]) {
+  addOptions(choices: ChoiceFull[]): void {
     const fragment = document.createDocumentFragment();
-    const addOptionToFragment = (data): void => {
-      // Create a standard select option
-      const option = this.template(data);
-      // Append it to fragment
+    choices.forEach((obj) => {
+      const choice = obj;
+      if (choice.element) {
+        return;
+      }
+
+      const option = this.template(choice);
       fragment.appendChild(option);
-    };
-
-    // Add each list item to list
-    options.forEach((optionData) => addOptionToFragment(optionData));
-
-    this.appendDocFragment(fragment);
+      choice.element = option;
+    });
+    this.element.appendChild(fragment);
   }
 
-  appendDocFragment(fragment: DocumentFragment): void {
-    this.element.innerHTML = '';
-    this.element.appendChild(fragment);
+  optionsAsChoices(): (ChoiceFull | GroupFull)[] {
+    const choices: (ChoiceFull | GroupFull)[] = [];
+
+    this.element.querySelectorAll<HTMLElement>(':scope > option, :scope > optgroup').forEach((e) => {
+      if (isHtmlOption(e)) {
+        choices.push(this._optionToChoice(e));
+      } else if (isHtmlOptgroup(e)) {
+        choices.push(this._optgroupToChoice(e));
+      }
+      // todo: hr as empty optgroup, requires displaying empty opt-groups to be useful
+    });
+
+    return choices;
+  }
+
+  // eslint-disable-next-line class-methods-use-this
+  _optionToChoice(option: HTMLOptionElement): ChoiceFull {
+    // option.value returns the label if there is no value attribute, which can break legacy placeholder attribute support
+    if (!option.hasAttribute('value') && option.hasAttribute('placeholder')) {
+      option.setAttribute('value', '');
+      option.value = '';
+    }
+
+    return {
+      id: 0,
+      groupId: 0,
+      score: 0,
+      rank: 0,
+      value: option.value,
+      label: option.innerHTML,
+      element: option,
+      active: true,
+      // this returns true if nothing is selected on initial load, which will break placeholder support
+      selected: this.extractPlaceholder ? option.selected : option.hasAttribute('selected'),
+      disabled: option.disabled,
+      highlighted: false,
+      placeholder: this.extractPlaceholder && (!option.value || option.hasAttribute('placeholder')),
+      labelClass:
+        typeof option.dataset.labelClass !== 'undefined' ? stringToHtmlClass(option.dataset.labelClass) : undefined,
+      labelDescription:
+        typeof option.dataset.labelDescription !== 'undefined' ? option.dataset.labelDescription : undefined,
+      customProperties: parseCustomProperties(option.dataset.customProperties),
+    };
+  }
+
+  _optgroupToChoice(optgroup: HTMLOptGroupElement): GroupFull {
+    const options = optgroup.querySelectorAll('option');
+    const choices = Array.from(options).map((option) => this._optionToChoice(option));
+
+    return {
+      id: 0,
+      label: optgroup.label || '',
+      element: optgroup,
+      active: !!choices.length,
+      disabled: optgroup.disabled,
+      choices,
+    };
   }
 }

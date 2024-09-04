@@ -1,8 +1,7 @@
-import { wrap } from '../lib/utils';
-import { SELECT_ONE_TYPE } from '../constants';
+import { addClassesToElement, removeClassesFromElement } from '../lib/utils';
 import { ClassNames } from '../interfaces/class-names';
 import { PositionOptionsType } from '../interfaces/position-options-type';
-import { PassedElementType } from '../interfaces/passed-element-type';
+import { PassedElementType, PassedElementTypes } from '../interfaces/passed-element-type';
 
 export default class Container {
   element: HTMLElement;
@@ -16,8 +15,6 @@ export default class Container {
   isOpen: boolean;
 
   isFlipped: boolean;
-
-  isFocussed: boolean;
 
   isDisabled: boolean;
 
@@ -40,38 +37,22 @@ export default class Container {
     this.position = position;
     this.isOpen = false;
     this.isFlipped = false;
-    this.isFocussed = false;
     this.isDisabled = false;
     this.isLoading = false;
-    this._onFocus = this._onFocus.bind(this);
-    this._onBlur = this._onBlur.bind(this);
-  }
-
-  addEventListeners(): void {
-    this.element.addEventListener('focus', this._onFocus);
-    this.element.addEventListener('blur', this._onBlur);
-  }
-
-  removeEventListeners(): void {
-    this.element.removeEventListener('focus', this._onFocus);
-    this.element.removeEventListener('blur', this._onBlur);
   }
 
   /**
    * Determine whether container should be flipped based on passed
    * dropdown position
    */
-  shouldFlip(dropdownPos: number): boolean {
-    if (typeof dropdownPos !== 'number') {
-      return false;
-    }
-
+  shouldFlip(dropdownPos: number, dropdownHeight: number): boolean {
     // If flip is enabled and the dropdown bottom position is
     // greater than the window height flip the dropdown.
     let shouldFlip = false;
     if (this.position === 'auto') {
-      shouldFlip = !window.matchMedia(`(min-height: ${dropdownPos + 1}px)`)
-        .matches;
+      shouldFlip =
+        this.element.getBoundingClientRect().top - dropdownHeight >= 0 &&
+        !window.matchMedia(`(min-height: ${dropdownPos + 1}px)`).matches;
     } else if (this.position === 'top') {
       shouldFlip = true;
     }
@@ -87,92 +68,90 @@ export default class Container {
     this.element.removeAttribute('aria-activedescendant');
   }
 
-  open(dropdownPos: number): void {
-    this.element.classList.add(this.classNames.openState);
+  open(dropdownPos: number, dropdownHeight: number): void {
+    addClassesToElement(this.element, this.classNames.openState);
     this.element.setAttribute('aria-expanded', 'true');
     this.isOpen = true;
 
-    if (this.shouldFlip(dropdownPos)) {
-      this.element.classList.add(this.classNames.flippedState);
+    if (this.shouldFlip(dropdownPos, dropdownHeight)) {
+      addClassesToElement(this.element, this.classNames.flippedState);
       this.isFlipped = true;
     }
   }
 
   close(): void {
-    this.element.classList.remove(this.classNames.openState);
+    removeClassesFromElement(this.element, this.classNames.openState);
     this.element.setAttribute('aria-expanded', 'false');
     this.removeActiveDescendant();
     this.isOpen = false;
 
     // A dropdown flips if it does not have space within the page
     if (this.isFlipped) {
-      this.element.classList.remove(this.classNames.flippedState);
+      removeClassesFromElement(this.element, this.classNames.flippedState);
       this.isFlipped = false;
     }
   }
 
-  focus(): void {
-    if (!this.isFocussed) {
-      this.element.focus();
-    }
-  }
-
   addFocusState(): void {
-    this.element.classList.add(this.classNames.focusState);
+    addClassesToElement(this.element, this.classNames.focusState);
   }
 
   removeFocusState(): void {
-    this.element.classList.remove(this.classNames.focusState);
+    removeClassesFromElement(this.element, this.classNames.focusState);
   }
 
   enable(): void {
-    this.element.classList.remove(this.classNames.disabledState);
+    removeClassesFromElement(this.element, this.classNames.disabledState);
     this.element.removeAttribute('aria-disabled');
-    if (this.type === SELECT_ONE_TYPE) {
+    if (this.type === PassedElementTypes.SelectOne) {
       this.element.setAttribute('tabindex', '0');
     }
     this.isDisabled = false;
   }
 
   disable(): void {
-    this.element.classList.add(this.classNames.disabledState);
+    addClassesToElement(this.element, this.classNames.disabledState);
     this.element.setAttribute('aria-disabled', 'true');
-    if (this.type === SELECT_ONE_TYPE) {
+    if (this.type === PassedElementTypes.SelectOne) {
       this.element.setAttribute('tabindex', '-1');
     }
     this.isDisabled = true;
   }
 
-  wrap(element: HTMLSelectElement | HTMLInputElement | HTMLElement): void {
-    wrap(element, this.element);
+  wrap(element: HTMLElement): void {
+    const el = this.element;
+    const { parentNode } = element;
+    if (parentNode) {
+      if (element.nextSibling) {
+        parentNode.insertBefore(el, element.nextSibling);
+      } else {
+        parentNode.appendChild(el);
+      }
+    }
+
+    el.appendChild(element);
   }
 
   unwrap(element: HTMLElement): void {
-    if (this.element.parentNode) {
+    const el = this.element;
+    const { parentNode } = el;
+    if (parentNode) {
       // Move passed element outside this element
-      this.element.parentNode.insertBefore(element, this.element);
+      parentNode.insertBefore(element, el);
       // Remove this element
-      this.element.parentNode.removeChild(this.element);
+      parentNode.removeChild(el);
     }
   }
 
   addLoadingState(): void {
-    this.element.classList.add(this.classNames.loadingState);
+    addClassesToElement(this.element, this.classNames.loadingState);
     this.element.setAttribute('aria-busy', 'true');
     this.isLoading = true;
   }
 
   removeLoadingState(): void {
-    this.element.classList.remove(this.classNames.loadingState);
+    removeClassesFromElement(this.element, this.classNames.loadingState);
     this.element.removeAttribute('aria-busy');
     this.isLoading = false;
-  }
-
-  _onFocus(): void {
-    this.isFocussed = true;
-  }
-
-  _onBlur(): void {
-    this.isFocussed = false;
   }
 }

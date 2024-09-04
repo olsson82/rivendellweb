@@ -1,8 +1,9 @@
-import { AddItemAction, RemoveItemAction, HighlightItemAction } from '../actions/items';
-import { Item } from '../interfaces/item';
+import { ItemActions } from '../actions/items';
 import { State } from '../interfaces/state';
-export declare const defaultState: never[];
-type ActionTypes = AddItemAction | RemoveItemAction | HighlightItemAction | Record<string, never>;
-export default function items(state?: Item[], action?: ActionTypes): State['items'];
+import { ChoiceActions } from '../actions/choices';
+import { Options } from '../interfaces';
+import { StateUpdate } from '../interfaces/store';
+type ActionTypes = ChoiceActions | ItemActions;
+type StateType = State['items'];
+export default function items(s: StateType, action: ActionTypes, context?: Options): StateUpdate<StateType>;
 export {};
-//# sourceMappingURL=items.d.ts.map

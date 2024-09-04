@@ -11,11 +11,6 @@ export default class Dropdown {
         classNames: ClassNames;
     });
     /**
-     * Bottom position of dropdown in viewport coordinates
-     */
-    get distanceFromTopWindow(): number;
-    getChild(selector: string): HTMLElement | null;
-    /**
      * Show dropdown to user by adding active state class
      */
     show(): this;
@@ -24,4 +19,3 @@ export default class Dropdown {
      */
     hide(): this;
 }
-//# sourceMappingURL=dropdown.d.ts.map

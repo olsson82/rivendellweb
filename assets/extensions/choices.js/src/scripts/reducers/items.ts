@@ -1,78 +1,86 @@
-import {
-  AddItemAction,
-  RemoveItemAction,
-  HighlightItemAction,
-} from '../actions/items';
-import { Item } from '../interfaces/item';
+import { ItemActions } from '../actions/items';
 import { State } from '../interfaces/state';
+import { ChoiceActions } from '../actions/choices';
+import { ActionType, Options, PassedElementTypes } from '../interfaces';
+import { StateUpdate } from '../interfaces/store';
+import { isHtmlSelectElement } from '../lib/html-guard-statements';
+import { ChoiceFull } from '../interfaces/choice-full';
+import { updateClassList } from '../lib/utils';
 
-export const defaultState = [];
+type ActionTypes = ChoiceActions | ItemActions;
+type StateType = State['items'];
 
-type ActionTypes =
-  | AddItemAction
-  | RemoveItemAction
-  | HighlightItemAction
-  | Record<string, never>;
+const removeItem = (item: ChoiceFull): void => {
+  const { itemEl } = item;
+  if (itemEl) {
+    itemEl.remove();
+    item.itemEl = undefined;
+  }
+};
 
-export default function items(
-  state: Item[] = defaultState,
-  action: ActionTypes = {},
-): State['items'] {
+export default function items(s: StateType, action: ActionTypes, context?: Options): StateUpdate<StateType> {
+  let state = s;
+  let update = true;
+
   switch (action.type) {
-    case 'ADD_ITEM': {
-      const addItemAction = action as AddItemAction;
-      // Add object to items array
-      const newState = [
-        ...state,
-        {
-          id: addItemAction.id,
-          choiceId: addItemAction.choiceId,
-          groupId: addItemAction.groupId,
-          value: addItemAction.value,
-          label: addItemAction.label,
-          active: true,
-          highlighted: false,
-          customProperties: addItemAction.customProperties,
-          placeholder: addItemAction.placeholder || false,
-          keyCode: null,
-        },
-      ];
+    case ActionType.ADD_ITEM: {
+      action.item.selected = true;
+      const el = action.item.element as HTMLOptionElement | undefined;
+      if (el) {
+        el.selected = true;
+        el.setAttribute('selected', '');
+      }
 
-      return newState.map((obj: Item) => {
-        const item = obj;
-        item.highlighted = false;
-
-        return item;
-      });
+      state.push(action.item);
+      break;
     }
 
-    case 'REMOVE_ITEM': {
-      // Set item to inactive
-      return state.map((obj) => {
-        const item = obj;
-        if (item.id === action.id) {
-          item.active = false;
+    case ActionType.REMOVE_ITEM: {
+      action.item.selected = false;
+      const el = action.item.element as HTMLOptionElement | undefined;
+      if (el) {
+        el.selected = false;
+        el.removeAttribute('selected');
+        // For a select-one, if all options are deselected, the first item is selected. To set a black value, select.value needs to be set
+        const select = el.parentElement;
+        if (select && isHtmlSelectElement(select) && select.type === PassedElementTypes.SelectOne) {
+          select.value = '';
         }
-
-        return item;
-      });
+      }
+      // this is mixing concerns, but this is *so much faster*
+      removeItem(action.item);
+      state = state.filter((choice) => choice.id !== action.item.id);
+      break;
     }
 
-    case 'HIGHLIGHT_ITEM': {
-      const highlightItemAction = action as HighlightItemAction;
+    case ActionType.REMOVE_CHOICE: {
+      state = state.filter((item) => item.id !== action.choice.id);
+      removeItem(action.choice);
+      break;
+    }
 
-      return state.map((obj) => {
-        const item = obj;
-        if (item.id === highlightItemAction.id) {
-          item.highlighted = highlightItemAction.highlighted;
+    case ActionType.HIGHLIGHT_ITEM: {
+      const { highlighted } = action;
+      const item = state.find((obj) => obj.id === action.item.id);
+      if (item && item.highlighted !== highlighted) {
+        item.highlighted = highlighted;
+        if (context) {
+          updateClassList(
+            item,
+            highlighted ? context.classNames.highlightedState : context.classNames.selectedState,
+            highlighted ? context.classNames.selectedState : context.classNames.highlightedState,
+          );
         }
+      }
 
-        return item;
-      });
+      break;
     }
 
     default: {
-      return state;
+      update = false;
+      break;
     }
   }
+
+  return { state, update };
 }

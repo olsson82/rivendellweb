@@ -13,20 +13,13 @@ export default class List {
     this.height = this.element.offsetHeight;
   }
 
-  clear(): void {
-    this.element.innerHTML = '';
-  }
-
-  append(node: Element | DocumentFragment): void {
-    this.element.appendChild(node);
-  }
-
-  getChild(selector: string): HTMLElement | null {
-    return this.element.querySelector(selector);
-  }
-
-  hasChildren(): boolean {
-    return this.element.hasChildNodes();
+  prepend(node: Element | DocumentFragment): void {
+    const child = this.element.firstElementChild;
+    if (child) {
+      this.element.insertBefore(node, child);
+    } else {
+      this.element.append(node);
+    }
   }
 
   scrollToTop(): void {
@@ -47,10 +40,7 @@ export default class List {
     const elementPos = element.offsetTop + elementHeight;
 
     // Difference between the element and scroll position
-    const destination =
-      direction > 0
-        ? this.element.scrollTop + elementPos - listScrollPosition
-        : element.offsetTop;
+    const destination = direction > 0 ? this.element.scrollTop + elementPos - listScrollPosition : element.offsetTop;
 
     requestAnimationFrame(() => {
       this._animateScroll(destination, direction);
