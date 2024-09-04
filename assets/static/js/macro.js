@@ -200,7 +200,7 @@ var MACROForm = $('#addmacro_form').validate({
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
                 if (fel == "false") {
-                    MACROForm.resetForm();
+                    $("#addmacro_form").trigger("reset");
                     $('#add_macro').modal('hide');
                     dt.ajax.reload();
                 } else {

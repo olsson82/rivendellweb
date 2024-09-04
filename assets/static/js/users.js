@@ -304,7 +304,7 @@ var AddForm = $('#add_form').validate({
                 var mydata = $.parseJSON(data);
                 var fel = mydata.error;
                 if (fel == "false") {
-                    AddForm.resetForm();
+                    $("#add_form").trigger("reset");
                     dt.ajax.reload();
                     $('#add_window').modal('hide');
                 } else {

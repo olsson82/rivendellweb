@@ -262,8 +262,8 @@ var RenameForm = $('#rename_form').validate({
                 var mydata = $.parseJSON(data);
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
-                if (fel == "false") {
-                    RenameForm.resetForm();
+                if (fel == "false") {                    
+                    $("#rename_form").trigger("reset");
                     dt.ajax.reload();
                     $('#rename_window').modal('hide');
                 } else {
@@ -342,7 +342,7 @@ var AddForm = $('#add_form').validate({
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
                 if (fel == "false") {
-                    AddForm.resetForm();
+                    $("#add_form").trigger("reset");
                     dt.ajax.reload();
                     $('#add_window').modal('hide');
                 } else {
@@ -411,8 +411,8 @@ var EditForm = $('#edit_form').validate({
                 var mydata = $.parseJSON(data);
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
-                if (fel == "false") {
-                    EditForm.resetForm();
+                if (fel == "false") {                    
+                    $("#edit_form").trigger("reset");
                     dt.ajax.reload();
                     $('#edit_window').modal('hide');
                 } else {

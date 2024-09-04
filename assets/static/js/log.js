@@ -216,7 +216,7 @@ var addVoiceForm = $('#addVoice_form').validate({
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
                 if (fel == "false") {
-                    addVoiceForm.resetForm();
+                    $("#addVoice_form").trigger("reset");
                     dt.ajax.reload();
                     $('#add_voicetrack').modal('hide');
                 } else {
@@ -293,8 +293,8 @@ var addMarkerForm = $('#addMarker_form').validate({
                 var mydata = $.parseJSON(data);
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
-                if (fel == "false") {
-                    addMarkerForm.resetForm();
+                if (fel == "false") {  
+                    $("#addMarker_form").trigger("reset");
                     dt.ajax.reload();
                     $('#add_marker').modal('hide');
                 } else {
@@ -425,8 +425,8 @@ var addCartForm = $('#addCart_form').validate({
                 var mydata = $.parseJSON(data);
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
-                if (fel == "false") {
-                    addCartForm.resetForm();
+                if (fel == "false") {                      
+                    $("#addCart_form").trigger("reset");
                     dt.ajax.reload();
                     $('#add_cart').modal('hide');
                 } else {

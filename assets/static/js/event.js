@@ -373,7 +373,7 @@ var VTForm = $('#vtmarker_form').validate({
                 var fel = mydata.error;
                 var kod = mydata.errorcode;
                 if (fel == "false") {
-                    VTForm.resetForm();
+                    $("#vtmarker_form").trigger("reset");
                     if (theimptype == 0) {
                         dt.ajax.reload();
                     } else {

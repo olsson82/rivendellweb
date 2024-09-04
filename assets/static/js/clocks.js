@@ -102,6 +102,7 @@ $('#rename_form').validate({
                 var kod = mydata.errorcode;
                 if (fel == "false") {
                     $('#rename_clock').modal('hide');
+                    $("#rename_form").trigger("reset");
                     dt.ajax.reload();
                 } else {
                     if (kod == 1) {

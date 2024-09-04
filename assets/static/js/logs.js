@@ -189,7 +189,7 @@ var addLogForm = $('#addlog_form').validate({
                 var thelogname = mydata.logname;
                 if (fel == "false") {
                     dt.ajax.reload();
-                    addLogForm.resetForm();
+                    $("#addlog_form").trigger("reset");
                     $('#add_log').modal('hide');
                 } else {
                     Swal.fire({

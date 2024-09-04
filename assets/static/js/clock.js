@@ -661,6 +661,7 @@ $('#addevent_form').validate({
                     doedit = 0;
                     $("#starttime").val("");
                     $("#endtime").val("");
+                    $("#addevent_form").trigger("reset");
                     $('#addevent_clock').modal('hide');
                 } else {
                     Swal.fire({
