@@ -935,3 +935,6 @@ $en_US['GPIENDNOTEXIST'] = 'That end GPI matrix dont exist!';
 $en_US['GPIENDLINENOTEXIST'] = 'That end GPI line dont exist!';
 $en_US['TALK'] = 'Talk';
 $en_US['CUT'] = 'Cut';
+$en_US['SSHINDENTFILE'] = 'SSH Indent. File';
+$en_US['TIMEOFFSET'] = 'Time Offset (mS)';
+$en_US['STARTUPCART'] = 'Startup Cart';

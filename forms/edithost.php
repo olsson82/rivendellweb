@@ -34,8 +34,11 @@ $defuser = $_POST['defuser'];
 $ipaddress = $_POST['ipadd'];
 $report = $_POST['repedit'];
 $web = $_POST['webbrow'];
+$sshindent = $_POST['sshindent'];
+$timeoffset = $_POST['timeoffset'];
+$startupcart = $_POST['startupcart'];
 
-if (!$dbfunc->updateHost($hostname, $shortname, $description, $defuser, $ipaddress, $report, $web)) {
+if (!$dbfunc->updateHost($hostname, $shortname, $description, $defuser, $ipaddress, $report, $web, $sshindent, $timeoffset, $startupcart)) {
     $echodata = ['error' => 'true', 'errorcode' => '1'];
     echo json_encode($echodata);
 } else {

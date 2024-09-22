@@ -207,6 +207,36 @@ $page_js = '<script src="'.DIR.'/assets/static/js/hosts.js"></script>';
                                 <div class="col-md-8 form-group">
                                     <input type="text" id="webbrow" class="form-control" name="webbrow">
                                 </div>
+                                <div class="col-md-4">
+                                    <label for="sshindent">
+                                        <?= $ml->tr('SSHINDENTFILE') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="sshindent" class="form-control" name="sshindent">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="timeoffset">
+                                        <?= $ml->tr('TIMEOFFSET') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="number" id="timeoffset" class="form-control" min="-500" max="500"
+                                        name="timeoffset" value="0">
+                                </div>
+                                <div class="col-md-4">
+                                    <label for="startupcart">
+                                        <?= $ml->tr('STARTUPCART') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="startupcart" class="form-control" name="startupcart" readonly>
+                                </div>
+                                <div class="col-12 col-md-8 offset-md-4 form-group">
+                                    <a href="javascript:;" data-bs-stacked-modal="#macro_select" class="btn btn-info">
+                                        <?= $ml->tr('SELECTCART') ?>
+                                    </a>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -220,7 +250,75 @@ $page_js = '<script src="'.DIR.'/assets/static/js/hosts.js"></script>';
                 </form>
             </div>
         </div>
-    </div>    
+    </div>
+    
+    <div class="modal fade text-left" id="macro_select" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="selCartLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-primary">
+                    <h4 class="modal-title white" id="selCartLabel">
+                        <?= $ml->tr('ADDFROMLIBRARY') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-macsel-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    <select id="selectGroup" class="choices form-select">
+                        <option value="allgroups">
+                            <?= $ml->tr('ALLGROUPS') ?>
+                        </option>
+                        <?php foreach ($groupinfo as $ugrp) { ?>
+                            <option value="<?php echo $ugrp; ?>">
+                                <?php echo $ugrp; ?>
+                            </option>
+                        <?php } ?>
+
+                    </select>
+                    <div class="table-responsive">
+                        <table class="table" id="macroadd_table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <?= $ml->tr('CART') ?>
+                                    </th>
+                                    <th>
+                                        <?= $ml->tr('GROUP') ?>
+                                    </th>
+                                    <th>
+                                        <?= $ml->tr('LENGTH') ?>
+                                    </th>
+                                    <th>
+                                        <?= $ml->tr('TITLE') ?>
+                                    </th>
+                                    <th>
+                                        <?= $ml->tr('ARTIST') ?>
+                                    </th>
+                                    <th>
+                                        <?= $ml->tr('ACTION') ?>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <input type="hidden" name="idet" id="idet1" value="<?php echo $id; ?>">
+                    <input type="hidden" name="vttype" id="vttype1" value="">
+                    <input type="hidden" name="imptype" id="imptype1" value="">
+                    <button type="button" class="btn btn-light-secondary" data-kt-macsel-modal-action="close">
+                            <?= $ml->tr('CLOSE') ?>                        
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </div>
 

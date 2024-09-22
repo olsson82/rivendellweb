@@ -1854,10 +1854,11 @@ class DBFunc
 
     }
 
-    public function updateHost($hostname, $shortname, $description, $defuser, $ipaddress, $report, $web)
+    public function updateHost($hostname, $shortname, $description, $defuser, $ipaddress, $report, $web, $sshindent, $timeoffset, $startupcart)
     {
 
-        $sql = 'UPDATE `STATIONS` SET `SHORT_NAME` = :short, `DESCRIPTION` = :descri, `DEFAULT_NAME` = :defname, `IPV4_ADDRESS` = :ipv4, `REPORT_EDITOR_PATH` = :report, `BROWSER_PATH` = :browspath WHERE `NAME` = :thename';
+        $sql = 'UPDATE `STATIONS` SET `SHORT_NAME` = :short, `DESCRIPTION` = :descri, `DEFAULT_NAME` = :defname, `IPV4_ADDRESS` = :ipv4, `REPORT_EDITOR_PATH` = :report, `BROWSER_PATH` = :browspath, 
+        `SSH_IDENTITY_FILE` = :sshident, `TIME_OFFSET` = :timeoffset, `STARTUP_CART` = :startupcart WHERE `NAME` = :thename';
         $stmt = $this->_db->prepare($sql);
         $stmt->bindParam(':short', $shortname);
         $stmt->bindParam(':descri', $description);
@@ -1865,6 +1866,9 @@ class DBFunc
         $stmt->bindParam(':ipv4', $ipaddress);
         $stmt->bindParam(':report', $report);
         $stmt->bindParam(':browspath', $web);
+        $stmt->bindParam(':sshident', $sshindent);
+        $stmt->bindParam(':timeoffset', $timeoffset);
+        $stmt->bindParam(':startupcart', $startupcart);
         $stmt->bindParam(':thename', $hostname);
 
         if ($stmt->execute() === FALSE) {

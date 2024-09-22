@@ -1,5 +1,6 @@
 <script>
     var HOST_URL = "<?php echo DIR; ?>";
+    var USERNAME = "<?php echo $username; ?>";
     var TRAN_EDIT = "<?= $ml->tr('EDITHOST') ?>";
     var TRAN_CLOSETHEWINDOW = "<?= $ml->tr('CLOSETHEWINDOW') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";

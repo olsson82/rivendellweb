@@ -935,3 +935,6 @@ $sv_SE['GPIENDNOTEXIST'] = 'Den slut GPI matrixen existerar inte!';
 $sv_SE['GPIENDLINENOTEXIST'] = 'Den slut GPI raden existerar inte!';
 $sv_SE['TALK'] = 'Prata';
 $sv_SE['CUT'] = 'Cut';
+$sv_SE['SSHINDENTFILE'] = 'SSH Indent. Fil';
+$sv_SE['TIMEOFFSET'] = 'Tid Offset (mS)';
+$sv_SE['STARTUPCART'] = 'Uppstart Cart';
