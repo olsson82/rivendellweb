@@ -88,7 +88,6 @@ $page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
         </div>
     </div>
 
-    <!-- Basic Tables start -->
     <section class="section">
         <div class="card">
             <div class="card-header d-flex justify-content-between">
@@ -99,7 +98,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
                     <?= $ml->tr('FORSERVICE {{' . $selectedService . '}}'); ?>
                 </h6>
                 <div data-kt-library-table-toolbar="base">
-                    <button onclick="clearAll('<?php echo $activeService; ?>')" class="btn btn-light-danger">
+                <button onclick="saveGrid('<?php echo $activeService; ?>')" class="btn btn-light-warning">
+                        <?= $ml->tr('SAVEGRIDLAYOUT'); ?>
+                    </button>  
+                    <button onclick="LoadLayout('<?php echo $activeService; ?>')" class="btn btn-light-info">
+                        <?= $ml->tr('SELLAYOUTGRID'); ?>
+                    </button>    
+                <button onclick="clearAll('<?php echo $activeService; ?>')" class="btn btn-light-danger">
                         <?= $ml->tr('CLEARALLGRID'); ?>
                     </button>
                 </div>
@@ -257,6 +262,88 @@ $page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
                         <span class="d-none d-sm-block">
                             <?= $ml->tr('CLOSE') ?>
                         </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="save_grid" data-bs-backdrop="static" role="dialog" aria-labelledby="SaveLabel"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="SaveLabel">
+                        <?= $ml->tr('SAVEGRIDLAYOUT') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-savelayout-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <form class="form form-horizontal" id="save_form" action="#">
+                    <div class="modal-body">
+                        <div class="form-body">
+                            <div class="row">
+                            <P><?= $ml->tr('SAVEGRIDLAYOUTINFO') ?></P>
+                                <div class="col-md-4">
+                                    <label for="layoutname">
+                                        <?= $ml->tr('LAYOUTNAME') ?>
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <input type="text" id="layoutname" class="form-control" name="layoutname">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="modal-footer">
+                        <input type="hidden" name="serviceid" id="serviceid">
+                        <button type="button" class="btn btn-light-secondary" data-kt-savelayout-modal-action="close">
+                            <?= $ml->tr('CLOSE') ?>
+                        </button>
+                        <input type="submit" class="btn btn-warning ms-1" value="<?= $ml->tr('SAVE') ?>">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade text-left" id="layout_select" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="layoutSelLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-primary">
+                    <h4 class="modal-title white" id="layoutSelLabel">
+                        <?= $ml->tr('SELLAYOUTGRID') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-gridlayout-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+                    
+                    <div class="table-responsive">
+                        <table class="table" id="gridlayout_table">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <?= $ml->tr('LAYOUTNAME') ?>
+                                    </th>
+                                    <th>
+                                        <?= $ml->tr('ACTION') ?>
+                                    </th>
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-kt-gridlayout-modal-action="close">                        
+                            <?= $ml->tr('CLOSE') ?>
                     </button>
                 </div>
             </div>

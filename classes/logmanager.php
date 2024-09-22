@@ -1374,4 +1374,72 @@ class Log
         }
     }
 
+    public function getClockHourName($service, $hour)
+    {
+
+        $clockname = '';
+        $sql = "SELECT * FROM SERVICE_CLOCKS WHERE `SERVICE_NAME` = '" . $service . "' AND `HOUR` = '" . $hour . "'";
+        $results = $this->_db->query($sql);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+
+        while ($row = $results->fetch())
+            $clockname = $row['CLOCK_NAME'];
+
+        $results = NULL;
+
+
+
+        return $clockname;
+
+    }
+
+    public function getShortClockName($clock)
+    {
+
+        $shotname = '';
+        $sql = "SELECT * FROM CLOCKS WHERE `NAME` = '" . $clock . "'";
+        $results = $this->_db->query($sql);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+
+        while ($row = $results->fetch())
+            $shotname = $row['SHORT_NAME'];
+
+        $results = NULL;
+
+
+
+        return $shotname;
+
+    }
+
+    public function getClockColor($clock)
+    {
+
+        $color = '';
+        $sql = "SELECT * FROM CLOCKS WHERE `NAME` = '" . $clock . "'";
+        $results = $this->_db->query($sql);
+        $results->setFetchMode(PDO::FETCH_ASSOC);
+
+        while ($row = $results->fetch())
+            $color = $row['COLOR'];
+
+        $results = NULL;
+
+
+
+        return $color;
+
+    }
+    public function updateClockGrid($servicename, $hour, $clockname)
+    {
+            $sql = 'UPDATE `SERVICE_CLOCKS` SET `CLOCK_NAME` = :newName
+                WHERE `SERVICE_NAME` = :serviceName AND `HOUR` = :hoUR';
+            $stmt = $this->_db->prepare($sql);
+            $stmt->bindParam(':newName', $clockname);
+            $stmt->bindParam(':serviceName', $servicename);
+            $stmt->bindParam(':hoUR', $hour);
+            $stmt->execute();
+        return true;
+    }
+
 }

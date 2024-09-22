@@ -57,6 +57,16 @@ if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/data/logedit.json')) {
   $json_string = file_get_contents($filepath);
   $logedit_data = json_decode($json_string, true);
 }
+/**************************************************************
+ * FOR HANDLE MULTIPLE GRID TEMPLATES. *
+ **************************************************************/
+if (!file_exists($_SERVER['DOCUMENT_ROOT'] . '/data/grids.json')) {
+  $grids_data = array();
+} else {
+  $filepath = $_SERVER['DOCUMENT_ROOT'] . '/data/grids.json';
+  $json_string = file_get_contents($filepath);
+  $grids_data = json_decode($json_string, true);
+}
 ob_start();
 session_start();
 date_default_timezone_set($json_sett['timezone']);
@@ -69,7 +79,7 @@ define('SMTPUSER', $json_sett['smtpusr']);
 define('SMTPPASS', $json_sett['smtppass']);
 define('SMTPFROM', $json_sett['smtpfrom']);
 define('DEFAULTLANG', $json_sett['deflang']);
-define('VERS', '0.5.4'); //DO NOT CHANGE THIS!
+define('VERS', '0.5.2'); //DO NOT CHANGE THIS!
 define('DBOK', '375'); //DO NOT CHANGE THIS!
 define('SYSTIT', 'Rivendell Web Broadcast'); //DO NOT CHANGE THIS!
 define('USERESET', $json_sett['usereset']);
