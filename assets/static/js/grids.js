@@ -33,6 +33,54 @@ var color;
 var shortname;
 var serviceName = HOST_SERVICE;
 
+function removelayout(n) {
+
+    Swal.fire({
+        text: TRAN_REMOVELAYOUTDESIGN,
+        icon: "warning",
+        showCancelButton: true,
+        buttonsStyling: false,
+        confirmButtonText: TRAN_YES,
+        cancelButtonText: TRAN_NO,
+        customClass: {
+            confirmButton: "btn btn-primary",
+            cancelButton: "btn btn-active-light"
+        }
+    }).then(function (result) {
+        if (result.value) {
+            jQuery.ajax({
+                type: "POST",
+                url: HOST_URL + '/forms/grids/removelayout.php',
+                data: {
+                    layout: n,
+                    service: serviceName
+                },
+                datatype: 'html',
+                success: function (data) {
+                    var mydata = $.parseJSON(data);
+                    var fel = mydata.error;
+                    var kod = mydata.errorcode;
+                    if (fel == "false") {
+                            dt.ajax.reload();                       
+
+                    } else {
+                        Swal.fire({
+                            text: TRAN_BUG,
+                            icon: "error",
+                            buttonsStyling: false,
+                            confirmButtonText: TRAN_OK,
+                            customClass: {
+                                confirmButton: "btn btn-primary"
+                            }
+                        });
+                    }
+                }
+            });
+        }
+    });
+
+}
+
 function replacegrid(n) {
 
     Swal.fire({
@@ -430,7 +478,13 @@ var KTDatatablesServerSideLibrary = function () {
                     orderable: false,
                     className: 'text-end',
                     render: function (data, type, row) {
-                        return `<a href="javascript:;" onclick="replacegrid('` + row.LAYOUTNAME + `')" class="btn icon btn-info"><i class="bi bi-plus-square"></i></a>`;
+                        return `
+                        <div class="btn-group mb-3" role="group">
+                <a href="javascript:;" onclick="replacegrid('`+ row.LAYOUTNAME + `')" class="btn icon btn-info" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="`+ TRAN_SELLAYOUTGRID + `"><i class="bi bi-plus-square"></i></a>
+                <a href="javascript:;" onclick="removelayout('`+ row.LAYOUTNAME + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="`+ TRAN_REMOVE + `"><i class="bi bi-x-square"></i></a>
+            </div>`;
 
                     }
                 },

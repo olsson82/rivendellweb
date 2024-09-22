@@ -2,6 +2,9 @@
     var HOST_URL = "<?php echo DIR; ?>";
     var HOST_SERVICE = "<?php echo $activeService; ?>";
     var TRAN_REPLACEGRIDLAYOUT = "<?= $ml->tr('REPLACEGRIDLAYOUT') ?>";
+    var TRAN_SELLAYOUTGRID = "<?= $ml->tr('SELLAYOUTGRID') ?>";
+    var TRAN_REMOVE = "<?= $ml->tr('REMOVE') ?>";
+    var TRAN_REMOVELAYOUTDESIGN = "<?= $ml->tr('REMOVELAYOUTDESIGN') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";
     var TRAN_NO = "<?= $ml->tr('NO') ?>";
     var TRAN_OK = "<?= $ml->tr('OK') ?>";

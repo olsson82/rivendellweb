@@ -944,3 +944,4 @@ $sv_SE['SAVEGRIDLAYOUTINFO'] = 'Här kan du spara din grid layout lokalt på ser
 $sv_SE['GRIDLAYOUTNAMEEXIST'] = 'Grid layout namn existerar redan i service.';
 $sv_SE['SELLAYOUTGRID'] = 'Välj Layout';
 $sv_SE['REPLACEGRIDLAYOUT'] = 'Vill du ersätta nuvarande grid med markerade grid layout?';
+$sv_SE['REMOVELAYOUTDESIGN'] = 'Vill du radera denna layout ?';
