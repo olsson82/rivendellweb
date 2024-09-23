@@ -945,3 +945,4 @@ $en_US['GRIDLAYOUTNAMEEXIST'] = 'This grid layout name already exist in this ser
 $en_US['SELLAYOUTGRID'] = 'Select Layout';
 $en_US['REPLACEGRIDLAYOUT'] = 'Do you want to replace current grid with the selected grid layout?';
 $en_US['REMOVELAYOUTDESIGN'] = 'Do you want to remove this layout ?';
+$en_US['EDITGRIDLAYOUT'] = 'Edit Layout';

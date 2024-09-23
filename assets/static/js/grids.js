@@ -31,7 +31,142 @@ var oldclockname;
 var clockid;
 var color;
 var shortname;
+var layoutedit;
 var serviceName = HOST_SERVICE;
+var editmodal;
+var layoutrow;
+
+var elements = Array.prototype.slice.call(document.querySelectorAll("[data-bs-stacked-modal]"));
+if (elements && elements.length > 0) {
+    elements.forEach((element) => {
+        if (element.getAttribute("data-kt-initialized") === "1") {
+            return;
+        }
+
+        element.setAttribute("data-kt-initialized", "1");
+
+        element.addEventListener("click", function (e) {
+            e.preventDefault();
+
+            const modalEl = document.querySelector(this.getAttribute("data-bs-stacked-modal"));
+
+            if (modalEl) {
+                editmodal = new bootstrap.Modal(modalEl);
+                editmodal.show();
+            }
+        });
+    });
+}
+
+function layoutaddall(m, n, o) {
+
+    jQuery.ajax({
+        type: "POST",
+        url: HOST_URL + '/forms/grids/savelayoutallclock.php',
+        data: {
+            name: m,
+            short: n,
+            color: o,
+            row: layoutrow,
+            service: serviceName,
+            layout: layoutedit
+        },
+        datatype: 'html',
+        success: function (data) {
+            var mydata = $.parseJSON(data);
+            var fel = mydata.error;
+            var kod = mydata.errorcode;
+            if (fel == "false") {
+                for (rowruns = 0; rowruns < 168; rowruns++) {
+                    $("#edclocklink_" + rowruns).css('background-color', o);
+                    $("#edclockname_" + rowruns).html(n);
+                }
+
+                editmodal.hide();
+
+            } else {
+                Swal.fire({
+                    text: TRAN_NOTSAVED,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: TRAN_OK,
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+            }
+        }
+    });
+
+}
+
+function addlayoutclock(m, n, o) {
+
+    jQuery.ajax({
+        type: "POST",
+        url: HOST_URL + '/forms/grids/savelayoutclock.php',
+        data: {
+            name: m,
+            short: n,
+            color: o,
+            row: layoutrow,
+            service: serviceName,
+            layout: layoutedit
+        },
+        datatype: 'html',
+        success: function (data) {
+            var mydata = $.parseJSON(data);
+            var fel = mydata.error;
+            var kod = mydata.errorcode;
+            if (fel == "false") {
+                editmodal.hide();
+                $("#edclocklink_" + layoutrow).css('background-color', o);
+                $("#edclockname_" + layoutrow).html(n);
+
+            } else {
+                Swal.fire({
+                    text: TRAN_NOTSAVED,
+                    icon: "error",
+                    buttonsStyling: false,
+                    confirmButtonText: TRAN_OK,
+                    customClass: {
+                        confirmButton: "btn btn-primary"
+                    }
+                });
+            }
+        }
+    });
+
+}
+
+function replacelayouthour(n) {
+    layoutrow = n;
+}
+
+function editlayout(n) {
+    $("#layout_select").modal("hide");
+    layoutedit = n;
+    jQuery.ajax({
+        type: "GET",
+        url: HOST_URL + '/forms/grids/getgridlayout.php',
+        data: {
+            layout: n,
+            service: serviceName
+        },
+        datatype: 'json',
+        success: function (results) {
+            var obj = $.parseJSON(results);
+
+            $.each(obj, function(key,value) {
+                $("#edclocklink_" + value.HOUR).css('background-color', value.COLOR);
+                $("#edclockname_" + value.HOUR).html(value.SHOR_NAME);
+            });
+
+            $("#layoutedit_select").modal("show");
+        }
+    });
+
+}
 
 function removelayout(n) {
 
@@ -482,6 +617,8 @@ var KTDatatablesServerSideLibrary = function () {
                         <div class="btn-group mb-3" role="group">
                 <a href="javascript:;" onclick="replacegrid('`+ row.LAYOUTNAME + `')" class="btn icon btn-info" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="`+ TRAN_SELLAYOUTGRID + `"><i class="bi bi-plus-square"></i></a>
+                <a href="javascript:;" onclick="editlayout('`+ row.LAYOUTNAME + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
+                title="`+ TRAN_EDITGRIDLAYOUT + `"><i class="bi bi-pencil-square"></i></a>
                 <a href="javascript:;" onclick="removelayout('`+ row.LAYOUTNAME + `')" class="btn icon btn-danger" data-bs-toggle="tooltip" data-bs-placement="top"
                 title="`+ TRAN_REMOVE + `"><i class="bi bi-x-square"></i></a>
             </div>`;
@@ -550,7 +687,109 @@ var KTDatatablesServerSideLibrary = function () {
     }
 }();
 
+const element4 = document.getElementById('layoutedit_select');
+const modal4 = new bootstrap.Modal(element4);
+
+var initGridEditModalButtons = function () {
+    const cancelButton = element4.querySelector('[data-kt-gridlayoutedit-modal-action="cancel"]');
+    cancelButton.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal4.hide();
+                $("#layout_select").modal("show");
+            }
+        });
+    });
+    const closeButton = element4.querySelector('[data-kt-gridlayoutedit-modal-action="close"]');
+    closeButton.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                modal4.hide();
+                $("#layout_select").modal("show");
+
+            }
+        });
+    });
+}
+
+const element5 = document.getElementById('layoutclock_modal');
+const modal5 = new bootstrap.Modal(element5);
+
+var initGridClockEditModalButtons = function () {
+    const cancelButton = element5.querySelector('[data-kt-clocklayout-modal-action="cancel"]');
+    cancelButton.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                editmodal.hide();
+            }
+        });
+    });
+    const closeButton = element5.querySelector('[data-kt-clocklayout-modal-action="close"]');
+    closeButton.addEventListener('click', e => {
+        e.preventDefault();
+
+        Swal.fire({
+            text: TRAN_CLOSETHEWINDOW,
+            icon: "warning",
+            showCancelButton: true,
+            buttonsStyling: false,
+            confirmButtonText: TRAN_YES,
+            cancelButtonText: TRAN_NO,
+            customClass: {
+                confirmButton: "btn btn-primary",
+                cancelButton: "btn btn-active-light"
+            }
+        }).then(function (result) {
+            if (result.value) {
+                editmodal.hide();
+
+            }
+        });
+    });
+}
+
 initGridModalButtons();
+initGridEditModalButtons();
+initGridClockEditModalButtons();
 initGridLayoutModalButtons();
 
 $(document).ready(function () {

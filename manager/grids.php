@@ -28,11 +28,11 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 if (!$info->checkusrRights('MODIFY_TEMPLATE_PRIV')) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 $activeService = $_COOKIE['serviceName'];
@@ -43,22 +43,22 @@ $clocks = $logfunc->getRivendellClocks($activeService);
 $pagecode = "grids";
 $page_vars = 'grids';
 $page_title = $ml->tr('GRIDS');
-$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="' . DIR . '/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="' . DIR . '/assets/compiled/css/table-datatable-jquery.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/js-cookie@3.0.5/dist/js.cookie.min.js "></script>
-<script src="'.DIR.'/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
-<script src="'.DIR.'/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net/js/jquery.dataTables.min.js"></script>
+<script src="' . DIR . '/assets/extensions/datatables.net-bs5/js/dataTables.bootstrap5.min.js"></script>
 <script src="https://cdn.datatables.net/select/1.7.0/js/dataTables.select.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
-$page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="' . DIR . '/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
+$page_js = '<script src="' . DIR . '/assets/static/js/grids.js"></script>';
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
 
@@ -98,13 +98,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
                     <?= $ml->tr('FORSERVICE {{' . $selectedService . '}}'); ?>
                 </h6>
                 <div data-kt-library-table-toolbar="base">
-                <button onclick="saveGrid('<?php echo $activeService; ?>')" class="btn btn-light-warning">
+                    <button onclick="saveGrid('<?php echo $activeService; ?>')" class="btn btn-light-warning">
                         <?= $ml->tr('SAVEGRIDLAYOUT'); ?>
-                    </button>  
+                    </button>
                     <button onclick="LoadLayout('<?php echo $activeService; ?>')" class="btn btn-light-info">
                         <?= $ml->tr('SELLAYOUTGRID'); ?>
-                    </button>    
-                <button onclick="clearAll('<?php echo $activeService; ?>')" class="btn btn-light-danger">
+                    </button>
+                    <button onclick="clearAll('<?php echo $activeService; ?>')" class="btn btn-light-danger">
                         <?= $ml->tr('CLEARALLGRID'); ?>
                     </button>
                 </div>
@@ -258,10 +258,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-light-secondary" data-kt-clock-modal-action="close">
-                        <i class="bx bx-x d-block d-sm-none"></i>
-                        <span class="d-none d-sm-block">
                             <?= $ml->tr('CLOSE') ?>
-                        </span>
                     </button>
                 </div>
             </div>
@@ -283,7 +280,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
                     <div class="modal-body">
                         <div class="form-body">
                             <div class="row">
-                            <P><?= $ml->tr('SAVEGRIDLAYOUTINFO') ?></P>
+                                <P><?= $ml->tr('SAVEGRIDLAYOUTINFO') ?></P>
                                 <div class="col-md-4">
                                     <label for="layoutname">
                                         <?= $ml->tr('LAYOUTNAME') ?>
@@ -321,7 +318,7 @@ $page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
                 </div>
                 <div class="modal-body">
 
-                    
+
                     <div class="table-responsive">
                         <table class="table" id="gridlayout_table">
                             <thead>
@@ -342,7 +339,180 @@ $page_js = '<script src="'.DIR.'/assets/static/js/grids.js"></script>';
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-light-secondary" data-kt-gridlayout-modal-action="close">                        
+                    <button type="button" class="btn btn-light-secondary" data-kt-gridlayout-modal-action="close">
+                        <?= $ml->tr('CLOSE') ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade text-left" id="layoutedit_select" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="layoutEdLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-full" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-warning">
+                    <h4 class="modal-title white" id="layoutEdLabel">
+                        <?= $ml->tr('EDITGRIDLAYOUT') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-gridlayoutedit-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+
+
+                    <div class="table-responsive">
+                        <table class="table" id="gridedit_table">
+                            <thead>
+                                <tr>
+                                    <?php
+                                    $days = array('mon', 'tue', 'wed', 'thu', 'fri', 'sat', 'sun');
+                                    foreach ($days as $day) {
+                                        ?>
+                                        <th>
+                                            <?php if ($day == 'mon') {
+                                                echo $ml->tr('MONDAY');
+                                            } else if ($day == 'tue') {
+                                                echo $ml->tr('TUESDAY');
+                                            } else if ($day == 'wed') {
+                                                echo $ml->tr('WEDNESDAY');
+                                            } else if ($day == 'thu') {
+                                                echo $ml->tr('THURSDAY');
+                                            } else if ($day == 'fri') {
+                                                echo $ml->tr('FRIDAY');
+                                            } else if ($day == 'sat') {
+                                                echo $ml->tr('SATURDAY');
+                                            } else if ($day == 'sun') {
+                                                echo $ml->tr('SUNDAY');
+                                            } ?>
+                                        </th>
+                                    <?php } ?>
+                                </tr>
+                            </thead>
+                            <tbody>
+                            <?php
+                            $clockNo = 0;
+                            $runsNo = -1;
+                            $runsNo2 = -1;
+                            $rowlines = array(0, 24, 48, 72, 96, 120, 144, 1, 25, 49, 73, 97, 121, 145, 2, 26, 50, 74, 98, 122, 146, 3, 27, 51, 75, 99, 123, 147, 4, 28, 52, 76, 100, 124, 148, 5, 29, 53, 77, 101, 125, 149, 6, 30, 54, 78, 102, 126, 150, 7, 31, 55, 79, 103, 127, 151, 8, 32, 56, 80, 104, 128, 152, 9, 33, 57, 81, 105, 129, 153, 10, 34, 58, 82, 106, 130, 154, 11, 35, 59, 83, 107, 131, 155, 12, 36, 60, 84, 108, 132, 156, 13, 37, 61, 85, 109, 133, 157, 14, 38, 62, 86, 110, 134, 158, 15, 39, 63, 87, 111, 135, 159, 16, 40, 64, 88, 112, 136, 160, 17, 41, 65, 89, 113, 137, 161, 18, 42, 66, 90, 114, 138, 162, 19, 43, 67, 91, 115, 139, 163, 20, 44, 68, 92, 116, 140, 164, 21, 45, 69, 93, 117, 141, 165, 22, 46, 70, 94, 118, 142, 166, 23, 47, 71, 95, 119, 143, 167);
+                            foreach ($rowlines as $rowline) {
+
+                                $runsNo++;
+                                $runsNo2++;
+                                $class = 'btn-light';
+                                $display = 'none';
+                                $color = 'white';
+                                $data = '---';
+                                $display = 'block';
+                                $style = 'background-color: ' . $color;
+                                if ($runsNo == 0) {
+                                    echo "<tr>";
+                                }
+                                ?>
+                                <td><a href="javascript:;" style="background: <?php echo $color; ?>;"
+                                        id="edclocklink_<?php echo $rowline; ?>" class="btn btn-sm <?php echo $class; ?>"
+                                        onclick="replacelayouthour(<?php echo $rowline; ?>)" data-bs-stacked-modal="#layoutclock_modal"><span
+                                            class="fs-6 font-bold">
+                                            <?php echo sprintf('%02d', $clockNo) . '-' . sprintf('%02d', $clockNo + 1); ?>
+                                        </span>
+                                        <span id="edclockname_<?php echo $rowline; ?>" class="fs-6">
+                                            <?php echo $data ?>
+                                        </span></a>
+
+                                </td>
+                                <?php if ($runsNo2 == 6) {
+                                    $clockNo++;
+                                    echo "</tr>";
+                                }
+                                if ($runsNo >= 6) {
+                                    $runsNo = -1;
+                                }
+                                if ($runsNo2 >= 6) {
+                                    $runsNo2 = -1;
+                                }
+                            } ?>
+                        </tbody>
+                        </table>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-kt-gridlayoutedit-modal-action="close">
+                        <?= $ml->tr('CLOSE') ?>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade text-left" id="layoutclock_modal" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="layoutclockLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-xl" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-success">
+                    <h4 class="modal-title white" id="layoutclockLabel">
+                        <?= $ml->tr('ASSIGNCLOCK') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-clocklayout-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+
+                <div class="modal-body">
+
+                    <div class="row">
+                        <P>
+                            <?= $ml->tr('SELECTCLOCKHOUR') ?>
+                        </P>
+                        <div class="table-responsive">
+                            <table class="table table-lg">
+                                <thead>
+                                    <tr>
+                                        <th>
+                                            <?= $ml->tr('NAME') ?>
+                                        </th>
+                                        <th>
+                                            <?= $ml->tr('CODE') ?>
+                                        </th>
+                                        <th>
+                                            <?= $ml->tr('SELECT') ?>
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <?php foreach ($clocks as $clock) { ?>
+                                        <tr>
+                                            <td>
+                                                <P style="color:<?php echo $clock['COLOR']; ?>">
+                                                    <?php echo $clock['NAME']; ?>
+                                                </P>
+                                            </td>
+                                            <td>
+                                                <?php echo $clock['SHORT_NAME']; ?>
+                                            </td>
+                                            <td>
+                                                <div class="btn-group mb-3" role="group">
+                                                    <button
+                                                        onclick="addlayoutclock('<?php echo $clock['NAME']; ?>', '<?php echo $clock['SHORT_NAME']; ?>', '<?php echo $clock['COLOR']; ?>')"
+                                                        type="button" class="btn btn-success">
+                                                        <?= $ml->tr('ADD') ?>
+                                                    </button>
+                                                    <button type="button"
+                                                        onclick="layoutaddall('<?php echo $clock['NAME']; ?>', '<?php echo $clock['SHORT_NAME']; ?>', '<?php echo $clock['COLOR']; ?>')"
+                                                        class="btn btn-danger">
+                                                        <?= $ml->tr('ADDONALL') ?>
+                                                    </button>
+                                                </div>
+                                            </td>
+
+                                        </tr>
+                                    <?php } ?>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-kt-clocklayout-modal-action="close">
                             <?= $ml->tr('CLOSE') ?>
                     </button>
                 </div>

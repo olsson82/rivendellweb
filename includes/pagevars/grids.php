@@ -5,6 +5,7 @@
     var TRAN_SELLAYOUTGRID = "<?= $ml->tr('SELLAYOUTGRID') ?>";
     var TRAN_REMOVE = "<?= $ml->tr('REMOVE') ?>";
     var TRAN_REMOVELAYOUTDESIGN = "<?= $ml->tr('REMOVELAYOUTDESIGN') ?>";
+    var TRAN_EDITGRIDLAYOUT = "<?= $ml->tr('EDITGRIDLAYOUT') ?>";
     var TRAN_YES = "<?= $ml->tr('YES') ?>";
     var TRAN_NO = "<?= $ml->tr('NO') ?>";
     var TRAN_OK = "<?= $ml->tr('OK') ?>";
