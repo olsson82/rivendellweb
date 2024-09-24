@@ -2,6 +2,8 @@ RewriteEngine On
 RewriteRule ^login$ index.php
 RewriteRule ^forgot$ forgot.php
 RewriteRule ^dash$ dash.php
+RewriteRule ^updater$ updater.php
+RewriteRule ^rdcatch$ rdcatch.php
 RewriteRule ^usrsett$ usrsett.php
 RewriteRule ^logout$ logout.php
 RewriteRule ^install$ installer.php

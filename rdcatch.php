@@ -31,7 +31,7 @@ if (!$user->is_logged_in()) {
     header('Location: ' . DIR . '/login');
     exit();
 }
-if (!$json_sett["admin"][$_COOKIE['username']]["hosts"] == 1) {
+if (!$json_sett["usrsett"][$_COOKIE['username']]["rdcatch"] == 1) {
     header('Location: ' . DIR . '/login');
     exit();
 }

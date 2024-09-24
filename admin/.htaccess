@@ -7,7 +7,6 @@ RewriteRule ^schedcodes$ schedcodes.php
 RewriteRule ^hosts$ hosts.php
 RewriteRule ^hosts/rdairplay$ rdairplay.php
 RewriteRule ^hosts/rdpanel$ rdpanel.php
-RewriteRule ^hosts/rdcatch$ rdcatch.php
 RewriteRule ^services$ services.php
 RewriteRule ^users/user/(.+)$ user.php?id=$1
 RewriteRule ^services/service/(.+)$ service.php?id=$1

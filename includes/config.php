@@ -183,3 +183,10 @@ $languagesArray = array(
     'langcode' => 'sv_SE',
   ),
 );
+/***********************************************
+ * TO DO UPDATE TO SUPPORT NEW RDCATCH CHANGES *
+ ***********************************************/
+if ($json_sett['jsonID'] != 'AxZQ9f3fEUkLz25131' && isset($json_sett["admin"][$_COOKIE['username']]["username"])) {
+  header('Location: '.DIR.'/updater');
+  //exit(); 
+}

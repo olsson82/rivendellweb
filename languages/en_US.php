@@ -946,3 +946,6 @@ $en_US['SELLAYOUTGRID'] = 'Select Layout';
 $en_US['REPLACEGRIDLAYOUT'] = 'Do you want to replace current grid with the selected grid layout?';
 $en_US['REMOVELAYOUTDESIGN'] = 'Do you want to remove this layout ?';
 $en_US['EDITGRIDLAYOUT'] = 'Edit Layout';
+$en_US['SPECUSERRIGHTS'] = 'Special User Rights';
+$en_US['HANDLERDCATCH'] = 'Handle RDCatch';
+$en_US['HANDLERDCATCHINFO'] = 'Allow this user to manage RDCatch automation.';

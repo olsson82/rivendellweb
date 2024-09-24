@@ -26,51 +26,63 @@
  *             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE             *
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
-function fileCreateWrite()
-{
-    $array_data = array();
-    $extra = array(
-        'sysname' => $_POST['sys_name'],
-        'sysurl' => $_POST["urladd"],
-        'deflang' => $_POST["def_lang"],
-        'admin' => array(
-            $_POST["admin_usr"] => array(
-                'username' => $_POST["admin_usr"],
-                'settings' => '1',
-                'users' => '1',
-                'message' => '1',
-                'groups' => '1',
-                'sched' => '1',
-                'services' => '1',
-                'hosts' => '1',
-            )
-        ),
-        'timezone' => $_POST["time_zone"],
-        'smtpserv' => $_POST["smtp_server"],
-        'port' => $_POST["smtp_port"],
-        'smtplogin' => $_POST["smtp_login"],
-        'smtpenc' => $_POST["smtp_enc"],
-        'smtpusr' => $_POST["smtp_usr"],
-        'smtppass' => $_POST["smtp_pass"],
-        'smtpfrom' => $_POST["smtp_from"],
-        'newsmess' => '',
-        'usereset' => $_POST["pass_reset"],
-        'autotrim' => $_POST["autotrim"],
-        'normalize' => $_POST["normalize"],
-        'jsonID' => 'AxZQ9f3fEUkLz25131',
+require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
+$error = 0;
+$json_sett["jsonID"] = "AxZQ9f3fEUkLz25131";
+$jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
 
-    );
-    $array_data[] = $extra;
-    $final_data = json_encode($extra, JSON_UNESCAPED_SLASHES);
-    return $final_data;
-}
+    if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $jsonsettings)) {
+        $error = 1;
+    }
+?>
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rivendell Web Broadcast Updater</title>
+    <link rel="shortcut icon" href="<?php echo DIR; ?>/AppImages/favicon.ico" />
+    <link rel="stylesheet" href="<?php echo DIR; ?>/assets/compiled/css/app.css">
+    <link rel="stylesheet" href="<?php echo DIR; ?>/assets/compiled/css/app-dark.css">
+</head>
+
+<body>
+    <script src="<?php echo DIR; ?>/assets/static/js/initTheme.js"></script>
+    <nav class="navbar navbar-light">
+        <div class="container d-block">
+            <a class="navbar-brand ms-4" href="javascript:;">
+                <img src="<?php echo DIR; ?>/assets/static/images/rivlogo/rdairplay-128x128.png">
+            </a>
+        </div>
+    </nav>
+
+            <div class="container">
+                <div class="card mt-5">
+                    <div class="card-header">
+                        <h4 class="card-title">Rivendell Web Broadcast Updater</h4>
+                    </div>
+                    <div class="card-body">
+                        <?php if ($error == 1) { ?>
+                            <P>Ooops! Looks like the update was not possible to do. Please check file write in the data folder.</P>
+                        <?php } else { ?>
+                        <P>This update has moved RDCatch to regular user use. No longer need admin rights to use it.</P>
+                        <P>You need to give the user right to use RDCatch function in user settings. You will find Special User Rights where you give your user rights to use RDCatch. You need also to give your self access to it.</P>
+                        <P class="col-sm-12 d-flex justify-content-end"><a target="_blank"
+                                href="https://olsson82.github.io/rivwebdoc/" class="btn btn-info">Documentation</a> <a
+                                href="<?php echo DIR; ?>/dash" class="btn btn-success">Go to dashboard</a></P>
+                                <?php } ?>
+
+                    </div>
+                </div>
+            </div>
 
 
-$final_data = fileCreateWrite();
-if (file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $final_data)) {
-    $echodata = ['error' => 'false', 'errorcode' => '0'];
-    echo json_encode($echodata);
-} else {
-    $echodata = ['error' => 'true', 'errorcode' => '1'];
-    echo json_encode($echodata);
-}
+
+    <script src="<?php echo DIR; ?>/assets/extensions/jquery/jquery.min.js"></script>
+    <script src="<?php echo DIR; ?>/assets/compiled/js/app.js"></script>
+
+</body>
+
+</html>

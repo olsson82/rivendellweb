@@ -946,3 +946,6 @@ $sv_SE['SELLAYOUTGRID'] = 'Välj Layout';
 $sv_SE['REPLACEGRIDLAYOUT'] = 'Vill du ersätta nuvarande grid med markerade grid layout?';
 $sv_SE['REMOVELAYOUTDESIGN'] = 'Vill du radera denna layout ?';
 $sv_SE['EDITGRIDLAYOUT'] = 'Redigera Layout';
+$sv_SE['SPECUSERRIGHTS'] = 'Speciella användarrättigheter';
+$sv_SE['HANDLERDCATCH'] = 'Hantera RDCatch';
+$sv_SE['HANDLERDCATCHINFO'] = 'Tillåt denna användare att hantera RDCatch automation.';

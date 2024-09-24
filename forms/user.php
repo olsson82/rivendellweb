@@ -29,6 +29,7 @@
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 $username = $_POST['username'];
 $error = 0;
+$json_sett["usrsett"][$username]['rdcatch'] = $_POST['handlerdcatch'];
 if ($_POST['adminrights'] == 1) {
     $json_sett["admin"][$username]['username'] = $username;
     $json_sett["admin"][$username]['settings'] = $_POST['systemdata'];
