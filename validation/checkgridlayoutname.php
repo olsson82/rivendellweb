@@ -26,15 +26,25 @@
  *             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE             *
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
-require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-$service = $_GET['service'];
-$grids = $grids_data[$service]['LAYOUT'];
-$data = array();
-foreach ($grids as $key => $val) {
-    $data[] = $grids_data[$service]['LAYOUT'][$key];
-  }
-$datatable = array();
-$datatable['data'] = $data; 
-header('Content-Type: application/json; charset=utf-8');
-$jsonData = json_encode($datatable, JSON_PRETTY_PRINT);
-echo $jsonData;
+require_once $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
+
+$layoutname = $_POST['layoutname'];
+$service = $_POST['service'];
+
+if (!$grids_data) {
+    $response = "true";
+} else {
+    if (!$grids_data[$service]['LAYOUT']) {
+        $response = "true";
+    } else {
+        if (array_key_exists($layoutname, $grids_data[$service]['LAYOUT'])) {
+            $response = $ml->tr('GRIDLAYOUTNAMEEXIST');
+        } else {
+            $response = "true";
+        }
+    }
+}
+
+header("HTTP/1.1 200 OK");
+header('Content-Type: application/json');
+echo json_encode($response);
