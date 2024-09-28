@@ -318,15 +318,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/clock.js"></script>';
                                 </div>
                                 <div class="modal-footer">
                                     <input type="hidden" name="service" value="<?php echo $_COOKIE['serviceName'] ?>">
+                                    <input type="hidden" name="oldclockcolor" value="<?php echo $info->getClockInfo($clockid, 'COLOR'); ?>" id="oldclockcolor">
                                     <input type="hidden" name="oldclockcode" value="<?php echo $info->getClockInfo($clockid, 'SHORT_NAME'); ?>" id="oldclockcode">
                                     <input type="hidden" id="clockidservice" name="clockid"
                                         value="<?php echo $clockid; ?>">
                                     <button type="button" class="btn btn-light-secondary"
                                         data-kt-service-modal-action="close">
-                                        <i class="bx bx-x d-block d-sm-none"></i>
-                                        <span class="d-none d-sm-block">
                                             <?= $ml->tr('CLOSE') ?>
-                                        </span>
                                     </button>
                                     <input type="submit" class="btn btn-danger ms-1" value="<?= $ml->tr('SAVE') ?>">
                                 </div>

@@ -57,8 +57,23 @@ if ($logfunc->clockExists($newname)) {
                     echo json_encode($echodata);
                     exit();
                 } else {
-                    $echodata = ['error' => 'false', 'errorcode' => '0', 'clockname' => $newname];
-                    echo json_encode($echodata);
+                    foreach ($grids_data as $lines) {
+                        foreach ($lines['LAYOUT'] as $line) {
+                            foreach ($line['HRIDDATA'] as $data) {
+                                if ($data['CLOCK_NAME'] == $oldname) {
+                                    $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['CLOCK_NAME'] = $newname;
+                                }
+                            }
+                        }
+                    }
+                    $jsonData = json_encode($grids_data, JSON_PRETTY_PRINT);
+                    if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/grids.json', $jsonData)) {
+                        $echodata = ['error' => 'true', 'errorcode' => '1'];
+                        echo json_encode($echodata);
+                    } else {
+                        $echodata = ['error' => 'false', 'errorcode' => '0', 'clockname' => $newname];
+                        echo json_encode($echodata);
+                    }
                 }
             }
         }

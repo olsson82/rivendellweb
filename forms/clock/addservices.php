@@ -30,6 +30,8 @@ require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 $clockid = $_POST["clockid"];
 $services = $_POST["services"];
 $colors = $_POST["colors"];
+$oldcolor = $_POST["oldclockcolor"];
+$oldclockcode = $_POST['oldclockcode'];
 $ccode = $_POST["ccode"];
 $usernotes = $_POST["usernotes"];
 $totaldata = count($services);
@@ -53,12 +55,37 @@ if ($ok == $totaldata) {
         $echodata = ['error' => 'true', 'errorcode' => '2'];
         echo json_encode($echodata);
     } else {
+        foreach ($grids_data as $lines) {
+            foreach ($lines['LAYOUT'] as $line) {
+                foreach ($line['HRIDDATA'] as $data) {
+                    if ($data['COLOR'] == $oldcolor) {
+                        $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['COLOR'] = $colors;
+                    }
+                }
+            }
+        }
+
         if (!$logfunc->updateClockData($clockid, $ccode, $usernotes)) {
             $echodata = ['error' => 'true', 'errorcode' => '3'];
             echo json_encode($echodata);
         } else {
-            $echodata = ['error' => 'false', 'errorcode' => '0'];
-            echo json_encode($echodata);
+            foreach ($grids_data as $lines) {
+                foreach ($lines['LAYOUT'] as $line) {
+                    foreach ($line['HRIDDATA'] as $data) {
+                        if ($data['SHOR_NAME'] == $oldclockcode) {
+                            $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['SHOR_NAME'] = $ccode;
+                        }
+                    }
+                }
+            }
+            $jsonData = json_encode($grids_data, JSON_PRETTY_PRINT);
+            if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/grids.json', $jsonData)) {
+                $echodata = ['error' => 'true', 'errorcode' => '1'];
+                echo json_encode($echodata);
+            } else {
+                $echodata = ['error' => 'false', 'errorcode' => '0'];
+                echo json_encode($echodata);
+            }
         }
     }
 }

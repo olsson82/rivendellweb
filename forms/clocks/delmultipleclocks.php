@@ -42,7 +42,23 @@ if ($request == 2) {
         if (!$logfunc->removeClock($deleteid)) {
             $notok = $notok + 1;
         } else {
+            foreach ($grids_data as $lines) {
+                foreach ($lines['LAYOUT'] as $line) {
+                    foreach ($line['HRIDDATA'] as $data) {
+                        if ($data['CLOCK_NAME'] == $deleteid) {
+                            $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['COLOR'] = "";
+                            $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['SHOR_NAME'] = "";
+                            $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['CLOCK_NAME'] = "";
+                        }
+                    }
+                }
+        }
+        $jsonData = json_encode($grids_data, JSON_PRETTY_PRINT);
+        if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/grids.json', $jsonData)) {
+        } else {
             $ok = $ok + 1;
+        }
+            
         }
     }
 

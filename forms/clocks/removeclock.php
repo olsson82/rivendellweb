@@ -33,6 +33,23 @@ if (!$logfunc->removeClock($id)) {
     $echodata = ['error' => 'true', 'errorcode' => '1'];
     echo json_encode($echodata);
 } else {
-    $echodata = ['error' => 'false', 'errorcode' => '0'];
-    echo json_encode($echodata);
+    foreach ($grids_data as $lines) {
+            foreach ($lines['LAYOUT'] as $line) {
+                foreach ($line['HRIDDATA'] as $data) {
+                    if ($data['CLOCK_NAME'] == $id) {
+                        $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['COLOR'] = "";
+                        $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['SHOR_NAME'] = "";
+                        $grids_data[$lines['SERVICE']]['LAYOUT'][$line['LAYOUTNAME']]['HRIDDATA'][$data['HOUR']]['CLOCK_NAME'] = "";
+                    }
+                }
+            }
+    }
+    $jsonData = json_encode($grids_data, JSON_PRETTY_PRINT);
+    if (!file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/grids.json', $jsonData)) {
+        $echodata = ['error' => 'true', 'errorcode' => '1'];
+        echo json_encode($echodata);
+    } else {
+        $echodata = ['error' => 'false', 'errorcode' => '0'];
+        echo json_encode($echodata);
+    }
 }
