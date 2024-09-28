@@ -244,7 +244,7 @@ if (isset($_COOKIE['serviceName'])) {
                 </li>
                 <?php } ?>
                 <?php if (isset($json_sett["admin"][$_COOKIE['username']]["username"])) { ?>
-                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'rdpanel' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?> has-sub">
+                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'rdpanel' || $pagecode == 'rdlogedit' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?> has-sub">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-gear"></i>
                             <span>
@@ -253,7 +253,7 @@ if (isset($_COOKIE['serviceName'])) {
                         </a>
 
                         <ul
-                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'rdpanel' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?>">
+                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'rdpanel' || $pagecode == 'rdlogedit' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?>">
 
 
                             <li class="submenu-item <?php if ($pagecode == 'admindash') { ?>active<?php } ?>">
@@ -310,6 +310,11 @@ if (isset($_COOKIE['serviceName'])) {
                                 <li class="submenu-item <?php if ($pagecode == 'rdpanel') { ?>active<?php } ?>">
                                     <a href="<?php echo DIR; ?>/admin/hosts/rdpanel" class="submenu-link">
                                         <?= $ml->tr('RDPANEL'); ?>
+                                    </a>
+                                </li>
+                                <li class="submenu-item <?php if ($pagecode == 'rdlogedit') { ?>active<?php } ?>">
+                                    <a href="<?php echo DIR; ?>/admin/hosts/rdlogedit" class="submenu-link">
+                                        <?= $ml->tr('RDLOGEDIT'); ?>
                                     </a>
                                 </li>
                             <?php } ?>

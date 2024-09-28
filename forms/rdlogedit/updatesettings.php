@@ -1,0 +1,84 @@
+<?php
+/*********************************************************************************************************
+ *                                        RIVENDELL WEB BROADCAST                                        *
+ *    A WEB SYSTEM TO USE WITH RIVENDELL RADIO AUTOMATION: HTTPS://GITHUB.COM/ELVISHARTISAN/RIVENDELL    *
+ *              THIS SYSTEM IS NOT CREATED BY THE DEVELOPER OF RIVENDELL RADIO AUTOMATION.               *
+ * IT'S CREATED AS AN HELP TOOL ONLINE BY ANDREAS OLSSON AFTER HE FIXED BUGS IN AN OLD SCRIPT CREATED BY *
+ *             BRIAN P. MCGLYNN : HTTPS://GITHUB.COM/BPM1992/RIVENDELL/TREE/RDWEB/WEB/RDPHP              *
+ *        USE THIS SYSTEM AT YOUR OWN RISK. IT DO DIRECT MODIFICATION ON THE RIVENDELL DATABASE.         *
+ *                 YOU CAN NOT HOLD US RESPONISBLE IF SOMETHING HAPPENDS TO YOUR SYSTEM.                 *
+ *                   THE DESIGN IS DEVELOP BY SAUGI: HTTPS://GITHUB.COM/ZURAMAI/MAZER                    *
+ *                                              MIT LICENSE                                              *
+ *                                   COPYRIGHT (C) 2024 ANDREAS OLSSON                                   *
+ *             PERMISSION IS HEREBY GRANTED, FREE OF CHARGE, TO ANY PERSON OBTAINING A COPY              *
+ *             OF THIS SOFTWARE AND ASSOCIATED DOCUMENTATION FILES (THE "SOFTWARE"), TO DEAL             *
+ *             IN THE SOFTWARE WITHOUT RESTRICTION, INCLUDING WITHOUT LIMITATION THE RIGHTS              *
+ *               TO USE, COPY, MODIFY, MERGE, PUBLISH, DISTRIBUTE, SUBLICENSE, AND/OR SELL               *
+ *                 COPIES OF THE SOFTWARE, AND TO PERMIT PERSONS TO WHOM THE SOFTWARE IS                 *
+ *                       FURNISHED TO DO SO, SUBJECT TO THE FOLLOWING CONDITIONS:                        *
+ *            THE ABOVE COPYRIGHT NOTICE AND THIS PERMISSION NOTICE SHALL BE INCLUDED IN ALL             *
+ *                            COPIES OR SUBSTANTIAL PORTIONS OF THE SOFTWARE.                            *
+ *              THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR               *
+ *               IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,                *
+ *              FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE              *
+ *                AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER                 *
+ *             LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,             *
+ *             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE             *
+ *                                               SOFTWARE.                                               *
+ *********************************************************************************************************/
+require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
+$time = $_POST['maxrecord'];
+list($hours, $minutes, $seconds) = explode(':', $time);
+$milliseconds = (($hours * 3600) + ($minutes * 60) + $seconds) * 1000;
+
+if ($_POST['autotrim'] != 0) {
+    $autotrim = $_POST['autotrim'] * 100;
+} else {
+    $autotrim = 0;
+}
+
+if ($_POST['normalize'] != 0) {
+    $normalize = $_POST['normalize'] * 100;
+} else {
+    $normalize = 0;
+}
+$audiomargin = $_POST['audiomargin'];
+$audioformat = $_POST['audioformat'];
+if ($_POST['audiobitrate'] != 0) {
+    $audiobitrate = $_POST['audiobitrate'] * 1000;
+} else {
+    $audiobitrate = 0;
+}
+$o2startbutt = $_POST['2startbutt'];
+$waveform = $_POST['waveform'];
+if (isset($_POST['playstart'])) {
+    $playstart = $_POST['playstart'];
+} else {
+    $playstart = 0;
+}
+if (isset($_POST['playend'])) {
+    $playend = $_POST['playend'];
+} else {
+    $playend = 0;
+}
+if (isset($_POST['recordstart'])) {
+    $recordstart = $_POST['recordstart'];
+} else {
+    $recordstart = 0;
+}
+if (isset($_POST['recordend'])) {
+    $recordend = $_POST['recordend'];
+} else {
+    $recordend = 0;
+}
+$channels = $_POST['channels'];
+$defaulttrans = $_POST['defaulttrans'];
+$rdlogedithost = $_POST['rdlogedithost'];
+
+if (!$dbfunc->updateRDLogEdit($milliseconds, $autotrim, $normalize, $audiomargin, $audioformat, $audiobitrate, $o2startbutt, $waveform, $playstart, $playend, $recordstart, $recordend, $channels, $defaulttrans, $rdlogedithost)) {
+    $echodata = ['error' => 'true', 'errorcode' => '1'];
+    echo json_encode($echodata);
+} else {
+    $echodata = ['error' => 'false', 'errorcode' => '0'];
+    echo json_encode($echodata);
+}

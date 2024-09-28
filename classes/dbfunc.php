@@ -3385,4 +3385,61 @@ class DBFunc
         return $cuts;
 
     }
+
+    public function getRDLogedit()
+    {
+        $rdpanel = array();
+        $sql = 'SELECT * FROM `RDLOGEDIT` ORDER BY `ID` ASC';
+        $stmt = $this->_db->prepare($sql);
+        $stmt->setFetchMode(PDO::FETCH_ASSOC);
+        $stmt->execute();
+        while ($row = $stmt->fetch()) {
+            $rdpanel[] = $row;
+        }
+        return $rdpanel;
+    }
+
+    public function getRDLogeditData($station)
+    {
+
+        $stmt = $this->_db->prepare('SELECT * FROM RDLOGEDIT WHERE STATION = :id');
+        $stmt->execute([':id' => $station]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+
+    }
+
+    public function updateRDLogEdit($maxrecord, $autotrim, $normalize, $audiomargin, $audioformat, $audiobitrate, $o2startbutt, $waveform, $playstart, $playend, $recordstart, $recordend, $channels, $defaulttrans, $rdlogedithost)
+    {
+
+        try {
+
+            $sql = "UPDATE RDLOGEDIT SET MAXLENGTH = :maxleng, TRIM_THRESHOLD = :treshold, RIPPER_LEVEL = :riplev, TAIL_PREROLL = :preroll, 
+            FORMAT = :format, BITRATE = :bitrate, ENABLE_SECOND_START = :secstart, WAVEFORM_CAPTION = :wavcapt, START_CART = :startcart,
+            END_CART = :endcart, REC_START_CART = :recscart, REC_END_CART = :rececart, DEFAULT_CHANNELS = :defchan, DEFAULT_TRANS_TYPE = :deftrans WHERE STATION = :station";
+
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':maxleng' => $maxrecord,
+                ':treshold' => $autotrim,
+                ':riplev' => $normalize,
+                ':preroll' => $audiomargin,
+                ':format' => $audioformat,
+                ':bitrate' => $audiobitrate,
+                ':secstart' => $o2startbutt,
+                ':wavcapt' => $waveform,
+                ':startcart' => $playstart,
+                ':endcart' => $playend,
+                ':recscart' => $recordstart,
+                ':rececart' => $recordend,
+                ':defchan' => $channels,
+                ':deftrans' => $defaulttrans,
+                ':station' => $rdlogedithost,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
 }
