@@ -242,8 +242,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdlogedit.js"></script>';
                                     <div class="input-group mb-3">
                                         <button class="btn btn-primary" type="button"
                                             id="playstart-button" onclick="add(1)" data-bs-stacked-modal="#macro_select"><?= $ml->tr('SELECTCART') ?></button>
-                                        <input type="text" class="form-control" id="playstart" name="playstart"
-                                            readonly>
+                                        <input type="numbers" class="form-control" id="playstart" name="playstart">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -255,7 +254,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdlogedit.js"></script>';
                                     <div class="input-group mb-3">
                                         <button class="btn btn-primary" type="button"
                                             id="playend-button" onclick="add(2)" data-bs-stacked-modal="#macro_select"><?= $ml->tr('SELECTCART') ?></button>
-                                        <input type="text" class="form-control" id="playend" name="playend" readonly>
+                                        <input type="numbers" class="form-control" id="playend" name="playend">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -267,8 +266,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdlogedit.js"></script>';
                                     <div class="input-group mb-3">
                                         <button class="btn btn-primary" type="button"
                                             id="recordstart-button" onclick="add(3)" data-bs-stacked-modal="#macro_select"><?= $ml->tr('SELECTCART') ?></button>
-                                        <input type="text" class="form-control" id="recordstart" name="recordstart"
-                                            readonly>
+                                        <input type="numbers" class="form-control" id="recordstart" name="recordstart">
                                     </div>
                                 </div>
                                 <div class="col-md-4">
@@ -280,8 +278,7 @@ $page_js = '<script src="' . DIR . '/assets/static/js/rdlogedit.js"></script>';
                                     <div class="input-group mb-3">
                                         <button class="btn btn-primary" type="button"
                                             id="recordend-button" onclick="add(4)" data-bs-stacked-modal="#macro_select"><?= $ml->tr('SELECTCART') ?></button>
-                                        <input type="text" class="form-control" id="recordend" name="recordend"
-                                            readonly>
+                                        <input type="numbers" class="form-control" id="recordend" name="recordend">
                                     </div>
                                 </div>
                                 <div class="col-md-4">

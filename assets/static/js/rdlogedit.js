@@ -181,6 +181,7 @@ function addcart(cart) {
 }
 
 function edithost(station) {
+    $("#conf_form").trigger("reset");
     $.ajax({
         url: HOST_URL + '/forms/rdlogedit/getstation.php',
         data: "id=" + station,
