@@ -9,6 +9,9 @@ The goal with this is to be able to do the most things from this system.
 
 **Please be advice that this system use BOTH Rivendells API and also do direct changes in the database**
 
+## Discussions
+If you have any suggestions or just wants to discuss about the system. Please use the [**Discussions**](https://github.com/olsson82/rivendellweb/discussions) for bug, use the issue.
+
 ## Some features in this system
 - **Library:** Manage your library just like in Rivendell.
 - **Logs:** Create logs, record voicetracks.
