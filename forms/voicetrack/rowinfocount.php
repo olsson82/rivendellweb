@@ -27,29 +27,6 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
-
-$json_sett["sysname"] = $_POST['sys_name'];
-$json_sett["sysurl"] = $_POST['urladd'];
-$json_sett["timezone"] = $_POST['time_zone'];
-$json_sett["deflang"] = $_POST['def_lang'];
-$json_sett["usereset"] = $_POST['pass_reset'];
-$json_sett["autotrim"] = $_POST['autotrim'];
-$json_sett["normalize"] = $_POST['normalize'];
-$json_sett["smtpserv"] = $_POST['smtp_server'];
-$json_sett["smtplogin"] = $_POST['smtp_login'];
-$json_sett["smtpenc"] = $_POST['smtp_enc'];
-$json_sett["port"] = $_POST['smtp_port'];
-$json_sett["smtpusr"] = $_POST['smtp_usr'];
-$json_sett["smtppass"] = $_POST['smtp_pass'];
-$json_sett["smtpfrom"] = $_POST['smtp_from'];
-$json_sett["multitrack"] = $_POST['multitrack'];
-
-$jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
-
-if (file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $jsonsettings)) {
-    $echodata = ['error' => 'false', 'errorcode' => '0'];
-    echo json_encode($echodata);
-} else {
-    $echodata = ['error' => 'true', 'errorcode' => '1'];
-    echo json_encode($echodata);
-}
+$count = $_POST["count"];
+$logname = $_POST["logname"];
+echo json_encode($dbfunc->getLogLineDataCount($count, $logname));

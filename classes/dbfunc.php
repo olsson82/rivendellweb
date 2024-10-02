@@ -72,6 +72,20 @@ class DBFunc
 
     }
 
+    public function getLogLineDataCount($count, $logname)
+    {
+
+        $stmt = $this->_db->prepare('SELECT ll.*, cc.TITLE, cc.ARTIST FROM LOG_LINES ll LEFT JOIN CART cc ON ll.CART_NUMBER = cc.NUMBER WHERE ll.LOG_NAME = :logname AND ll.COUNT = :count');
+        $stmt->execute([
+            ':logname' => $logname,
+            ':count' => $count
+        ]);
+        $array = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $array;
+
+    }
+
     public function getCutInfoTable($cutid, $order)
     {
 
@@ -3436,6 +3450,52 @@ class DBFunc
                 ':defchan' => $channels,
                 ':deftrans' => $defaulttrans,
                 ':station' => $rdlogedithost,
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function updateTrackData($lineid, $trstart, $trend, $logname)
+    {
+
+        try {
+
+            $sql = "UPDATE LOG_LINES SET SEGUE_START_POINT = :segstart, SEGUE_END_POINT = :segend WHERE LINE_ID = :lineid AND LOG_NAME = :logname";
+
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':segstart' => $trstart,
+                ':segend' => $trend,
+                ':lineid' => $lineid,
+                ':logname' => $logname
+            ]);
+            return true;
+        } catch (PDOException $e) {
+            return false;
+        }
+    }
+
+    public function updateFadeData($lineid, $fadevalue, $type, $logname)
+    {
+
+        try {
+
+            $gain = '-3000';
+
+            if ($type == 1) {
+                $sql = "UPDATE LOG_LINES SET FADEUP_POINT = :fade, FADEUP_GAIN = :gain WHERE LINE_ID = :lineid AND LOG_NAME = :logname";
+            } else {
+                $sql = "UPDATE LOG_LINES SET FADEDOWN_POINT = :fade, FADEDOWN_GAIN = :gain WHERE LINE_ID = :lineid AND LOG_NAME = :logname";
+            }
+            
+            $stmt = $this->_db->prepare($sql);
+            $stmt->execute([
+                ':fade' => $fadevalue,
+                ':gain' => $gain,
+                ':lineid' => $lineid,
+                ':logname' => $logname
             ]);
             return true;
         } catch (PDOException $e) {

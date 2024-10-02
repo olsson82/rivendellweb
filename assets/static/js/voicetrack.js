@@ -237,6 +237,7 @@ var myDropzone = new Dropzone("#dropzone_upload", {
                         $("#artist_" + lineid).html(data['ARTIST']);
                         $("#title_" + lineid).html(data['TITLE']);
                         $("#length_" + lineid).html(getTimeFromMillis(data['AVERAGE_LENGTH']));
+                        if (ALLOW_MULTITRACK == '1') {
                         $("#buttons_" + lineid).html(`<div class="btn-group mb-3" role="group"
                         aria-label="`+ TRAN_VOICETRACKER + `">
                         <button type="button"
@@ -251,7 +252,30 @@ var myDropzone = new Dropzone("#dropzone_upload", {
                             title="`+ TRAN_UPLOAD + `"
                             class="btn btn-warning"><i
                                 class="bi bi-cloud-upload"></i></button>
+                        <button type="button"
+                                onclick="doMultitrack(`+ lineid + `,'` + logname + `')"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="`+ TRAN_MULTITRACKEDITOR + `"
+                                class="btn btn-success"><i
+                                    class="bi bi-music-note-list"></i></button>
                     </div>`);
+                } else {
+                    $("#buttons_" + lineid).html(`<div class="btn-group mb-3" role="group"
+                        aria-label="`+ TRAN_VOICETRACKER + `">
+                        <button type="button"
+                            onclick="recordvoice(`+ lineid + `,'` + VT_GROUP + `','` + data['CART_NUMBER'] + `', '` + logname + `', '` + VT_USERNAME + `')"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="`+ TRAN_RECORD + `"
+                            class="btn btn-danger"><i
+                                class="bi bi-mic"></i></button>
+                        <button type="button"
+                            onclick="uploadvoice(`+ lineid + `,'` + VT_GROUP + `','` + data['CART_NUMBER'] + `', '` + logname + `', '` + VT_USERNAME + `')"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="`+ TRAN_UPLOAD + `"
+                            class="btn btn-warning"><i
+                                class="bi bi-cloud-upload"></i></button>
+                    </div>`);
+                }
                         $("#upload_voice").modal("hide");
                     }
                 });
@@ -441,6 +465,7 @@ function importToCart(thefile, rdline, rdgroup, idnomb) {
                     $("#artist_" + lineid).html(data['ARTIST']);
                     $("#title_" + lineid).html(data['TITLE']);
                     $("#length_" + lineid).html(getTimeFromMillis(data['AVERAGE_LENGTH']));
+                    if (ALLOW_MULTITRACK == '1') {
                     $("#buttons_" + lineid).html(`<div class="btn-group mb-3" role="group"
                         aria-label="`+ TRAN_VOICETRACKER + `">
                         <button type="button"
@@ -455,7 +480,30 @@ function importToCart(thefile, rdline, rdgroup, idnomb) {
                             title="`+ TRAN_UPLOAD + `"
                             class="btn btn-warning"><i
                                 class="bi bi-cloud-upload"></i></button>
+                            <button type="button"
+                                onclick="doMultitrack(`+ lineid + `,'` + logname + `')"
+                                data-bs-toggle="tooltip" data-bs-placement="top"
+                                title="`+ TRAN_MULTITRACKEDITOR + `"
+                                class="btn btn-success"><i
+                                    class="bi bi-music-note-list"></i></button>
                     </div>`);
+                    } else {
+                        $("#buttons_" + lineid).html(`<div class="btn-group mb-3" role="group"
+                        aria-label="`+ TRAN_VOICETRACKER + `">
+                        <button type="button"
+                            onclick="recordvoice(`+ lineid + `,'` + VT_GROUP + `','` + data['CART_NUMBER'] + `', '` + logname + `', '` + VT_USERNAME + `')"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="`+ TRAN_RECORD + `"
+                            class="btn btn-danger"><i
+                                class="bi bi-mic"></i></button>
+                        <button type="button"
+                            onclick="uploadvoice(`+ lineid + `,'` + VT_GROUP + `','` + data['CART_NUMBER'] + `', '` + logname + `', '` + VT_USERNAME + `')"
+                            data-bs-toggle="tooltip" data-bs-placement="top"
+                            title="`+ TRAN_UPLOAD + `"
+                            class="btn btn-warning"><i
+                                class="bi bi-cloud-upload"></i></button>
+                    </div>`); 
+                    }
                 }
             });
 

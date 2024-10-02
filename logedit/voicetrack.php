@@ -28,7 +28,7 @@
  *********************************************************************************************************/
 require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 if (!$user->is_logged_in()) {
-    header('Location: '.DIR.'/login');
+    header('Location: ' . DIR . '/login');
     exit();
 }
 
@@ -45,23 +45,28 @@ $vtGroup = $vtInfo[0]['group'];
 $pagecode = "logs";
 $page_vars = 'voicetrack';
 $page_title = $ml->tr('VOICETRACKER');
-$page_css = '<link rel="stylesheet" href="'.DIR.'/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
+$page_css = '<link rel="stylesheet" href="' . DIR . '/assets/extensions/datatables.net-bs5/css/dataTables.bootstrap5.min.css">
 <link rel="stylesheet" href="https://cdn.datatables.net/select/1.7.0/css/select.dataTables.min.css">
 <link rel="stylesheet" href="https://unpkg.com/dropzone@5/dist/min/dropzone.min.css" type="text/css" />
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.css">
-<link rel="stylesheet" href="'.DIR.'/assets/extensions/choices.js/public/assets/styles/choices.css">
-<link rel="stylesheet" href="'.DIR.'/assets/compiled/css/table-datatable-jquery.css">';
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/flatpickr/flatpickr.min.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/choices.js/public/assets/styles/choices.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/jquerypreload/preloader.css">
+<link rel="stylesheet" href="' . DIR . '/assets/extensions/waveform/main.css">';
 $plugin_js = '<script src="https://unpkg.com/dropzone@5/dist/min/dropzone.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
-<script src="'.DIR.'/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
-<script src="'.DIR.'/assets/extensions/flatpickr/flatpickr.min.js"></script>
-<script src="'.DIR.'/assets/extensions/jquery-loading/jquery.loading.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/jquery.validate.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jqueryvalidation/additional-methods.min.js"></script>
+<script src="' . DIR . '/assets/extensions/sweetalert2/sweetalert2.min.js"></script>
+<script src="' . DIR . '/assets/extensions/flatpickr/flatpickr.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jquery-loading/jquery.loading.min.js"></script>
+<script src="' . DIR . '/assets/extensions/jquerypreload/jquery.preloader.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/wavesurfer.min.js"></script>
 <script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/record.min.js"></script>
-<script src="'.DIR.'/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
-$page_js = '<script src="'.DIR.'/assets/static/js/voicetrack.js"></script>';
+<script src="https://unpkg.com/wavesurfer.js@7/dist/plugins/envelope.min.js"></script>
+<script src="' . DIR . '/assets/extensions/waveform/waveform-playlist.js"></script>
+<script src="' . DIR . '/assets/extensions/choices.js/public/assets/scripts/choices.js"></script>';
+$page_js = '<script src="' . DIR . '/assets/static/js/voicetrack.js"></script>
+<script src="' . DIR . '/assets/static/js/multitrack.js"></script>';
 
 ?>
 <?php include $_SERVER['DOCUMENT_ROOT'] . '/includes/top.php'; ?>
@@ -249,6 +254,13 @@ $page_js = '<script src="'.DIR.'/assets/static/js/voicetrack.js"></script>';
                                                                                     data-bs-toggle="tooltip" data-bs-placement="top"
                                                                                     title="<?= $ml->tr('UPLOAD') ?>" class="btn btn-warning"><i
                                                                                         class="bi bi-cloud-upload"></i></button>
+                                                                                        <?php if ($json_sett["multitrack"] == '1') { ?>
+                                                                                <button type="button"
+                                                                                    onclick="doMultitrack(<?php echo $lineid; ?>, '<?php echo $logName; ?>')"
+                                                                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                                                                    title="<?= $ml->tr('MULTITRACKEDITOR') ?>" class="btn btn-success"><i
+                                                                                        class="bi bi-music-note-list"></i></button>
+                                                                                        <?php } ?>
                                                                             </div>
                                                                         </td>
                                                                         <td id="artist_<?php echo $lineid; ?>">
@@ -484,6 +496,83 @@ $page_js = '<script src="'.DIR.'/assets/static/js/voicetrack.js"></script>';
                         <span class="d-none d-sm-block">
                             <?= $ml->tr('CLOSE') ?>
                         </span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade text-left" id="multitrack_voice" data-bs-backdrop="static" role="dialog"
+        aria-labelledby="multitrackLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-full" role="document">
+            <div class="modal-content">
+                <div class="modal-header  bg-success">
+                    <h4 class="modal-title white" id="multitrackLabel">
+                        <?= $ml->tr('MULTITRACKEDITOR') ?>
+                    </h4>
+                    <button type="button" class="close" data-kt-multitrack-modal-action="cancel" aria-label="Close">
+                        <i data-feather="x"></i>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-body" id="markerbody">
+                        <P><?= $ml->tr('MULTITRACKINFO') ?></P>
+
+                        <div class="col-12">
+                            <div class="btn-group mb-3" role="group">
+                                <a href="javascript:;" id="play" class="btn-play btn icon btn-primary"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('PLAY') ?>"><i id="playpic" class="bi bi-play"></i></a>
+                                    <a href="javascript:;" id="pause" class="btn-pause btn icon btn-warning"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('PAUSE') ?>"><i class="bi bi-pause"></i></a>
+                                <a href="javascript:;" id="stop" class="btn-stop btn icon btn-danger"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('STOP') ?>"><i class="bi bi-stop"></i></a>
+                                <a href="javascript:;" id="backward" class="btn-rewind btn icon btn-info"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('BACKWARD') ?>"><i class="bi bi-rewind"></i></a>
+                                <a href="javascript:;" id="forward" class="btn-fast-forward btn icon btn-success"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('FORWARD') ?>"><i class="bi bi-fast-forward"></i></a>
+                            </div>
+                            <div class="btn-group mb-3" role="group">
+                                <a href="javascript:;" id="zoomin" class="btn-zoom-in btn icon btn-info"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('ZOOMIN') ?>"><i class="bi bi-zoom-in"></i></a>
+                                <a href="javascript:;" id="zoomout" class="btn-zoom-out btn icon btn-info"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('ZOOMOUT') ?>"><i class="bi bi-zoom-out"></i></a>
+                            </div>
+                            <div class="btn-group mb-3" role="group">
+                                <a href="javascript:;" id="cursor" class="btn-cursor btn icon btn-info"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('SELECTCURSOR') ?>"><i class="bi bi-headphones"></i></a>
+                                <a href="javascript:;" id="movetrack" class="btn-shift btn icon btn-info"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('MOVETRACK') ?>"><i class="bi bi-arrows"></i></a>
+                            </div>
+                            <div class="btn-group mb-3" role="group">
+                                <a href="javascript:;" id="fadeup" class="btn-fadein btn icon btn-warning"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('FADEUP') ?>"><i class="bi bi-arrow-up-right-circle"></i></a>
+                                    <a href="javascript:;" id="fadedown" class="btn-fadeout btn icon btn-danger"
+                                    data-bs-toggle="tooltip" data-bs-placement="top"
+                                    title="<?= $ml->tr('FADEDOWN') ?>"><i class="bi bi-arrow-down-right-circle"></i></a>
+                            </div>
+                        </div>
+
+                        <div id="multitrack"></div>
+
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-light-secondary" data-kt-multitrack-modal-action="close">
+                            <?= $ml->tr('CLOSE') ?>
+                    </button>
+                    <button type="button" onclick="saveTracksData()" class="btn btn-info ms-1">
+                            <?= $ml->tr('SAVE') ?>
                     </button>
                 </div>
             </div>

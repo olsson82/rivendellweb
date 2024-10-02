@@ -225,6 +225,29 @@ $page_js = '<script src="'.DIR.'/assets/static/js/settings.js"></script>';
                                         </p>
                                     </div>
                                     <div class="col-md-4">
+                                        <label for="multitrack">
+                                            <?= $ml->tr('USEMULTITRACKEDITOR'); ?>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select id="multitrack" name="multitrack" class="choices form-select">
+                                            <option value="1" <?php if ($json_sett["multitrack"] == '1') {
+                                                echo 'SELECTED';
+                                            } ?>>
+                                                <?= $ml->tr('YES'); ?>
+                                            </option>
+                                            <option value="0" <?php if ($json_sett["multitrack"] == '0') {
+                                                echo 'SELECTED';
+                                            } ?>>
+                                                <?= $ml->tr('NO'); ?>
+                                            </option>
+                                        </select>
+                                        <p><small class="text-muted">
+                                                <?= $ml->tr('USEMULTITRACKEDITORTEXT'); ?>
+                                            </small>
+                                        </p>
+                                    </div>
+                                    <div class="col-md-4">
                                         <label for="autotrim">
                                             <?= $ml->tr('AUTOTRIMLEVEL'); ?>
                                         </label>
