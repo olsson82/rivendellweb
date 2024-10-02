@@ -9,8 +9,11 @@ The goal with this is to be able to do the most things from this system.
 
 **Please be advice that this system use BOTH Rivendells API and also do direct changes in the database**
 
+## Multitrack Editor
+There is an multitrack editor in voicetracking for testing. Not recommended to use it on live production server yet. This need to be activated in system settings. Read documents for more info.
+
 ## Discussions
-If you have any suggestions or just wants to discuss about the system. Please use the [**Discussions**](https://github.com/olsson82/rivendellweb/discussions) for bug, use the issue.
+If you have any suggestions or just wants to discuss about the system. Please use the [**Discussions**](https://github.com/olsson82/rivendellweb/discussions). For bugs, use the issues.
 
 ## Some features in this system
 - **Library:** Manage your library just like in Rivendell.
@@ -18,7 +21,6 @@ If you have any suggestions or just wants to discuss about the system. Please us
 - **Log Manager:** Manage your events, clocks and grids. With special feature like grid layout to save multiple grids templates.
 - **RDCatch:** Manage your automation
 - **Admin features:** Some admin features can be manage.
-
 
 ## The project
 This project started after i fixed some bugs in an old script by Brian McGlynn for to use with Rivendell Radio Automation. The original script can be found here: https://github.com/bpm1992/rivendell/tree/rdweb/web/rdphp
