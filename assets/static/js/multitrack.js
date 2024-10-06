@@ -99,6 +99,7 @@ function doMultitrack(lineid, logname) {
         var title;
         var endpoint;
         var print;
+        var startpoint;
 
         $.ajax({
             type: "POST",
@@ -140,6 +141,7 @@ function doMultitrack(lineid, logname) {
                 success: function (dat) {
                     cutname = dat['CUT_NAME'];
                     cutseguestartpoint = dat['SEGUE_START_POINT'];
+                    startpoint = dat['START_POINT'];
                     endpoint = dat['END_POINT'];
                     if (artist == '' || artist == null || artist == "undefined") {
                         print = title;
@@ -159,7 +161,7 @@ function doMultitrack(lineid, logname) {
                             currfadeuppoint = currfadeuppoint / 1000;
                             theTracks.push(
                                 {
-                                    src: HOST_URL + '/forms/library/export.php?cutname=' + cutname + '&mp3=0',
+                                    src: HOST_URL + '/forms/voicetrack/export.php?cutname=' + cutname + '&mp3=0&start=' +startpoint+ '&end='+endpoint,
                                     name: print,
                                     start: 0,
                                     states: {
@@ -179,7 +181,7 @@ function doMultitrack(lineid, logname) {
                             currfadedownpoint = calfadeend / 1000;
                             theTracks.push(
                                 {
-                                    src: HOST_URL + '/forms/library/export.php?cutname=' + cutname + '&mp3=0',
+                                    src: HOST_URL + '/forms/voicetrack/export.php?cutname=' + cutname + '&mp3=0&start=' +startpoint+ '&end='+endpoint,
                                     name: print,
                                     start: 0,
                                     states: {
@@ -204,7 +206,7 @@ function doMultitrack(lineid, logname) {
                             currfadedownpoint = calfadeend / 1000;
                             theTracks.push(
                                 {
-                                    src: HOST_URL + '/forms/library/export.php?cutname=' + cutname + '&mp3=0',
+                                    src: HOST_URL + '/forms/voicetrack/export.php?cutname=' + cutname + '&mp3=0&start=' +startpoint+ '&end='+endpoint,
                                     name: print,
                                     start: 0,
                                     states: {
@@ -222,7 +224,7 @@ function doMultitrack(lineid, logname) {
                         } else {
                             theTracks.push(
                                 {
-                                    src: HOST_URL + '/forms/library/export.php?cutname=' + cutname + '&mp3=0',
+                                    src: HOST_URL + '/forms/voicetrack/export.php?cutname=' + cutname + '&mp3=0&start=' +startpoint+ '&end='+endpoint,
                                     name: print,
                                     start: 0,
                                     states: {
@@ -268,7 +270,7 @@ function doMultitrack(lineid, logname) {
                             currfadeuppoint = currfadeuppoint / 1000;
                             theTracks.push(
                                 {
-                                    src: HOST_URL + '/forms/library/export.php?cutname=' + cutname + '&mp3=0',
+                                    src: HOST_URL + '/forms/voicetrack/export.php?cutname=' + cutname + '&mp3=0&start=' +startpoint+ '&end='+endpoint,
                                     name: print,
                                     start: starttime,
                                     states: {
@@ -290,7 +292,7 @@ function doMultitrack(lineid, logname) {
                             currfadedownpoint = calfadeend / 1000;
                             theTracks.push(
                                 {
-                                    src: HOST_URL + '/forms/library/export.php?cutname=' + cutname + '&mp3=0',
+                                    src: HOST_URL + '/forms/voicetrack/export.php?cutname=' + cutname + '&mp3=0&start=' +startpoint+ '&end='+endpoint,
                                     name: print,
                                     start: starttime,
                                     states: {
@@ -313,7 +315,7 @@ function doMultitrack(lineid, logname) {
                             currfadedownpoint = calfadeend / 1000;
                             theTracks.push(
                                 {
-                                    src: HOST_URL + '/forms/library/export.php?cutname=' + cutname + '&mp3=0',
+                                    src: HOST_URL + '/forms/voicetrack/export.php?cutname=' + cutname + '&mp3=0&start=' +startpoint+ '&end='+endpoint,
                                     name: print,
                                     start: starttime,
                                     states: {
@@ -337,7 +339,7 @@ function doMultitrack(lineid, logname) {
                         } else {
                             theTracks.push(
                                 {
-                                    src: HOST_URL + '/forms/library/export.php?cutname=' + cutname + '&mp3=0',
+                                    src: HOST_URL + '/forms/voicetrack/export.php?cutname=' + cutname + '&mp3=0&start=' +startpoint+ '&end='+endpoint,
                                     name: print,
                                     start: starttime,
                                     states: {
