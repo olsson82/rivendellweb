@@ -425,7 +425,7 @@ $('#saveas_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkclocknamenew.php",
-            noSpace: true
+            //noSpace: true
         },
         ccode: {
             required: true,

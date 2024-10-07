@@ -131,7 +131,7 @@ var RenameEventForm = $('#renameevent_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkeventnamenew.php",
-            noSpace: true
+            //noSpace: true
         },
     },
     messages: {
@@ -186,7 +186,7 @@ var addEventForm = $('#addevent_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkeventnamenew.php",
-            noSpace: true
+            //noSpace: true
         },
     },
     messages: {

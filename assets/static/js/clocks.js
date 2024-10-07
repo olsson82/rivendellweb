@@ -39,15 +39,15 @@ function tr(translate) {
         datatype: 'html',
         success: function (data) {
             var mydata = $.parseJSON(data);
-            result  = mydata.translated;
+            result = mydata.translated;
         }
     });
     return result;
 }
 
-jQuery.validator.addMethod("noSpace", function(value, element) { 
-    return value.indexOf(" ") < 0 && value != ""; 
-  }, TRAN_NOSPACEALLOWED);
+jQuery.validator.addMethod("noSpace", function (value, element) {
+    return value.indexOf(" ") < 0 && value != "";
+}, TRAN_NOSPACEALLOWED);
 
 $("#checkall").on("click", function (e) {
     if ($(this).is(":checked")) {
@@ -69,10 +69,10 @@ $('#rename_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkclocknamenew.php",
-            noSpace: true
+            //noSpace: true
         },
-        
-    
+
+
     },
     messages: {
         name: {
@@ -115,7 +115,7 @@ $('#rename_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    } else if(kod == 2) {
+                    } else if (kod == 2) {
                         Swal.fire({
                             text: TRAN_CLOCKRULESNOTPOSS,
                             icon: "error",
@@ -125,7 +125,7 @@ $('#rename_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    } else if(kod == 3) {
+                    } else if (kod == 3) {
                         Swal.fire({
                             text: TRAN_CLOCKLINESNOTPOSS,
                             icon: "error",
@@ -135,7 +135,7 @@ $('#rename_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    } else if(kod == 4) {
+                    } else if (kod == 4) {
                         Swal.fire({
                             text: TRAN_CLOCKSERVICESNOTPOSS,
                             icon: "error",
@@ -145,7 +145,7 @@ $('#rename_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    } else if(kod == 5) {
+                    } else if (kod == 5) {
                         Swal.fire({
                             text: TRAN_CLOCKNAMENOTPOSSCHANGE,
                             icon: "error",
@@ -177,7 +177,7 @@ $('#add_form').validate({
         name: {
             required: true,
             remote: HOST_URL + "/validation/checkclocknamenew.php",
-            noSpace: true
+            //noSpace: true
         },
         ccode: {
             required: true,
@@ -188,8 +188,8 @@ $('#add_form').validate({
         colors: {
             required: true,
         },
-        
-    
+
+
     },
     messages: {
         name: {
@@ -226,7 +226,7 @@ $('#add_form').validate({
                 var kod = mydata.errorcode;
                 var theclockname = mydata.clockname;
                 if (fel == "false") {
-                    location.href = HOST_URL + "/manager/clock/"+theclockname;
+                    location.href = HOST_URL + "/manager/clock/" + theclockname;
                 } else {
                     if (kod == 1) {
                         Swal.fire({
@@ -237,8 +237,8 @@ $('#add_form').validate({
                             customClass: {
                                 confirmButton: "btn btn-primary"
                             }
-                        });                        
-                    } else if(kod == 2) {
+                        });
+                    } else if (kod == 2) {
                         Swal.fire({
                             text: TRAN_CLOCKCODEEXIST,
                             icon: "error",
@@ -248,7 +248,7 @@ $('#add_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    } else if(kod == 3) {
+                    } else if (kod == 3) {
                         Swal.fire({
                             text: TRAN_CLOCKNOTPOSSIBLE,
                             icon: "error",
@@ -258,7 +258,7 @@ $('#add_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    } else if(kod == 4) {
+                    } else if (kod == 4) {
                         Swal.fire({
                             text: TRAN_CLOCKSERVNOTPOSSIBLE,
                             icon: "error",
@@ -268,7 +268,7 @@ $('#add_form').validate({
                                 confirmButton: "btn btn-primary"
                             }
                         });
-                    } else if(kod == 5) {
+                    } else if (kod == 5) {
                         Swal.fire({
                             text: TRAN_CLOCKRULENOTPOSSIBLE,
                             icon: "error",
@@ -338,7 +338,7 @@ function delClock(id) {
             });
 
 
-        } 
+        }
     });
 }
 
@@ -373,7 +373,7 @@ var KTDatatablesServerSide = function () {
                 "infoEmpty": TRAN_TABLESHOWS + " 0 " + TRAN_TABLETO + " 0 " + TRAN_TABLETOTAL + " 0 " + TRAN_TABLEROWS,
                 "infoFiltered": "(" + TRAN_TABLEFILTERED + " _MAX_ " + TRAN_TABLEROWS + ")",
                 "infoThousands": " ",
-                "lengthMenu": TRAN_TABLESHOW+ " _MENU_ " +TRAN_TABLEROWS,
+                "lengthMenu": TRAN_TABLESHOW + " _MENU_ " + TRAN_TABLEROWS,
                 "loadingRecords": TRAN_TABLELOADING,
                 "processing": TRAN_TABLEWORKING,
                 "search": TRAN_TABLESEARCH,
@@ -424,9 +424,7 @@ var KTDatatablesServerSide = function () {
                 {
                     targets: 1,
                     render: function (data, type, row) {
-
-
-                        return '<a href="'+ HOST_URL +'/manager/clock/' + row.NAME + '" style="color:' + row.COLOR + ';" class="text-hover-primary mb-1">' + data + '</a>';
+                        return '<a href="' + HOST_URL + '/manager/clock/' + data + '" style="color:' + row.COLOR + ';" class="text-hover-primary mb-1">' + data + '</a>';
 
 
 
@@ -443,7 +441,7 @@ var KTDatatablesServerSide = function () {
                     render: function (data, type, row) {
                         return `
                         <div class="btn-group mb-3" role="group">
-                                    <a href="`+ HOST_URL +`/manager/clock/`+ row.NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
+                                    <a href="`+ HOST_URL + `/manager/clock/` + row.NAME + `" class="btn icon btn-primary" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_EDITCLOCK + `"><i class="bi bi-pencil"></i></a>
                                     <a href="javascript:;" onclick="rename('` + row.NAME + `')" class="btn icon btn-warning" data-bs-toggle="tooltip" data-bs-placement="top"
                                     title="`+ TRAN_RENAMECLOCK + `"><i class="bi bi-fonts"></i></a>
@@ -465,7 +463,7 @@ var KTDatatablesServerSide = function () {
         const container = document.querySelector('#clocks_table');
         const checkboxes = container.querySelectorAll('[type="checkbox"]');
         const deleteSelected = document.querySelector('[data-kt-clocks-table-select="delete_selected"]');
-        checkboxes.forEach(c => { 
+        checkboxes.forEach(c => {
             c.addEventListener('click', function () {
                 setTimeout(function () {
                     toggleToolbars();
@@ -516,7 +514,7 @@ var KTDatatablesServerSide = function () {
                                             confirmButton: "btn btn-primary"
                                         }
                                     }).then(function (result) {
-                                        if (result.isConfirmed) { 
+                                        if (result.isConfirmed) {
                                             dt.ajax.reload();
                                         }
                                     });
@@ -541,7 +539,7 @@ var KTDatatablesServerSide = function () {
         });
     }
 
-    var toggleToolbars = function () { 
+    var toggleToolbars = function () {
         const container = document.querySelector('#clocks_table');
         const toolbarBase = document.querySelector('[data-kt-clocks-table-toolbar="base"]');
         const toolbarSelected = document.querySelector('[data-kt-clocks-table-select="selected"]');
@@ -566,103 +564,103 @@ var KTDatatablesServerSide = function () {
         }
     }
 
-const element3 = document.getElementById('add_clock');
-const modal3 = new bootstrap.Modal(element3);
+    const element3 = document.getElementById('add_clock');
+    const modal3 = new bootstrap.Modal(element3);
 
-var initAddClockButtons = function () { 
-    const cancelButton2 = element3.querySelector('[data-kt-clockadd-modal-action="cancel"]');
-    cancelButton2.addEventListener('click', e => {
-        e.preventDefault();
+    var initAddClockButtons = function () {
+        const cancelButton2 = element3.querySelector('[data-kt-clockadd-modal-action="cancel"]');
+        cancelButton2.addEventListener('click', e => {
+            e.preventDefault();
 
-        Swal.fire({
-            text: TRAN_CLOSEADDCLOCK,
-            icon: "warning",
-            showCancelButton: true,
-            buttonsStyling: false,
-            confirmButtonText: TRAN_YES,
-            cancelButtonText: TRAN_NO,
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-active-light"
-            }
-        }).then(function (result) {
-            if (result.value) {
-                modal3.hide();
-            }
+            Swal.fire({
+                text: TRAN_CLOSEADDCLOCK,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal3.hide();
+                }
+            });
         });
-    });
-    const closeButton2 = element3.querySelector('[data-kt-clockadd-modal-action="close"]');
-    closeButton2.addEventListener('click', e => {
-        e.preventDefault();
+        const closeButton2 = element3.querySelector('[data-kt-clockadd-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
 
-        Swal.fire({
-            text: TRAN_CLOSEADDCLOCK,
-            icon: "warning",
-            showCancelButton: true,
-            buttonsStyling: false,
-            confirmButtonText: TRAN_YES,
-            cancelButtonText: TRAN_NO,
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-active-light"
-            }
-        }).then(function (result) {
-            if (result.value) {
-                modal3.hide();
+            Swal.fire({
+                text: TRAN_CLOSEADDCLOCK,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal3.hide();
 
-            }
+                }
+            });
         });
-    });
-}
+    }
 
-const element4 = document.getElementById('rename_clock');
-const modal4 = new bootstrap.Modal(element4);
+    const element4 = document.getElementById('rename_clock');
+    const modal4 = new bootstrap.Modal(element4);
 
-var initRenameClockButtons = function () {
-    const cancelButton2 = element4.querySelector('[data-kt-clockrename-modal-action="cancel"]');
-    cancelButton2.addEventListener('click', e => {
-        e.preventDefault();
+    var initRenameClockButtons = function () {
+        const cancelButton2 = element4.querySelector('[data-kt-clockrename-modal-action="cancel"]');
+        cancelButton2.addEventListener('click', e => {
+            e.preventDefault();
 
-        Swal.fire({
-            text: TRAN_CLOSERENAMECLOCKWINDOW,
-            icon: "warning",
-            showCancelButton: true,
-            buttonsStyling: false,
-            confirmButtonText: TRAN_YES,
-            cancelButtonText: TRAN_NO,
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-active-light"
-            }
-        }).then(function (result) {
-            if (result.value) {
-                modal4.hide();
-            }
+            Swal.fire({
+                text: TRAN_CLOSERENAMECLOCKWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal4.hide();
+                }
+            });
         });
-    });
-    const closeButton2 = element4.querySelector('[data-kt-clockrename-modal-action="close"]');
-    closeButton2.addEventListener('click', e => {
-        e.preventDefault();
+        const closeButton2 = element4.querySelector('[data-kt-clockrename-modal-action="close"]');
+        closeButton2.addEventListener('click', e => {
+            e.preventDefault();
 
-        Swal.fire({
-            text: TRAN_CLOSERENAMECLOCKWINDOW,
-            icon: "warning",
-            showCancelButton: true,
-            buttonsStyling: false,
-            confirmButtonText: TRAN_YES,
-            cancelButtonText: TRAN_NO,
-            customClass: {
-                confirmButton: "btn btn-primary",
-                cancelButton: "btn btn-active-light"
-            }
-        }).then(function (result) {
-            if (result.value) {
-                modal4.hide();
+            Swal.fire({
+                text: TRAN_CLOSERENAMECLOCKWINDOW,
+                icon: "warning",
+                showCancelButton: true,
+                buttonsStyling: false,
+                confirmButtonText: TRAN_YES,
+                cancelButtonText: TRAN_NO,
+                customClass: {
+                    confirmButton: "btn btn-primary",
+                    cancelButton: "btn btn-active-light"
+                }
+            }).then(function (result) {
+                if (result.value) {
+                    modal4.hide();
 
-            }
+                }
+            });
         });
-    });
-}
+    }
 
 
     return {
