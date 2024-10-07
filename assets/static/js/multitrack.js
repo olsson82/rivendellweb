@@ -143,13 +143,13 @@ function doMultitrack(lineid, logname) {
                     cutseguestartpoint = dat['SEGUE_START_POINT'];
                     startpoint = dat['START_POINT'];
                     endpoint = dat['END_POINT'];
+                    endtime = endpoint;
                     if (artist == '' || artist == null || artist == "undefined") {
                         print = title;
                     } else {
                         print = title + ' - ' + artist;
                     }
                     if (i == 0) {
-                        endtime = endpoint;
                         tra1end = endtime;
                         tr1lineid = lineid;
                         dragg = false;
