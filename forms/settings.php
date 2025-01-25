@@ -43,6 +43,8 @@ $json_sett["smtpusr"] = $_POST['smtp_usr'];
 $json_sett["smtppass"] = $_POST['smtp_pass'];
 $json_sett["smtpfrom"] = $_POST['smtp_from'];
 $json_sett["multitrack"] = $_POST['multitrack'];
+$json_sett["backups"]["autotype"] = $_POST['back_type'];
+$json_sett["backups"]["olderthan"] = $_POST['back_older'];
 
 $jsonsettings = json_encode($json_sett, JSON_UNESCAPED_SLASHES);
 

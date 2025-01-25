@@ -134,8 +134,8 @@ $logfunc = new Log($db);
  * WE NEED TO CHECK SO THERE ARE NO LOGS THAT ARE LEFT IN THE LOG EDIT JSON FILE. *
  *             IF THERE ARE LOGS THAT NOT ARE IN USE, THEN REMOVE IT.             *
  **********************************************************************************/
- 
- foreach ($logedit_data as $lines) {
+
+foreach ($logedit_data as $lines) {
   $field = $info->getLogInfo($lines['NAME'], "LOCK_DATETIME");
   $now = date('Y-m-d H:i:s', strtotime('-5 minutes'));
   if ($lines['LOCK_GUID'] != $info->getLogInfo($lines['NAME'], "LOCK_GUID") && strtotime($field) < strtotime($now)) {
@@ -144,14 +144,14 @@ $logfunc = new Log($db);
     unset($logedit_data[$lines['NAME']]);
     $jsonData = json_encode($logedit_data, JSON_PRETTY_PRINT);
     file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/logedit.json', $jsonData);
-  } else if($lines['LOCK_GUID'] == $info->getLogInfo($lines['NAME'], "LOCK_GUID") && strtotime($field) < strtotime($now)) {
+  } else if ($lines['LOCK_GUID'] == $info->getLogInfo($lines['NAME'], "LOCK_GUID") && strtotime($field) < strtotime($now)) {
     $code = $info->getLogInfo($lines['NAME'], "LOCK_GUID");
     $functions->removelock($lines['NAME'], $code);
     unset($logedit_data[$lines['NAME']]);
     $jsonData = json_encode($logedit_data, JSON_PRETTY_PRINT);
     file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/logedit.json', $jsonData);
- }
-} 
+  }
+}
 /**************************************************************************************
  *                  MULTILANGUAGE SUPPORT. LANGUAGE SAVED IN COOKIE.                  *
  * TO ADD UNTRANSLATED STRINGS TO LANGUAGE FILE, SET TO TRUE ON UNTRANSLATED_LOGGING. *
@@ -187,6 +187,14 @@ $languagesArray = array(
  * TO DO UPDATE TO SUPPORT NEW RDCATCH CHANGES *
  ***********************************************/
 if ($json_sett['jsonID'] != 'AxZQ9f3fEUkLz25131' && isset($json_sett["admin"][$_COOKIE['username']]["username"])) {
-  header('Location: '.DIR.'/updater');
+  header('Location: ' . DIR . '/updater');
   //exit(); 
+}
+/******************************************************
+ * IF BACKUP FOLDER NOT CREATED ADD IT IN DATA FOLDER *
+ ******************************************************/
+if (!file_exists(LOCAL_PATH_ROOT . "/data/backups/")) {
+  $oldmask = umask(0);
+  mkdir(LOCAL_PATH_ROOT . "/data/backups", 0777);
+  umask($oldmask);
 }

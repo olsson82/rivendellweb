@@ -26,56 +26,16 @@
  *             OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE             *
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
-function fileCreateWrite()
-{
-    $array_data = array();
-    $extra = array(
-        'sysname' => $_POST['sys_name'],
-        'sysurl' => $_POST["urladd"],
-        'deflang' => $_POST["def_lang"],
-        'admin' => array(
-            $_POST["admin_usr"] => array(
-                'username' => $_POST["admin_usr"],
-                'settings' => '1',
-                'backups' => '1',
-                'users' => '1',
-                'message' => '1',
-                'groups' => '1',
-                'sched' => '1',
-                'services' => '1',
-                'hosts' => '1',
-            )
-        ),
-        'timezone' => $_POST["time_zone"],
-        'smtpserv' => $_POST["smtp_server"],
-        'port' => $_POST["smtp_port"],
-        'smtplogin' => $_POST["smtp_login"],
-        'smtpenc' => $_POST["smtp_enc"],
-        'smtpusr' => $_POST["smtp_usr"],
-        'smtppass' => $_POST["smtp_pass"],
-        'smtpfrom' => $_POST["smtp_from"],
-        'newsmess' => '',
-        'usereset' => $_POST["pass_reset"],
-        'autotrim' => $_POST["autotrim"],
-        'normalize' => $_POST["normalize"],
-        'backups' => array(
-            'autotype' => $_POST['back_type'],
-            'olderthan' => $_POST['back_older'],
-        ),
-        'jsonID' => 'AxZQ9f3fEUkLz25131',
+require $_SERVER['DOCUMENT_ROOT'] . '/includes/config.php';
 
-    );
-    $array_data[] = $extra;
-    $final_data = json_encode($extra, JSON_UNESCAPED_SLASHES);
-    return $final_data;
+$backups = $json_sett["backups"]['backdata'];
+$data = array();
+foreach ($backups as $key => $val) {
+  $data[] = $backups[$key];
 }
 
-
-$final_data = fileCreateWrite();
-if (file_put_contents($_SERVER['DOCUMENT_ROOT'] . '/data/settings.json', $final_data)) {
-    $echodata = ['error' => 'false', 'errorcode' => '0'];
-    echo json_encode($echodata);
-} else {
-    $echodata = ['error' => 'true', 'errorcode' => '1'];
-    echo json_encode($echodata);
-}
+$datatable = array();
+$datatable['data'] = $data; 
+header('Content-Type: application/json; charset=utf-8');
+$jsonData = json_encode($datatable, JSON_PRETTY_PRINT);
+echo $jsonData;

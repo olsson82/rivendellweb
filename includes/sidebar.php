@@ -244,7 +244,7 @@ if (isset($_COOKIE['serviceName'])) {
                 </li>
                 <?php } ?>
                 <?php if (isset($json_sett["admin"][$_COOKIE['username']]["username"])) { ?>
-                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'rdpanel' || $pagecode == 'rdlogedit' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?> has-sub">
+                    <li class="sidebar-item <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'rdpanel' || $pagecode == 'rdlogedit' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services' || $pagecode == 'backups') { ?>active<?php } ?> has-sub">
                         <a href="#" class='sidebar-link'>
                             <i class="bi bi-gear"></i>
                             <span>
@@ -253,7 +253,7 @@ if (isset($_COOKIE['serviceName'])) {
                         </a>
 
                         <ul
-                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'rdpanel' || $pagecode == 'rdlogedit' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services') { ?>active<?php } ?>">
+                            class="submenu <?php if ($pagecode == 'admindash' || $pagecode == 'settings' || $pagecode == 'users' || $pagecode == 'rdairplay' || $pagecode == 'rdpanel' || $pagecode == 'rdlogedit' || $pagecode == 'groups'|| $pagecode == 'schedcodes' || $pagecode == 'hosts' || $pagecode == 'services' || $pagecode == 'backups') { ?>active<?php } ?>">
 
 
                             <li class="submenu-item <?php if ($pagecode == 'admindash') { ?>active<?php } ?>">
@@ -265,6 +265,13 @@ if (isset($_COOKIE['serviceName'])) {
                                 <li class="submenu-item <?php if ($pagecode == 'settings') { ?>active<?php } ?>">
                                     <a href="<?php echo DIR; ?>/admin/settings" class="submenu-link">
                                         <?= $ml->tr('SETTINGS'); ?>
+                                    </a>
+                                </li>
+                            <?php } ?>
+                            <?php if ($json_sett["admin"][$_COOKIE['username']]["backups"] == 1) { ?>
+                                <li class="submenu-item <?php if ($pagecode == 'backups') { ?>active<?php } ?>">
+                                    <a href="<?php echo DIR; ?>/admin/backups" class="submenu-link">
+                                        <?= $ml->tr('BACKUPS'); ?>
                                     </a>
                                 </li>
                             <?php } ?>

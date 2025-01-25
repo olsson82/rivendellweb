@@ -202,6 +202,55 @@ $page_js = '<script src="'.DIR.'/assets/static/js/settings.js"></script>';
                                             </small></p>
                                     </div>
                                     <div class="col-md-4">
+                                        <label for="back_type">
+                                            <?= $ml->tr('BACKUPTYPE'); ?>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select id="back_type" name="back_type" class="choices form-select">
+                                        <option value="0" <?php if ($json_sett["backups"]["autotype"] == 0) {
+                                                echo 'SELECTED';
+                                            } ?>>
+                                        <?= $ml->tr('ONLYRIVDATABASE') ?>
+                                            </option>
+                                            <option value="1" <?php if ($json_sett["backups"]["autotype"] == 1) {
+                                                echo 'SELECTED';
+                                            } ?>>
+                                        <?= $ml->tr('ONLYRIVWEBDATABASE') ?>
+                                            </option>
+                                            <option value="2" <?php if ($json_sett["backups"]["autotype"] == 2) {
+                                                echo 'SELECTED';
+                                            } ?>>
+                                        <?= $ml->tr('BACKUPEVERYTHING') ?>
+                                            </option>
+                                        </select>
+                                        <p><small class="text-muted">
+                                                <?= $ml->tr('BACKUPTYPEINFO'); ?>
+                                            </small></p>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <label for="back_older">
+                                            <?= $ml->tr('REMOLDERTHAN'); ?>
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select id="back_older" name="back_older" class="choices form-select">
+                                        <option value="0" <?php if ($json_sett["backups"]["olderthan"] == 0) {
+                                                echo 'SELECTED';
+                                            } ?>>
+                                        <?= $ml->tr('ONEWEEK') ?>
+                                            </option>
+                                            <option value="1" <?php if ($json_sett["backups"]["olderthan"] == 1) {
+                                                echo 'SELECTED';
+                                            } ?>>
+                                        <?= $ml->tr('ONEMONTH') ?>
+                                            </option>
+                                        </select>
+                                        <p><small class="text-muted">
+                                                <?= $ml->tr('REMOLDERTHANINFO'); ?>
+                                            </small></p>
+                                    </div>
+                                    <div class="col-md-4">
                                         <label for="pass_reset">
                                             <?= $ml->tr('SYSTEMPASSRESET'); ?>
                                         </label>

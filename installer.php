@@ -167,6 +167,45 @@ $errors = 0;
                                     <p><small class="text-muted">The language that will be used by default.</small></p>
                                 </div>
                                 <div class="col-md-4">
+                                    <label for="back_type">
+                                        Backup Type
+                                    </label>
+                                </div>
+                                <div class="col-md-8 form-group">
+                                    <select id="back_type" name="back_type" class="choices form-select">
+                                        <option value="0">
+                                            Only Rivendell Database
+                                        </option>
+                                        <option value="1">
+                                            Only Rivendell Web Broadcast
+                                        </option>
+                                        <option value="2" SELECTED>
+                                            Everything
+                                        </option>
+                                    </select>
+                                    <p><small class="text-muted">
+                                            When you run backup with cron job, what type will be used.
+                                        </small></p>
+                                </div>
+                                <div class="col-md-4">
+                                        <label for="back_older">
+                                        Remove backup older than
+                                        </label>
+                                    </div>
+                                    <div class="col-md-8 form-group">
+                                        <select id="back_older" name="back_older" class="choices form-select">
+                                        <option value="0" SELECTED>
+                                        One week
+                                            </option>
+                                            <option value="1">
+                                            One month
+                                            </option>
+                                        </select>
+                                        <p><small class="text-muted">
+                                        Will remove backups that pass this creation time.
+                                            </small></p>
+                                    </div>
+                                <div class="col-md-4">
                                     <label for="pass_reset">Use Password Reset</label>
                                 </div>
                                 <div class="col-md-8 form-group">

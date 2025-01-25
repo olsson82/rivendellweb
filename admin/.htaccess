@@ -9,5 +9,6 @@ RewriteRule ^hosts/rdairplay$ rdairplay.php
 RewriteRule ^hosts/rdpanel$ rdpanel.php
 RewriteRule ^hosts/rdlogedit$ rdlogedit.php
 RewriteRule ^services$ services.php
+RewriteRule ^backups$ backups.php
 RewriteRule ^users/user/(.+)$ user.php?id=$1
 RewriteRule ^services/service/(.+)$ service.php?id=$1

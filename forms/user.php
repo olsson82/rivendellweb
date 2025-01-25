@@ -33,6 +33,7 @@ $json_sett["usrsett"][$username]['rdcatch'] = $_POST['handlerdcatch'];
 if ($_POST['adminrights'] == 1) {
     $json_sett["admin"][$username]['username'] = $username;
     $json_sett["admin"][$username]['settings'] = $_POST['systemdata'];
+    $json_sett["admin"][$username]['backups'] = $_POST['managebackups'];
     $json_sett["admin"][$username]['users'] = $_POST['manageuser'];
     $json_sett["admin"][$username]['message'] = $_POST['messages'];
     $json_sett["admin"][$username]['hosts'] = $_POST['hosts'];
