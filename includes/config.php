@@ -139,7 +139,7 @@ define('DEFAULTLANG', $json_sett['deflang']);
 define('VERS', '0.6.7'); //DO NOT CHANGE THIS!
 define('DBOK', '376'); //DO NOT CHANGE THIS!
 define('SYSTIT', 'Rivendell Web Broadcast'); //DO NOT CHANGE THIS!
-define('APIURL', 'http://localhost/rd-bin/rdxport.cgi'); //DO NOT CHANGE THIS!
+define('APIURL', 'http://127.0.0.1/rd-bin/rdxport.cgi'); //DO NOT CHANGE THIS!
 define('USERESET', $json_sett['usereset']);
 define('AUTOTRIM', $json_sett['autotrim']);
 define('NORMALIZE', $json_sett['normalize']);

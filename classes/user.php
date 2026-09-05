@@ -98,13 +98,13 @@ class User
                 setcookie('loggedin', 'true', $expire, '/');
                 setcookie('username', $row['LOGIN_NAME'], $expire, '/');
                 setcookie('fullname', $row['FULL_NAME'], $expire, '/');
-                setcookie('rdWebAPI', 'http://localhost/rd-bin/rdxport.cgi', $expire, '/');
+                setcookie('rdWebAPI', 'http://127.0.0.1/rd-bin/rdxport.cgi', $expire, '/');
             } else {
                 $expire = time() + (3600 * 4);
                 setcookie('loggedin', 'true', $expire, '/');
                 setcookie('username', $row['LOGIN_NAME'], $expire, '/');
                 setcookie('fullname', $row['FULL_NAME'], $expire, '/');
-                setcookie('rdWebAPI', 'http://localhost/rd-bin/rdxport.cgi', $expire, '/');
+                setcookie('rdWebAPI', 'http://127.0.0.1/rd-bin/rdxport.cgi', $expire, '/');
             }
 
             return true;
@@ -131,13 +131,13 @@ class User
                 setcookie('loggedin', 'true', $expire, '/');
                 setcookie('username', $row['LOGIN_NAME'], $expire, '/');
                 setcookie('fullname', $row['FULL_NAME'], $expire, '/');
-                setcookie('rdWebAPI', 'http://localhost/rd-bin/rdxport.cgi', $expire, '/');
+                setcookie('rdWebAPI', 'http://127.0.0.1/rd-bin/rdxport.cgi', $expire, '/');
             } else {
                 $expire = time() + (3600 * 4);
                 setcookie('loggedin', 'true', $expire, '/');
                 setcookie('username', $row['LOGIN_NAME'], $expire, '/');
                 setcookie('fullname', $row['FULL_NAME'], $expire, '/');
-                setcookie('rdWebAPI', 'http://localhost/rd-bin/rdxport.cgi', $expire, '/');
+                setcookie('rdWebAPI', 'http://127.0.0.1/rd-bin/rdxport.cgi', $expire, '/');
             }
 
             return true;
