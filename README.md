@@ -1,8 +1,6 @@
 # Rivendell Web Broadcast
 ![Skärmbild från 2024-04-30 17-57-25](https://github.com/olsson82/rivendellweb/assets/122672087/c9e12210-5af5-4893-bac2-af8428f7f04d)
 
-## There are an issue with the rivendells api in version 4.4.1 and until it fixed, i do not recommend to use this with the latest version of rivendell. This happends in Ubuntu 24.4 and Linux Mint 22.2. If you use Debian 12 it works.
-
 Web system for manage Rivendell Radio Automation created by Andreas Olsson to help manage rivendell remote with the most function.
 
 The goal with this is to be able to do the most things from this system.
