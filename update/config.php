@@ -27,5 +27,5 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 $config['version_url'] = "https://update.rivendellwebsys.com";
-$config['version_file'] = "update-067.yml";
+$config['version_file'] = "update-068.yml";
 $config["update_folder"] = "../";
