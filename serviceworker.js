@@ -26,7 +26,7 @@
  *                                               SOFTWARE.                                               *
  *********************************************************************************************************/
 var staticCacheName = "rivwebbroad-pwa";
- 
+
 self.addEventListener("install", function (e) {
   e.waitUntil(
     caches.open(staticCacheName).then(function (cache) {
@@ -34,10 +34,13 @@ self.addEventListener("install", function (e) {
     })
   );
 });
- 
+
 self.addEventListener("fetch", function (event) {
+  if (event.request.method !== "GET") {
+    return;
+  }
   console.log(event.request.url);
- 
+
   event.respondWith(
     caches.match(event.request).then(function (response) {
       return response || fetch(event.request);
