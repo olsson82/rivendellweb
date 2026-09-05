@@ -64,10 +64,10 @@ if ($lockguid != "") {
         $faketime = 0;
         $rowcount = 0;
 
-        $sql = "SELECT * FROM LOG_LINES WHERE LOG_NAME = '$id' ORDER BY COUNT ASC";
+        $sql = "SELECT * FROM LOG_LINES WHERE LOG_NAME = ? ORDER BY COUNT ASC";
         $stmt = $db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
+        $stmt->execute(array($id));
         while ($row = $stmt->fetch()) {
             $cartno = $row['CART_NUMBER'];
             $sql2 = "SELECT * FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME WHERE grid.NUMBER = '$cartno'";
@@ -178,10 +178,10 @@ if ($lockguid != "") {
         $timebefore = 0;
         $faketime = 0;
         $rowcount = 0;
-        $sql = "SELECT * FROM LOG_LINES WHERE LOG_NAME = '$id' ORDER BY COUNT ASC";
+        $sql = "SELECT * FROM LOG_LINES WHERE LOG_NAME = ? ORDER BY COUNT ASC";
         $stmt = $db->prepare($sql);
         $stmt->setFetchMode(PDO::FETCH_ASSOC);
-        $stmt->execute();
+        $stmt->execute(array($id));
         while ($row = $stmt->fetch()) {
             $cartno = $row['CART_NUMBER'];
             $sql2 = "SELECT * FROM CART grid LEFT JOIN GROUPS clk ON grid.GROUP_NAME=clk.NAME WHERE grid.NUMBER = '$cartno'";
